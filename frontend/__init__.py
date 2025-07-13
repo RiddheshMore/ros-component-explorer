@@ -1,0 +1,1 @@
+# Frontend package for ROS Component Explorer 

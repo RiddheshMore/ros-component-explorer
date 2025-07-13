@@ -1,0 +1,11 @@
+# ROS Component Explorer - Proof of Concept
+# Core dependencies for the semantic ROS component database and explorer
+
+# NiceGUI for the web-based user interface
+nicegui>=1.4.0
+
+# RDF processing with rdflib
+rdflib>=6.0.0
+
+# Additional utilities
+typing-extensions>=4.0.0 

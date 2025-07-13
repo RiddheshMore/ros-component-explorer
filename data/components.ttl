@@ -1,0 +1,143 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix comp: <http://example.org/ros-components#> .
+
+# Localization Components
+comp:AMCL a comp:LocalizationNode ;
+    rdfs:label "AMCL" ;
+    comp:description "Adaptive Monte Carlo Localization for a mobile robot. Uses particle filter to estimate robot pose." ;
+    comp:hasInput "sensor_msgs/LaserScan" ;
+    comp:hasInput "geometry_msgs/Odometry" ;
+    comp:hasInput "sensor_msgs/PointCloud2" ;
+    comp:hasOutput "geometry_msgs/PoseWithCovarianceStamped" ;
+    comp:hasOutput "nav_msgs/OccupancyGrid" ;
+    comp:updateRate "10 Hz" ;
+    comp:package "amcl" ;
+    comp:nodeType "localization" .
+
+comp:GMAPPING a comp:LocalizationNode ;
+    rdfs:label "GMapping" ;
+    comp:description "Gmapping is a ROS wrapper for OpenSlam's GMapping. Creates 2D occupancy grid maps from laser data." ;
+    comp:hasInput "sensor_msgs/LaserScan" ;
+    comp:hasInput "geometry_msgs/Odometry" ;
+    comp:hasOutput "nav_msgs/OccupancyGrid" ;
+    comp:hasOutput "geometry_msgs/PoseWithCovarianceStamped" ;
+    comp:updateRate "5 Hz" ;
+    comp:package "gmapping" ;
+    comp:nodeType "slam" .
+
+# Sensor Driver Components
+comp:SickScanDriver a comp:SensorDriver ;
+    rdfs:label "SICK Scan Driver" ;
+    comp:description "Driver for SICK TIM series laser scanners. Provides laser scan data for navigation and mapping." ;
+    comp:hasOutput "sensor_msgs/LaserScan" ;
+    comp:updateRate "25 Hz" ;
+    comp:package "sick_scan" ;
+    comp:nodeType "sensor" ;
+    comp:sensorType "laser_scanner" .
+
+comp:VelodyneDriver a comp:SensorDriver ;
+    rdfs:label "Velodyne Driver" ;
+    comp:description "Driver for Velodyne 3D laser scanners. Provides point cloud data for 3D perception." ;
+    comp:hasOutput "sensor_msgs/PointCloud2" ;
+    comp:updateRate "10 Hz" ;
+    comp:package "velodyne_driver" ;
+    comp:nodeType "sensor" ;
+    comp:sensorType "3d_laser" .
+
+comp:IMUDriver a comp:SensorDriver ;
+    rdfs:label "IMU Driver" ;
+    comp:description "Driver for Inertial Measurement Unit sensors. Provides orientation and angular velocity data." ;
+    comp:hasOutput "sensor_msgs/Imu" ;
+    comp:updateRate "100 Hz" ;
+    comp:package "imu_driver" ;
+    comp:nodeType "sensor" ;
+    comp:sensorType "imu" .
+
+# Path Planning Components
+comp:MoveBase a comp:PathPlanner ;
+    rdfs:label "Move Base" ;
+    comp:description "Navigation stack for mobile robots. Combines global and local path planning with obstacle avoidance." ;
+    comp:hasInput "geometry_msgs/PoseStamped" ;
+    comp:hasInput "sensor_msgs/LaserScan" ;
+    comp:hasInput "nav_msgs/OccupancyGrid" ;
+    comp:hasOutput "geometry_msgs/Twist" ;
+    comp:hasOutput "nav_msgs/Path" ;
+    comp:updateRate "20 Hz" ;
+    comp:package "move_base" ;
+    comp:nodeType "navigation" .
+
+comp:GlobalPlanner a comp:PathPlanner ;
+    rdfs:label "Global Planner" ;
+    comp:description "Global path planning component. Calculates optimal path from current position to goal." ;
+    comp:hasInput "geometry_msgs/PoseStamped" ;
+    comp:hasInput "nav_msgs/OccupancyGrid" ;
+    comp:hasOutput "nav_msgs/Path" ;
+    comp:updateRate "1 Hz" ;
+    comp:package "global_planner" ;
+    comp:nodeType "planning" .
+
+comp:LocalPlanner a comp:PathPlanner ;
+    rdfs:label "Local Planner" ;
+    comp:description "Local path planning and obstacle avoidance. Generates velocity commands for robot movement." ;
+    comp:hasInput "nav_msgs/Path" ;
+    comp:hasInput "sensor_msgs/LaserScan" ;
+    comp:hasInput "geometry_msgs/PoseStamped" ;
+    comp:hasOutput "geometry_msgs/Twist" ;
+    comp:updateRate "20 Hz" ;
+    comp:package "base_local_planner" ;
+    comp:nodeType "planning" .
+
+# Controller Components
+comp:BaseController a comp:Controller ;
+    rdfs:label "Base Controller" ;
+    comp:description "Low-level controller for mobile robot base. Converts velocity commands to motor signals." ;
+    comp:hasInput "geometry_msgs/Twist" ;
+    comp:hasOutput "sensor_msgs/JointState" ;
+    comp:updateRate "50 Hz" ;
+    comp:package "base_controller" ;
+    comp:nodeType "control" .
+
+comp:JointController a comp:Controller ;
+    rdfs:label "Joint Controller" ;
+    comp:description "Controller for individual robot joints. Manages position, velocity, and effort control." ;
+    comp:hasInput "std_msgs/Float64" ;
+    comp:hasOutput "sensor_msgs/JointState" ;
+    comp:updateRate "100 Hz" ;
+    comp:package "joint_controller" ;
+    comp:nodeType "control" .
+
+# Perception Components
+comp:ObjectDetection a comp:PerceptionNode ;
+    rdfs:label "Object Detection" ;
+    comp:description "Computer vision-based object detection and recognition. Identifies objects in camera images." ;
+    comp:hasInput "sensor_msgs/Image" ;
+    comp:hasInput "sensor_msgs/CameraInfo" ;
+    comp:hasOutput "vision_msgs/Detection3DArray" ;
+    comp:updateRate "10 Hz" ;
+    comp:package "object_detection" ;
+    comp:nodeType "perception" ;
+    comp:algorithm "yolo" .
+
+comp:PointCloudProcessor a comp:PerceptionNode ;
+    rdfs:label "Point Cloud Processor" ;
+    comp:description "Processes 3D point cloud data for filtering, segmentation, and feature extraction." ;
+    comp:hasInput "sensor_msgs/PointCloud2" ;
+    comp:hasOutput "sensor_msgs/PointCloud2" ;
+    comp:updateRate "10 Hz" ;
+    comp:package "point_cloud_processor" ;
+    comp:nodeType "perception" ;
+    comp:algorithm "pcl" .
+
+comp:SLAMProcessor a comp:PerceptionNode ;
+    rdfs:label "SLAM Processor" ;
+    comp:description "Simultaneous Localization and Mapping processor. Builds maps while localizing the robot." ;
+    comp:hasInput "sensor_msgs/LaserScan" ;
+    comp:hasInput "sensor_msgs/PointCloud2" ;
+    comp:hasInput "geometry_msgs/Odometry" ;
+    comp:hasOutput "nav_msgs/OccupancyGrid" ;
+    comp:hasOutput "geometry_msgs/PoseWithCovarianceStamped" ;
+    comp:updateRate "5 Hz" ;
+    comp:package "slam_processor" ;
+    comp:nodeType "perception" ;
+    comp:algorithm "graph_slam" . 
