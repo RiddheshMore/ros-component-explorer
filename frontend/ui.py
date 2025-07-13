@@ -7,6 +7,7 @@ import nicegui.ui as ui
 from typing import List, Dict, Optional
 from backend.db_manager import DatabaseManager
 import logging
+import functools
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ def build_ui(db_manager: DatabaseManager):
                                 ui.label(component['description']).classes("text-sm text-gray-700 mt-1")
                         
                         with ui.column().classes("items-end"):
-                            ui.button("Details", on_click=lambda c=component: show_component_details(c)).classes("bg-blue-500 text-white")
+                            ui.button("Details", on_click=functools.partial(show_component_details, component)).classes("bg-blue-500 text-white")
     
     def perform_search():
         """Perform search based on current input."""
@@ -81,18 +82,34 @@ def build_ui(db_manager: DatabaseManager):
             
             # Details content
             with ui.column().classes("space-y-3"):
+                # Display class if available
                 if 'class' in details:
                     ui.label(f"**Class:** {details['class']}").classes("text-sm")
                 
-                # Display all properties
+                # Display description if available
+                if 'description' in details.get('properties', {}):
+                    ui.label(f"**Description:** {details['properties']['description']}").classes("text-sm")
+                
+                # Display inputs
+                inputs = [v for k, v in details.get('properties', {}).items() if k == 'hasInput']
+                if inputs:
+                    ui.label(f"**Inputs:** {', '.join(inputs)}").classes("text-sm")
+                
+                # Display outputs
+                outputs = [v for k, v in details.get('properties', {}).items() if k == 'hasOutput']
+                if outputs:
+                    ui.label(f"**Outputs:** {', '.join(outputs)}").classes("text-sm")
+                
+                # Display other properties
                 for prop_name, prop_value in details.get('properties', {}).items():
-                    if prop_name not in ['name', 'class']:  # Skip already displayed properties
+                    if prop_name not in ['description', 'hasInput', 'hasOutput']:  # Skip already displayed properties
                         # Format property name for display
                         display_name = prop_name.replace('_', ' ').title()
                         ui.label(f"**{display_name}:** {prop_value}").classes("text-sm")
                 
                 # Show URI for reference
                 ui.label(f"**URI:** {details['uri']}").classes("text-xs text-gray-500 mt-4")
+        dialog.open()
     
     def load_all_components():
         """Load and display all components."""

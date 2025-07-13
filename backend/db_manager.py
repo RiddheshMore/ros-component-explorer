@@ -106,7 +106,7 @@ class DatabaseManager:
         Search for components matching the given term.
         
         Args:
-            search_term: The search term to match against component names, classes, or descriptions
+            search_term: The search term to match against component names, classes, descriptions, inputs, or outputs
             
         Returns:
             List of dictionaries containing matching component information
@@ -114,22 +114,26 @@ class DatabaseManager:
         if not search_term.strip():
             return self.get_all_components()
         
-        # Case-insensitive search query
+        # Case-insensitive search query, now also matches hasInput and hasOutput
         query = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX comp: <http://example.org/ros-components#>
         
-        SELECT ?component ?label ?class_type ?description
+        SELECT DISTINCT ?component ?label ?class_type ?description
         WHERE {
             ?component a ?class_type .
             ?component rdfs:label ?label .
             OPTIONAL { ?component comp:description ?description }
+            OPTIONAL { ?component comp:hasInput ?input }
+            OPTIONAL { ?component comp:hasOutput ?output }
             FILTER(?class_type IN (comp:LocalizationNode, comp:SensorDriver, comp:PathPlanner, comp:Controller, comp:PerceptionNode))
             FILTER(
                 REGEX(?label, ?search_term, "i") ||
                 REGEX(?class_type, ?search_term, "i") ||
-                (BOUND(?description) && REGEX(?description, ?search_term, "i"))
+                (BOUND(?description) && REGEX(?description, ?search_term, "i")) ||
+                (BOUND(?input) && REGEX(?input, ?search_term, "i")) ||
+                (BOUND(?output) && REGEX(?output, ?search_term, "i"))
             )
         }
         ORDER BY ?label
@@ -187,15 +191,27 @@ class DatabaseManager:
             }
             
             for row in results:
-                property_name = str(row.property).split('#')[-1] if '#' in str(row.property) else str(row.property)
+                property_uri = str(row.property)
                 value = str(row.value)
                 
+                # Extract property name from URI
+                if '#' in property_uri:
+                    property_name = property_uri.split('#')[-1]
+                else:
+                    property_name = property_uri.split('/')[-1]
+                
                 # Handle special cases for better display
-                if property_name == 'type':
-                    details['class'] = value.split('#')[-1]
-                elif property_name == 'label':
+                if property_name == 'type' or property_uri == str(RDF.type):
+                    # This is the rdf:type property
+                    if '#' in value:
+                        details['class'] = value.split('#')[-1]
+                    else:
+                        details['class'] = value
+                elif property_name == 'label' or property_uri == str(RDFS.label):
+                    # This is the rdfs:label property
                     details['name'] = value
                 else:
+                    # All other properties
                     details['properties'][property_name] = value
             
             if not details.get('name'):
