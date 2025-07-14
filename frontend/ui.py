@@ -72,43 +72,58 @@ def build_ui(db_manager: DatabaseManager):
             ui.notify("Error: Could not load component details", type="error")
             return
         
-        with ui.dialog() as dialog, ui.card():
-            ui.card_section().classes("p-6")
-            
+        with ui.dialog() as dialog, ui.card().classes("w-full max-w-lg p-0"):
+            ui.card_section().classes("p-6 pb-2")
             # Header
             with ui.row().classes("items-center justify-between mb-4"):
-                ui.label(f"Component Details: {details.get('name', 'Unknown')}").classes("text-xl font-bold")
-                ui.button("Close", on_click=dialog.close).classes("bg-gray-500 text-white")
+                ui.label(f"Component Details: {details.get('name', 'Unknown')}" ).classes("text-2xl font-bold text-blue-700")
+                ui.button("CLOSE", on_click=dialog.close).classes("bg-blue-500 text-white px-3 py-1 rounded text-xs")
             
-            # Details content
-            with ui.column().classes("space-y-3"):
-                # Display class if available
+            # Main Info Section
+            with ui.column().classes("space-y-3 mb-2"):
                 if 'class' in details:
-                    ui.label(f"**Class:** {details['class']}").classes("text-sm")
-                
-                # Display description if available
+                    with ui.row().classes("items-baseline space-x-2"):
+                        ui.label("Class:").classes("font-bold text-gray-700")
+                        ui.label(details['class']).classes("text-base text-gray-900")
                 if 'description' in details.get('properties', {}):
-                    ui.label(f"**Description:** {details['properties']['description']}").classes("text-sm")
-                
-                # Display inputs
-                inputs = [v for k, v in details.get('properties', {}).items() if k == 'hasInput']
-                if inputs:
-                    ui.label(f"**Inputs:** {', '.join(inputs)}").classes("text-sm")
-                
-                # Display outputs
-                outputs = [v for k, v in details.get('properties', {}).items() if k == 'hasOutput']
-                if outputs:
-                    ui.label(f"**Outputs:** {', '.join(outputs)}").classes("text-sm")
-                
-                # Display other properties
-                for prop_name, prop_value in details.get('properties', {}).items():
-                    if prop_name not in ['description', 'hasInput', 'hasOutput']:  # Skip already displayed properties
-                        # Format property name for display
-                        display_name = prop_name.replace('_', ' ').title()
-                        ui.label(f"**{display_name}:** {prop_value}").classes("text-sm")
-                
-                # Show URI for reference
-                ui.label(f"**URI:** {details['uri']}").classes("text-xs text-gray-500 mt-4")
+                    with ui.row().classes("items-baseline space-x-2"):
+                        ui.label("Description:").classes("font-bold text-gray-700")
+                        ui.label(details['properties']['description']).classes("text-base text-gray-900")
+            
+            # Inputs
+            inputs = [v for k, v in details.get('properties', {}).items() if k == 'hasInput']
+            if inputs:
+                ui.label("Inputs:").classes("font-bold text-gray-700 mt-2")
+                with ui.column().classes("ml-4 space-y-1 mb-2"):
+                    for inp in inputs:
+                        ui.label(f"• {inp}").classes("text-base text-gray-900")
+            
+            # Outputs
+            outputs = [v for k, v in details.get('properties', {}).items() if k == 'hasOutput']
+            if outputs:
+                ui.label("Outputs:").classes("font-bold text-gray-700 mt-2")
+                with ui.column().classes("ml-4 space-y-1 mb-2"):
+                    for outp in outputs:
+                        ui.label(f"• {outp}").classes("text-base text-gray-900")
+            
+            # Other Properties
+            prop_map = {
+                'updateRate': 'Update Rate',
+                'package': 'Package',
+                'nodeType': 'Nodetype',
+                'algorithm': 'Algorithm',
+                'sensorType': 'Sensor Type',
+            }
+            for prop_key, prop_label in prop_map.items():
+                if prop_key in details.get('properties', {}):
+                    with ui.row().classes("items-baseline space-x-2 mb-2"):
+                        ui.label(f"{prop_label}:").classes("font-bold text-gray-700")
+                        ui.label(details['properties'][prop_key]).classes("text-base text-gray-900")
+            
+            # Divider
+            ui.separator().classes("my-4")
+            # URI
+            ui.label(f"URI: {details['uri']}").classes("text-xs text-gray-500 mt-2")
         dialog.open()
     
     def load_all_components():
