@@ -10,13 +10,16 @@ This application demonstrates how semantic descriptions of ROS components can be
 - **Search Interface**: Web-based UI for searching components by name, class, or description
 - **Component Details**: Detailed view of component properties and relationships
 - **Modular Architecture**: Separated backend (data management) and frontend (UI)
+- **Blazegraph Backend**: Uses Blazegraph as a triple store for persistent, scalable RDF storage
+- **Repository & Wiki Links**: Each component card and details dialog can link to the ROS package repository and ROS Wiki page
+
 
 ## Technology Stack
 
-- **Backend**: Python 3.9+ with rdflib for RDF processing
+- **Backend**: Python 3.9+ with Blazegraph (via HTTP SPARQL queries)
 - **Frontend**: NiceGUI for modern web-based interface
 - **Data Format**: RDF/Turtle for semantic component descriptions
-- **Database**: In-memory rdflib graph (simplified for PoC)
+- **Database**: Blazegraph triple store (Dockerized)
 
 ## Project Structure
 
@@ -29,7 +32,7 @@ ros-component-explorer/
 │   └── components.ttl     # RDF/Turtle file with sample component data
 ├── backend/
 │   ├── __init__.py
-│   └── db_manager.py      # Database manager for RDF operations
+│   └── db_manager.py      # Blazegraph manager for RDF operations
 └── frontend/
     ├── __init__.py
     └── ui.py              # NiceGUI user interface
@@ -41,12 +44,18 @@ ros-component-explorer/
 
 - Python 3.9 or higher
 - pip (Python package installer)
+- Docker (for Blazegraph)
 
 ### Installation Steps
 
-1. **Clone or download the project files**
+1. **Start Blazegraph with Docker**
+   ```bash
+   sudo docker run -d -p 9999:8080 --name blazegraph lyrasis/blazegraph:2.1.5
+   ```
+   - This maps your host’s port 9999 to the container’s port 8080 (where Blazegraph listens).
+   - Access Blazegraph at [http://localhost:9999/bigdata](http://localhost:9999/bigdata)
 
-2. **Install dependencies**:
+2. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
@@ -77,6 +86,7 @@ ros-component-explorer/
    - Input and output message types
    - Update rates and package information
    - Additional properties and metadata
+   - **Repo** and **Wiki** links (if available)
 
 ### Sample Data
 
@@ -116,57 +126,40 @@ The application comes with sample data for various ROS components:
 - Card-based component display with key information
 - Detailed property view in modal dialogs
 - Clear presentation of component relationships
+- **Repo** and **Wiki** links for each component (if available)
 
 ### RDF Data Model
 - Semantic descriptions using RDF/Turtle format
 - Extensible ontology for component properties
 - Support for complex relationships between components
 
-## Technical Details
+### Blazegraph Backend
+- All data is stored and queried via Blazegraph (Dockerized)
+- No in-memory rdflib; all queries use HTTP SPARQL
 
-### Data Model
-
-The application uses a simple ontology for ROS components:
-
-- **Classes**: LocalizationNode, SensorDriver, PathPlanner, Controller, PerceptionNode
-- **Properties**: hasInput, hasOutput, description, updateRate, package, nodeType, etc.
-
-### SPARQL Queries
-
-The backend uses SPARQL queries for:
-- Retrieving all components
-- Searching components by text
-- Getting detailed component information
-
-### Architecture
-
-- **Modular Design**: Separated concerns between data management and UI
-- **Extensible**: Easy to add new component types and properties
-- **Web-Based**: Accessible through any modern web browser
-
-## Future Enhancements
-
-This proof-of-concept can be extended with:
-
-1. **Advanced Search**: Semantic similarity search, filtering by component type
-2. **Component Relationships**: Visual graphs showing component dependencies
-3. **Integration**: Connect to real ROS package repositories
-4. **Advanced UI**: Interactive graphs, component comparison tools
-5. **Persistent Storage**: Full RDF database (e.g., Blazegraph, GraphDB)
+### Duplicate Result Handling
+- Deduplication logic in the backend ensures that each component appears only once in the UI, even if it has multiple inputs/outputs or other properties.
 
 ## Troubleshooting
 
-### Common Issues
+### Duplicate Results in Search
+- If you see duplicate cards for the same component, ensure you are using the latest code with deduplication logic in `backend/db_manager.py`.
+- The backend deduplicates by component URI, label, class, and description.
 
-1. **Port already in use**: Change the port in `main.py` line 35
-2. **Missing dependencies**: Ensure all requirements are installed
-3. **Data file not found**: Check that `data/components.ttl` exists
+### Blazegraph Connection Issues
+- Make sure Blazegraph is running and accessible at [http://localhost:9999/bigdata](http://localhost:9999/bigdata)
+- If you see connection errors, check Docker logs:
+  ```bash
+  sudo docker logs blazegraph
+  ```
+- If you see a 404 at `/blazegraph`, use `/bigdata` instead.
+- If you see "Not a valid (absolute) URI: kb", update the backend to remove the `context-uri` parameter when uploading Turtle data.
 
-### Logging
+### Port Already in Use
+- Change the port in `main.py` if 8080 is already used by another service.
 
-The application includes logging for debugging:
-- Check console output for error messages
-- Database operations are logged for troubleshooting
+### Data file not found
+- Check that `data/components.ttl` exists and is readable.
 
 ## Contributing
 
