@@ -1,4 +1,4 @@
-# ROS Component Explorer - Proof of Concept
+# ROS Component Explorer 
 
 A semantic search and visualization tool for Robot Operating System (ROS) components, built as a proof-of-concept for the R&D proposal "Rich Descriptive Models for Reusable ROS Software Components."
 
