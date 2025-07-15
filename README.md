@@ -88,33 +88,6 @@ ros-component-explorer/
    - Additional properties and metadata
    - **Repo** and **Wiki** links (if available)
 
-### Sample Data
-
-The application comes with sample data for various ROS components:
-
-**Localization Components:**
-- AMCL (Adaptive Monte Carlo Localization)
-- GMapping (SLAM mapping)
-
-**Sensor Drivers:**
-- SICK Scan Driver (laser scanner)
-- Velodyne Driver (3D laser)
-- IMU Driver (inertial measurement unit)
-
-**Path Planning:**
-- Move Base (navigation stack)
-- Global Planner
-- Local Planner
-
-**Controllers:**
-- Base Controller
-- Joint Controller
-
-**Perception:**
-- Object Detection
-- Point Cloud Processor
-- SLAM Processor
-
 ## Features Demonstrated
 
 ### Semantic Search
