@@ -7,5 +7,19 @@ nicegui>=1.4.0
 # RDF processing with rdflib
 rdflib>=6.0.0
 
+# Solr client for search functionality
+pysolr>=3.9.0
+
 # Additional utilities
 typing-extensions>=4.0.0 
+requests>=2.25.0
+sentence-transformers>=2.0.0
+chromadb>=0.3.20
+bs4>=0.0.1
+fastapi
+uvicorn
+requests
+beautifulsoup4
+sentence-transformers
+chromadb
+nicegui
