@@ -1,12 +1,24 @@
-# ROS Component Explorer - Proof of Concept
+# ROS Component Explorer 
 
 A semantic search and visualization tool for Robot Operating System (ROS) components, built as a proof-of-concept for the R&D proposal "Rich Descriptive Models for Reusable ROS Software Components."
+
+## 🚀 New: LLM-Powered Natural Language Search
+
+This project now features **intelligent natural language querying** powered by Large Language Models (LLMs). Ask questions like:
+
+- *"What is the best SLAM package for a robot with a 3D LiDAR and an IMU in a large, outdoor environment?"*
+- *"I need a navigation stack for indoor environments with stereo cameras"*
+- *"Recommend a localization package for outdoor robots with GPS and wheel odometry"*
+
+The system understands your requirements and provides intelligent recommendations with explanations.
 
 ## Project Overview
 
 This application demonstrates how semantic descriptions of ROS components can be stored, searched, and visualized using RDF (Resource Description Framework) technology. The proof-of-concept includes:
 
-- **Semantic Data Storage**: RDF/Turtle format for component descriptions
+- **🧠 Natural Language Search**: LLM-powered query understanding and response synthesis
+- **Semantic Data Storage**: RDF/Turtle format for component descriptions  
+- **🔍 Multi-Modal Search**: Traditional text, semantic vector, and hybrid search
 - **Search Interface**: Web-based UI for searching components by name, class, or description
 - **Component Details**: Detailed view of component properties and relationships
 - **Modular Architecture**: Separated backend (data management) and frontend (UI)
@@ -14,9 +26,10 @@ This application demonstrates how semantic descriptions of ROS components can be
 ## Technology Stack
 
 - **Backend**: Python 3.9+ with rdflib for RDF processing
+- **LLM Integration**: Sentence-BERT for embeddings, natural language processing
+- **Search Engine**: Apache Solr with vector search capabilities
 - **Frontend**: NiceGUI for modern web-based interface
 - **Data Format**: RDF/Turtle for semantic component descriptions
-- **Database**: In-memory rdflib graph (simplified for PoC)
 
 ## Project Structure
 
@@ -63,6 +76,25 @@ ros-component-explorer/
 
 ## Usage
 
+### 🧠 Natural Language Search (NEW!)
+
+Try the LLM-powered natural language interface by asking questions like:
+
+```bash
+# Test the LLM functionality
+python LLM/demo.py
+
+# Or run comprehensive tests
+python test_llm_comprehensive.py
+```
+
+**Example queries:**
+- "What is the best SLAM package for outdoor robots with 3D LiDAR?"
+- "I need navigation components for indoor environments"
+- "Recommend localization packages for robots with GPS"
+- "Find perception components for object detection"
+- "Compare SLAM packages for indoor robots"
+
 ### Main Interface
 
 1. **Search Components**: Use the search bar to find components by:
@@ -70,40 +102,16 @@ ros-component-explorer/
    - Component class (e.g., "LocalizationNode", "SensorDriver")
    - Description keywords (e.g., "laser", "navigation", "perception")
 
-2. **View All Components**: Click "Show All" to display all available components
+2. **Natural Language Mode**: Switch to ask questions in plain English
 
-3. **Component Details**: Click the "Details" button on any component card to view:
+3. **View All Components**: Click "Show All" to display all available components
+
+4. **Component Details**: Click the "Details" button on any component card to view:
    - Full component description
    - Input and output message types
    - Update rates and package information
    - Additional properties and metadata
 
-### Sample Data
-
-The application comes with sample data for various ROS components:
-
-**Localization Components:**
-- AMCL (Adaptive Monte Carlo Localization)
-- GMapping (SLAM mapping)
-
-**Sensor Drivers:**
-- SICK Scan Driver (laser scanner)
-- Velodyne Driver (3D laser)
-- IMU Driver (inertial measurement unit)
-
-**Path Planning:**
-- Move Base (navigation stack)
-- Global Planner
-- Local Planner
-
-**Controllers:**
-- Base Controller
-- Joint Controller
-
-**Perception:**
-- Object Detection
-- Point Cloud Processor
-- SLAM Processor
 
 ## Features Demonstrated
 

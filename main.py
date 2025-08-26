@@ -32,12 +32,12 @@ def main():
         db_manager = SolrManager(str(data_file))
         print(f"Loaded {len(db_manager.get_all_components())} components from Solr database")
         
-        # Build and run the user interface
-        build_ui(db_manager)
+        # Build and run the user interface with LLM integration
+        build_ui(db_manager, str(data_file))
         
         # Start the NiceGUI application
         ui.run(
-            title="ROS Component Explorer (Solr)",
+            title="ROS Component Explorer - LLM Enhanced",
             port=8080,
             show=True,
             reload=False
