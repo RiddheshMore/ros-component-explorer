@@ -43,18 +43,17 @@ class SolrManager:
             logger.error(f"Error checking/loading Solr data: {e}")
             raise
     
-    def _load_ttl_data(self):
-        """Parse TTL file and convert to Solr documents."""
-        # Parse the TTL file
-        g = Graph()
-        try:
-            logger.info(f"Parsing TTL file: {self.ttl_file}")
-            g.parse(self.ttl_file, format="turtle")
-            logger.info(f"TTL file parsed successfully. Graph has {len(g)} triples.")
-        except Exception as e:
-            logger.error(f"Error parsing TTL file: {e}")
-            raise
+    def _extract_components_from_graph(self, g: Graph, is_additional_file: bool = False):
+        """
+        Extract component data from an RDF graph and convert to Solr documents.
         
+        Args:
+            g: The RDF graph to process
+            is_additional_file: Whether this is an additional file being loaded
+        
+        Returns:
+            List of component dictionaries ready for Solr indexing
+        """
         # Define namespaces
         ROS = Namespace("http://example.org/ros-ontology#")
         DCTERMS = Namespace("http://purl.org/dc/terms/")
@@ -72,9 +71,23 @@ class SolrManager:
             ROS.PerceptionComponent
         ]
         
+        # Add additional component types for expanded files
+        if is_additional_file:
+            component_types.extend([
+                ROS.ManipulationComponent,
+                ROS.SimulationComponent
+            ])
+        
+        # Track the number of components found for each type
+        type_counts = {}
+        
         for component_type in component_types:
-            logger.info(f"Looking for components of type: {component_type}")
+            type_name = str(component_type).split('#')[-1]
+            count = 0
+            logger.info(f"Looking for components of type: {type_name}")
+            
             for component_uri, rdf_type, _ in g.triples((None, RDF.type, component_type)):
+                count += 1
                 logger.info(f"Found component: {component_uri}")
                 
                 # Get component label
@@ -99,10 +112,16 @@ class SolrManager:
                     package = str(pkg_obj)
                     break
                 
-                # Get update rate
+                # Get update rate and handle non-numeric values
                 update_rate = None
                 for _, _, rate_obj in g.triples((component_uri, ROS.hasUpdateRate, None)):
-                    update_rate = str(rate_obj)
+                    rate_str = str(rate_obj)
+                    # Try to parse as float, if it fails use "0.0"
+                    try:
+                        float(rate_str)
+                        update_rate = rate_str
+                    except ValueError:
+                        update_rate = "0.0"  # Default for non-numeric values
                     break
                 
                 # Get ROS version
@@ -127,20 +146,40 @@ class SolrManager:
                 doc = {
                     'id': str(component_uri),
                     'name': label,
-                    'type': str(component_type).split('#')[-1],
+                    'type': type_name,
                     'description': description or "No description available",
                     'package': package or "Unknown package",
-                    'update_rate': update_rate or "Unknown",
+                    'update_rate': update_rate or "0.0",  # Default to "0.0" for missing values
                     'ros_version': ros_version or "Unknown",
                     'subscribed_topics': subscribed_topics,
                     'published_topics': published_topics,
-                    'content': f"{label} {str(component_type).split('#')[-1]} {description or ''} {package or ''} {' '.join(subscribed_topics)} {' '.join(published_topics)}"
+                    'content': f"{label} {type_name} {description or ''} {package or ''} {' '.join(subscribed_topics)} {' '.join(published_topics)}"
                 }
                 
                 logger.info(f"Created document for {label}: {doc}")
                 components.append(doc)
+            
+            type_counts[type_name] = count
         
+        # Log component type statistics
+        logger.info(f"Component type counts: {type_counts}")
         logger.info(f"Total components found: {len(components)}")
+        return components
+        
+    def _load_ttl_data(self):
+        """Parse TTL file and convert to Solr documents."""
+        # Parse the TTL file
+        g = Graph()
+        try:
+            logger.info(f"Parsing TTL file: {self.ttl_file}")
+            g.parse(self.ttl_file, format="turtle")
+            logger.info(f"TTL file parsed successfully. Graph has {len(g)} triples.")
+        except Exception as e:
+            logger.error(f"Error parsing TTL file: {e}")
+            raise
+        
+        # Extract and index components
+        components = self._extract_components_from_graph(g)
         
         # Index documents in Solr
         if components:
@@ -154,6 +193,39 @@ class SolrManager:
                 raise
         else:
             logger.warning("No components found to index!")
+            
+    def load_additional_ttl_file(self, ttl_file_path: str):
+        """
+        Load an additional TTL file into Solr without clearing existing data.
+        
+        Args:
+            ttl_file_path: Path to the additional TTL file
+        """
+        # Parse the TTL file
+        g = Graph()
+        try:
+            logger.info(f"Parsing additional TTL file: {ttl_file_path}")
+            g.parse(ttl_file_path, format="turtle")
+            logger.info(f"Additional TTL file parsed successfully. Graph has {len(g)} triples.")
+        except Exception as e:
+            logger.error(f"Error parsing additional TTL file: {e}")
+            raise
+            
+        # Extract components from the additional file
+        components = self._extract_components_from_graph(g, is_additional_file=True)
+        
+        # Index documents in Solr
+        if components:
+            try:
+                logger.info(f"Indexing {len(components)} additional documents in Solr...")
+                self.solr.add(components)
+                self.solr.commit()
+                logger.info(f"Successfully indexed {len(components)} additional components in Solr")
+            except Exception as e:
+                logger.error(f"Error indexing additional documents in Solr: {e}")
+                raise
+        else:
+            logger.warning("No additional components found to index!")
     
     def add_vectors_to_documents(self, components_with_vectors: List[Dict]) -> bool:
         """
@@ -224,8 +296,14 @@ class SolrManager:
             return self.get_all_components()
         
         try:
-            # Use Solr's built-in text search
-            query = f"content:*{search_term}* OR name:*{search_term}* OR type:*{search_term}*"
+            # Check if this is already a structured Solr query
+            if any(field in search_term for field in ['name:', 'type:', 'content:', 'description:']):
+                # This is already a structured query, use it directly
+                query = search_term
+            else:
+                # This is a simple search term, wrap with wildcards
+                query = f"content:*{search_term}* OR name:*{search_term}* OR type:*{search_term}*"
+            
             results = self.solr.search(query, rows=1000)
             
             components = []
@@ -234,7 +312,9 @@ class SolrManager:
                     'uri': doc.get('id', ''),
                     'name': doc.get('name', ''),
                     'class': doc.get('type', ''),
-                    'description': doc.get('description', 'No description available')
+                    'description': doc.get('description', 'No description available'),
+                    'relevance_score': doc.get('score', 0.0),
+                    'search_type': 'text'
                 })
             return components
         except Exception as e:

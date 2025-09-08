@@ -109,14 +109,12 @@ class LLMSearchEngine:
         all_results = []
         
         # Text-based search
+        text_results = []
         if search_params["text_query"]:
             try:
                 text_results = self.solr_manager.search_components(
                     search_params["text_query"]
                 )
-                # Limit results if needed
-                if len(text_results) > max_results * 2:
-                    text_results = text_results[:max_results * 2]
                 
                 for result in text_results:
                     result["search_type"] = "text"
@@ -126,8 +124,14 @@ class LLMSearchEngine:
             except Exception as e:
                 logger.warning(f"Text search failed: {e}")
         
+        # Only do semantic search if text search found few results or if specifically needed
+        should_do_semantic = (
+            len(text_results) < 3 or  # Few text results found
+            (requirements.keywords and any(k in ['best', 'recommend', 'suggest'] for k in requirements.keywords))
+        )
+        
         # Semantic/vector search
-        if requirements.keywords or requirements.primary_function:
+        if should_do_semantic and (requirements.keywords or requirements.primary_function):
             try:
                 # Create semantic query from requirements
                 semantic_query = self._build_semantic_query(requirements)
@@ -203,20 +207,15 @@ class LLMSearchEngine:
         """Calculate relevance score for a result based on requirements."""
         base_score = result.get("relevance_score", 0.0)
         
-        # Boost factors
+        # Start with a base score
         boost = 1.0
         
-        # Category matching - handle both string and list types
+        # Get result fields for matching
         result_type = result.get("class", result.get("type", ""))
         if isinstance(result_type, list):
             result_type = " ".join(str(t) for t in result_type)
         result_type = str(result_type).lower()
         
-        for category in requirements.categories:
-            if category.value in result_type:
-                boost += 0.3
-        
-        # Sensor matching - handle both string and list types
         result_desc = result.get("description", "")
         if isinstance(result_desc, list):
             result_desc = " ".join(str(d) for d in result_desc)
@@ -227,26 +226,80 @@ class LLMSearchEngine:
             result_name = " ".join(str(n) for n in result_name)
         result_name = str(result_name).lower()
         
-        combined_text = f"{result_desc} {result_name}"
+        combined_text = f"{result_desc} {result_name} {result_type}"
         
+        # Strong category matching boost
+        category_match_bonus = 0.0
+        for category in requirements.categories:
+            category_terms = {
+                'perception': ['perception', 'vision', 'detection', 'recognition', 'tracking', 'object'],
+                'localization': ['localization', 'pose', 'position', 'slam', 'mapping'],
+                'sensors': ['sensor', 'camera', 'lidar', 'imu', 'gps'],
+                'navigation': ['navigation', 'planning', 'path', 'motion'],
+                'control': ['control', 'controller', 'motor', 'actuator']
+            }
+            
+            category_keywords = category_terms.get(category.value, [category.value])
+            
+            # Strong boost for exact type match
+            if category.value in result_type:
+                category_match_bonus += 1.0
+            
+            # Moderate boost for description/name matches
+            for keyword in category_keywords:
+                if keyword in combined_text:
+                    category_match_bonus += 0.3
+                    break  # Don't double-count same category
+        
+        # Strong sensor matching boost
+        sensor_match_bonus = 0.0
         for sensor in requirements.sensors:
             sensor_keywords = sensor.value.replace("_", " ")
             if sensor_keywords in combined_text:
-                boost += 0.2
+                sensor_match_bonus += 0.8
+            
+            # Additional specific sensor checks
+            if sensor.value == "camera":
+                camera_terms = ["camera", "vision", "image", "rgb", "stereo", "depth"]
+                if any(term in combined_text for term in camera_terms):
+                    sensor_match_bonus += 0.5
+        
+        # Penalize mismatched categories strongly
+        category_penalty = 0.0
+        if requirements.categories:
+            # Check if this is clearly the wrong category
+            wrong_category_indicators = {
+                'perception': ['localization', 'slam', 'mapping', 'amcl', 'gmapping', 'cartographer'],
+                'localization': ['detection', 'recognition', 'tracking', 'yolo', 'darknet'],
+                'sensors': ['planner', 'controller', 'navigation']
+            }
+            
+            for req_category in requirements.categories:
+                wrong_indicators = wrong_category_indicators.get(req_category.value, [])
+                if any(indicator in combined_text for indicator in wrong_indicators):
+                    category_penalty += 0.5
         
         # Performance requirements
+        perf_bonus = 0.0
         if "best" in requirements.performance_requirements:
             # Boost popular/well-known packages
-            popular_indicators = ["nav", "slam", "move_base", "amcl", "gmapping"]
+            popular_indicators = ["nav", "slam", "move_base", "amcl", "gmapping", "darknet", "yolo"]
             for indicator in popular_indicators:
                 if indicator in result_name:
-                    boost += 0.1
+                    perf_bonus += 0.1
         
         # Search type weighting
+        search_type_bonus = 0.0
         if result.get("search_type") == "semantic":
-            boost += 0.1  # Slight preference for semantic matches
+            search_type_bonus += 0.1  # Slight preference for semantic matches
         
-        return base_score * boost
+        # Apply all bonuses and penalties
+        final_boost = boost + category_match_bonus + sensor_match_bonus + perf_bonus + search_type_bonus - category_penalty
+        
+        # Ensure we don't go negative
+        final_boost = max(0.1, final_boost)
+        
+        return base_score * final_boost
     
     def _synthesize_response(self, query: str, requirements: QueryRequirements, results: List[Dict]) -> str:
         """Synthesize a human-readable response."""

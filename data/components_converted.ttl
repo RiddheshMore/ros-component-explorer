@@ -1,5 +1,10 @@
-INSERT DATA {
-  # -- 1. Define all unique ROS Topic types found in the components --
+@prefix ros: <http://example.org/ros-ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# -- 1. Define all unique ROS Topic types found in the components --
   ros:topic_LaserScan             a ros:ROS_Topic ; rdfs:label "LaserScan Topic" ; ros:hasMessageType "sensor_msgs/LaserScan" .
   ros:topic_Odometry              a ros:ROS_Topic ; rdfs:label "Odometry Topic" ; ros:hasMessageType "geometry_msgs/Odometry" .
   ros:topic_PointCloud2           a ros:ROS_Topic ; rdfs:label "PointCloud2 Topic" ; ros:hasMessageType "sensor_msgs/PointCloud2" .
@@ -1366,6 +1371,3 @@ INSERT DATA {
     ros:maintainer "Unknown" ;
     ros:repositoryUrl "https://github.com/ros-perception/imu_pipeline/tree/jazzy/imu_processors" ;
     ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
-
-
-}

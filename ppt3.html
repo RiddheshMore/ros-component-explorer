@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation: ROS Component Explorer System Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 4rem 2rem 6rem 2rem; /* Added padding for nav */
+            overflow-y: auto;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+        .slide-content {
+            max-width: 1200px;
+            width: 90%;
+        }
+        .highlight { color: #60a5fa; }
+        .arch-box {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .arrow {
+            font-size: 2.5rem;
+            color: #4b5563;
+            align-self: center;
+        }
+        pre {
+            background-color: #111827;
+            color: #d1d5db;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 h-full flex flex-col items-center justify-center">
+
+    <!-- Slide 1: Title -->
+    <div id="slide-1" class="slide active flex-col items-center justify-center text-center">
+        <div class="slide-content">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">ROS Component Explorer</h1>
+            <p class="text-2xl text-blue-400 mt-2">System Architecture & Query Flow</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: System Architecture -->
+    <div id="slide-2" class="slide flex-col items-center justify-center">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center">High-Level System Architecture</h2>
+            <p class="text-xl text-gray-300 mb-8 text-center">The system is composed of three distinct layers that work in concert to deliver a seamless search experience.</p>
+            <div class="grid md:grid-cols-5 gap-4 items-center">
+                <div class="arch-box">
+                    <h3 class="text-2xl font-semibold text-blue-300">Frontend</h3>
+                    <p class="mt-2">A user-friendly web interface built with <span class="highlight">Gradio</span> for query input and result display.</p>
+                </div>
+                <div class="arrow">&#10140;</div>
+                <div class="arch-box">
+                    <h3 class="text-2xl font-semibold text-blue-300">LLM Service</h3>
+                    <p class="mt-2">Acts as an intelligent <span class="highlight">translator</span>, converting natural language into structured Solr queries.</p>
+                </div>
+                <div class="arrow">&#10140;</div>
+                <div class="arch-box">
+                    <h3 class="text-2xl font-semibold text-blue-300">Backend</h3>
+                    <p class="mt-2">The data powerhouse, using <span class="highlight">Apache Solr</span> to index component data and execute complex searches.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: User Query Flow -->
+    <div id="slide-3" class="slide flex-col items-center justify-center">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center">User Query Flow</h2>
+            <p class="text-xl text-gray-300 mb-8 text-center">Follow a query's journey from your keyboard to the final results on your screen.</p>
+            <div class="space-y-4 text-lg">
+                <div class="bg-gray-800 p-4 rounded-lg flex items-center">
+                    <span class="text-blue-400 font-bold text-2xl mr-4">1.</span>
+                    <div><span class="font-semibold">Query Input:</span> User enters a plain English query into the Gradio frontend.</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg flex items-center">
+                    <span class="text-blue-400 font-bold text-2xl mr-4">2.</span>
+                    <div><span class="font-semibold">LLM Translation:</span> The query is sent to the LLM Service, which translates it into a structured Solr query.</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg flex items-center">
+                    <span class="text-blue-400 font-bold text-2xl mr-4">3.</span>
+                    <div><span class="font-semibold">Backend Search:</span> The Solr query is executed by the Backend against its indexed component data.</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg flex items-center">
+                    <span class="text-blue-400 font-bold text-2xl mr-4">4.</span>
+                    <div><span class="font-semibold">Results Display:</span> The matching components are returned to the frontend and displayed to the user.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Sentence Transformer Usage -->
+    <div id="slide-4" class="slide flex-col items-center">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center">Sentence Transformer Usage Overview</h2>
+            <div class="grid md:grid-cols-2 gap-6 text-base">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">1. Model Setup & Initialization</h3>
+                    <p>The <span class="highlight">all-MiniLM-L6-v2</span> model is used to generate 384-dimensional embeddings, with CUDA support for acceleration.</p>
+                    <pre class="mt-2"><code># In VectorGenerator class
+from sentence_transformers import SentenceTransformer
+
+def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+  self.model = SentenceTransformer(model_name)</code></pre>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">2. Component Text Processing</h3>
+                    <p>Rich text descriptions are created by combining component name, type, description, package, and ROS topics.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">3. Embedding Generation</h3>
+                    <p>Component descriptions are converted into 384D vectors in batches for efficiency and stored with the component data.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">4. Query Processing</h3>
+                    <p>User queries are also converted into a 384D vector to find components with the closest conceptual meaning.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg col-span-2">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">5. Current Status & Limitations</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><span class="text-green-400">Working:</span> Model initialization, text processing, embedding generation, and query vectorization.</li>
+                        <li><span class="text-yellow-400">Limitations:</span> Vector storage is not fully configured in the Solr schema, causing the system to fall back to text search instead of true vector similarity search.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: AI Response Generation -->
+    <div id="slide-5" class="slide flex-col items-center">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center">🤖 AI Response Generation Pipeline</h2>
+            <div class="grid md:grid-cols-2 gap-6 text-base">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">1. Response Generation Flow</h3>
+                    <p>A 5-step process: parse query, translate to search params, execute search, rank results, and synthesize a human-readable response.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">2. Response Type Detection</h3>
+                    <p>The AI automatically determines the response style (recommendation, comparison,list) based on query keywords.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg col-span-2">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">3. Key AI Response Characteristics</h3>
+                     <ul class="list-disc list-inside space-y-1">
+                        <li><span class="highlight">Natural Language Understanding:</span> Parses user intent from queries.</li>
+                        <li><span class="highlight">Context-Aware:</span> Provides different response styles based on query type.</li>
+                        <li><span class="highlight">Reasoning:</span> Explains why recommendations are made.</li>
+                        <li><span class="highlight">No External LLM APIs:</span> Uses rule-based NLP and Sentence Transformers for semantic understanding.</li>
+                    </ul>
+                </div>
+                 <div class="bg-gray-800 p-4 rounded-lg col-span-2">
+                    <h3 class="font-semibold text-blue-300 text-xl mb-2">4. Smart Response Features</h3>
+                     <ul class="list-disc list-inside space-y-1">
+                        <li>Intelligent text truncation for readability.</li>
+                        <li>Contextual reasoning based on detected requirements (e.g., sensors, environment).</li>
+                        <li>Graceful handling of missing data and "no results" scenarios.</li>
+                        <li>Rich Markdown formatting for better readability.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Example Queries -->
+    <div id="slide-6" class="slide flex-col items-center justify-center">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center">Example User Queries</h2>
+            <p class="text-xl text-gray-300 mb-8 text-center">The system is designed to understand a wide range of natural language questions.</p>
+            <div class="space-y-4">
+                <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-lg text-gray-200">"What is the best SLAM package for a robot with a 3D LiDAR and an IMU in a large, outdoor environment?"</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-lg text-gray-200">"I need a navigation stack for indoor environments with stereo cameras"</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-lg text-gray-200">"Recommend a localization package for outdoor robots with GPS and wheel odometry"</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-lg text-gray-200">"Find perception components for object detection using depth cameras"</p>
+                </div>
+                 <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-lg text-gray-200">"What planning algorithms work well with 2D LiDAR in real-time?"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Q&A -->
+    <div id="slide-7" class="slide flex-col items-center justify-center text-center">
+        <div class="slide-content">
+            <h1 class="text-6xl font-bold text-white">Thank You</h1>
+            <p class="text-4xl text-blue-400 mt-8">Questions?</p>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <button id="prevBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l-lg transition-colors">
+            &#9664; Prev
+        </button>
+        <div id="slideCounter" class="text-white font-semibold px-6 py-2 bg-gray-800">
+            Slide 1 / 7
+        </div>
+        <button id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg transition-colors">
+            Next &#9654;
+        </button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCounter = document.getElementById('slideCounter');
+        let currentSlide = 1;
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            const newSlideElement = document.getElementById(`slide-${n}`);
+            if (newSlideElement) newSlideElement.classList.add('active');
+            slideCounter.textContent = `Slide ${n} / ${totalSlides}`;
+            prevBtn.disabled = n === 1;
+            nextBtn.disabled = n === totalSlides;
+            prevBtn.classList.toggle('opacity-50', n === 1);
+            nextBtn.classList.toggle('opacity-50', n === totalSlides);
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) showSlide(++currentSlide);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) showSlide(--currentSlide);
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            else if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        window.onload = () => showSlide(currentSlide);
+    </script>
+
+</body>
+</html>
+

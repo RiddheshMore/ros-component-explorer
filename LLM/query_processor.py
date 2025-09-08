@@ -240,14 +240,33 @@ class NLQueryProcessor:
         stop_words = {
             "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", 
             "of", "with", "by", "is", "are", "was", "were", "what", "which", 
-            "who", "where", "when", "why", "how", "best", "good", "better"
+            "who", "where", "when", "why", "how", "best", "good", "better",
+            "show", "me", "all", "that", "can", "be", "used", "work", "works",
+            "find", "search", "get", "give", "list", "display", "tell", "help",
+            "want", "need", "looking", "please", "have", "has", "would", "could",
+            "should", "will", "shall", "may", "might", "must", "do", "does", "did"
         }
         
         # Simple word extraction (could be enhanced with NLP libraries)
         words = re.findall(r'\b\w+\b', query)
-        keywords = [word for word in words if word not in stop_words and len(word) > 2]
         
-        return keywords[:10]  # Limit to top 10 keywords
+        # Filter keywords to only include meaningful technical terms
+        meaningful_keywords = []
+        technical_terms = {
+            "camera", "lidar", "sensor", "robot", "ros", "detection", "tracking",
+            "navigation", "localization", "slam", "perception", "planning", "control",
+            "raspberry", "pi", "nvidia", "jetson", "arduino", "motors", "wheels",
+            "ultrasonic", "infrared", "thermal", "stereo", "depth", "rgb", "imu",
+            "gps", "odometry", "mapping", "path", "trajectory", "obstacle", "avoidance"
+        }
+        
+        for word in words:
+            if (word not in stop_words and 
+                len(word) > 2 and 
+                (word in technical_terms or any(term in word for term in technical_terms))):
+                meaningful_keywords.append(word)
+        
+        return meaningful_keywords[:5]  # Limit to top 5 meaningful keywords
 
 class QueryToSearchTranslator:
     """Translates parsed requirements into search parameters."""
@@ -287,20 +306,37 @@ class QueryToSearchTranslator:
         # Build text query from categories and keywords
         query_terms = []
         
-        # Add category-based terms
+        # Prioritize category-based terms (highest priority)
         for category in requirements.categories:
             if category in self.category_to_type_mapping:
                 query_terms.extend(self.category_to_type_mapping[category])
         
-        # Add sensor-related terms
+        # Add sensor-related terms (high priority)
         for sensor in requirements.sensors:
             query_terms.append(sensor.value)
         
-        # Add general keywords
-        query_terms.extend(requirements.keywords[:5])  # Limit keywords
+        # Add meaningful keywords only if we have them (lower priority)
+        if requirements.keywords:
+            query_terms.extend(requirements.keywords[:3])  # Limit to 3 most relevant keywords
         
-        # Create text query
-        search_params["text_query"] = " OR ".join(set(query_terms))
+        # Remove duplicates and create query
+        unique_terms = list(set(query_terms))
+        
+        # Construct a simpler, more reliable Solr query
+        if unique_terms:
+            # Create separate field queries
+            field_queries = []
+            term_string = " OR ".join(unique_terms)
+            
+            # Simple approach: search each field separately
+            field_queries.append(f"name:({term_string})")
+            field_queries.append(f"type:({term_string})")
+            field_queries.append(f"description:({term_string})")
+            field_queries.append(f"content:({term_string})")
+            
+            search_params["text_query"] = " OR ".join(field_queries)
+        else:
+            search_params["text_query"] = "*:*"  # Fallback to all results
         
         # Add filters based on requirements
         if requirements.environment and requirements.environment != EnvironmentType.UNKNOWN:

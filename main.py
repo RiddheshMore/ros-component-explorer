@@ -20,17 +20,32 @@ import nicegui.ui as ui
 def main():
     """Initialize and run the ROS Component Explorer application."""
     
-    # Initialize the Solr manager with the clean RDF data file
-    data_file = project_root / "data" / "components_clean.ttl"
+    # Initialize the Solr manager with the converted comprehensive RDF data file
+    data_file = project_root / "data" / "components_converted.ttl"
+    expanded_file = project_root / "data" / "expanded_components_ros.ttl"
     
     if not data_file.exists():
         print(f"Error: Data file not found at {data_file}")
-        print("Please ensure the data/components_clean.ttl file exists.")
+        print("Please ensure the data/components_converted.ttl file exists.")
         return
+        
+    if not expanded_file.exists():
+        print(f"Warning: Expanded components file not found at {expanded_file}")
+        print("Only base components will be loaded.")
     
     try:
+        # Initialize Solr with base components
         db_manager = SolrManager(str(data_file))
-        print(f"Loaded {len(db_manager.get_all_components())} components from Solr database")
+        base_count = len(db_manager.get_all_components())
+        
+        # Add expanded components if available
+        if expanded_file.exists():
+            print(f"Loading expanded components from {expanded_file}...")
+            db_manager.load_additional_ttl_file(str(expanded_file))
+            total_count = len(db_manager.get_all_components())
+            print(f"Loaded {total_count} components in total ({total_count - base_count} from expanded file)")
+        else:
+            print(f"Loaded {base_count} components from Solr database")
         
         # Build and run the user interface with LLM integration
         build_ui(db_manager, str(data_file))

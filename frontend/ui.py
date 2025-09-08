@@ -58,7 +58,8 @@ class ROSComponentUI:
                 # Component details modal
                 self._build_details_modal()
                 
-            # Do not auto-load components; wait for a natural language query
+            # Auto-load all components in ascending order when the app is launched
+            self._load_all_components()
                 
             logger.info("Enhanced UI built successfully")
             
@@ -118,7 +119,7 @@ class ROSComponentUI:
         """Build the results display section."""
         with ui.column().classes('w-full'):
             # Results info
-            self.results_info = ui.html('<p class="text-gray-600 mb-4">Loading components...</p>')
+            self.results_info = ui.html('<p class="text-gray-600 mb-4">Loading components in ascending order...</p>')
             
             # Results container
             self.results_container = ui.column().classes('w-full gap-4')
@@ -163,6 +164,8 @@ class ROSComponentUI:
         
         query = self.nlp_input.value.strip() if hasattr(self, 'nlp_input') and self.nlp_input.value else ""
         if not query:
+            # If no query is provided, reset to showing all components in ascending order
+            self._load_all_components()
             return
         
         try:
@@ -214,6 +217,71 @@ class ROSComponentUI:
     
     # Removed traditional search handler; only NLP search remains
     
+    def _load_all_components(self):
+        """Load all components in ascending order by name when the app is launched."""
+        try:
+            # Get all components from the database
+            all_components = self.db_manager.get_all_components()
+            
+            # Remove duplicates by name, preferring components with "Component" in the class name
+            unique_components = {}
+            for component in all_components:
+                name = component.get('name', '')
+                class_name = component.get('class', '')
+                
+                # Handle cases where name or class might be lists
+                if isinstance(name, list):
+                    name = name[0] if name else ''
+                if isinstance(class_name, list):
+                    class_name = class_name[0] if class_name else ''
+                
+                # Ensure we have string values
+                name = str(name)
+                class_name = str(class_name)
+                
+                if name in unique_components:
+                    # Prefer components with "Component" suffix (newer format)
+                    existing_class = unique_components[name].get('class', '')
+                    if isinstance(existing_class, list):
+                        existing_class = existing_class[0] if existing_class else ''
+                    existing_class = str(existing_class)
+                    
+                    if 'Component' in class_name and 'Component' not in existing_class:
+                        # Update the component's name and class to ensure they're strings
+                        component['name'] = name
+                        component['class'] = class_name
+                        unique_components[name] = component
+                    elif 'Component' not in class_name and 'Component' in existing_class:
+                        # Keep the existing one (already has Component suffix)
+                        pass
+                    else:
+                        # Both have same format, keep the first one
+                        pass
+                else:
+                    # Update the component's name and class to ensure they're strings
+                    component['name'] = name
+                    component['class'] = class_name
+                    unique_components[name] = component
+            
+            # Convert back to list and sort by name in ascending order
+            def safe_sort_key(component):
+                name = component.get('name', '')
+                return name.lower() if isinstance(name, str) else str(name).lower()
+                
+            sorted_components = sorted(unique_components.values(), key=safe_sort_key)
+            
+            # Set the search results
+            self.search_results = sorted_components
+            
+            # Update the results display
+            self.results_info.content = f'<p class="text-gray-600 mb-4">All {len(sorted_components)} unique components loaded in ascending order.</p>'
+            self._update_results()
+            
+        except Exception as e:
+            logger.error(f"Error loading all components: {e}")
+            ui.notify(f"Error loading components: {str(e)}", type='negative')
+            self.results_info.content = '<p class="text-red-600 mb-4">Failed to load components.</p>'
+
     def _update_results(self):
         """Update the results display with component cards."""
         results = self.search_results

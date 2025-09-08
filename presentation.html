@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROS Component Explorer - Technical Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            page-break-after: always;
+        }
+
+        .slide-content {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #e74c3c;
+            font-size: 1.8em;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+
+        p, li {
+            font-size: 1.4em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 30px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            margin: 20px 0;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .component-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: perspective(1000px) rotateY(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .component-box:hover {
+            transform: perspective(1000px) rotateY(10deg) scale(1.05);
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .flow-box::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #3498db;
+        }
+
+        .flow-box:last-child::after {
+            display: none;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        @media print {
+            .slide {
+                page-break-before: always;
+                height: 297mm;
+                width: 210mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <div class="slide-content">
+        <h1>🤖 ROS Component Explorer</h1>
+        <h2>AI-Powered Semantic Search & Discovery Platform</h2>
+        <p style="text-align: center; font-size: 1.6em; margin-top: 50px;">
+            A comprehensive system for discovering, exploring, and understanding<br>
+            <span class="highlight">Robot Operating System (ROS) components</span><br>
+            using cutting-edge AI and semantic technologies
+        </p>
+        <div style="margin-top: 60px; display: flex; justify-content: center; gap: 40px;">
+            <div style="background: #3498db; color: white; padding: 20px 30px; border-radius: 15px; font-size: 1.2em;">
+                🔍 Semantic Search
+            </div>
+            <div style="background: #e74c3c; color: white; padding: 20px 30px; border-radius: 15px; font-size: 1.2em;">
+                🧠 LLM Integration
+            </div>
+            <div style="background: #27ae60; color: white; padding: 20px 30px; border-radius: 15px; font-size: 1.2em;">
+                🌐 Web Interface
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">1</div>
+</div>
+
+<!-- Slide 2: Project Overview -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>📋 Project Overview</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>🎯 Mission</h3>
+                <p>Create an intelligent discovery platform for ROS components that understands natural language queries and provides semantic search capabilities</p>
+            </div>
+            <div class="feature-item">
+                <h3>🔬 Research Focus</h3>
+                <p>Proof-of-concept for "Rich Descriptive Models for Reusable ROS Software Components" using RDF ontologies and AI</p>
+            </div>
+            <div class="feature-item">
+                <h3>💡 Innovation</h3>
+                <p>Combines semantic web technologies with Large Language Models for intelligent component recommendations</p>
+            </div>
+            <div class="feature-item">
+                <h3>🚀 Impact</h3>
+                <p>Enables developers to quickly find the right ROS components for their robotics projects using natural language</p>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">114</span>
+                <span class="stat-label">Components</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">5</span>
+                <span class="stat-label">Categories</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Search Modes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Possibilities</span>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">2</div>
+</div>
+
+<!-- Slide 3: System Architecture -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🏗️ System Architecture</h2>
+        <div class="architecture-diagram">
+            <div class="component-box">
+                <h3>🎨 Frontend Layer</h3>
+                <p>NiceGUI Web Interface</p>
+                <ul style="text-align: left; font-size: 1.1em;">
+                    <li>Interactive Search UI</li>
+                    <li>Component Visualization</li>
+                    <li>Real-time Results</li>
+                    <li>Responsive Design</li>
+                </ul>
+            </div>
+            <div class="component-box">
+                <h3>⚙️ Backend Services</h3>
+                <p>Python Core Engine</p>
+                <ul style="text-align: left; font-size: 1.1em;">
+                    <li>Apache Solr Integration</li>
+                    <li>RDF Data Processing</li>
+                    <li>Query Management</li>
+                    <li>Vector Generation</li>
+                </ul>
+            </div>
+            <div class="component-box">
+                <h3>🧠 AI Layer</h3>
+                <p>LLM & Semantic Engine</p>
+                <ul style="text-align: left; font-size: 1.1em;">
+                    <li>Natural Language Processing</li>
+                    <li>Query Understanding</li>
+                    <li>Semantic Search</li>
+                    <li>Response Generation</li>
+                </ul>
+            </div>
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-box">User Query</div>
+            <div class="flow-box">NLP Processing</div>
+            <div class="flow-box">Solr Search</div>
+            <div class="flow-box">AI Analysis</div>
+            <div class="flow-box">Results & Recommendations</div>
+        </div>
+    </div>
+    <div class="slide-number">3</div>
+</div>
+
+<!-- Slide 4: Technology Stack -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>💻 Technology Stack</h2>
+        <div class="tech-stack">
+            <div class="tech-item">
+                <h3>🐍 Backend</h3>
+                <p>Python 3.12+<br>Apache Solr<br>RDFLib<br>FastAPI</p>
+            </div>
+            <div class="tech-item">
+                <h3>🌐 Frontend</h3>
+                <p>NiceGUI<br>Modern Web UI<br>Responsive Design<br>Real-time Updates</p>
+            </div>
+            <div class="tech-item">
+                <h3>🧠 AI/ML</h3>
+                <p>Sentence Transformers<br>HuggingFace Models<br>Vector Embeddings<br>CUDA Support</p>
+            </div>
+            <div class="tech-item">
+                <h3>📊 Data</h3>
+                <p>RDF/Turtle Format<br>SPARQL Queries<br>Semantic Ontology<br>JSON APIs</p>
+            </div>
+        </div>
+        <h3>🔧 Key Libraries & Dependencies</h3>
+        <div class="code-block">
+# Core Dependencies
+nicegui==1.4.21          # Modern web UI framework
+rdflib==7.0.0            # RDF processing and SPARQL
+pysolr==3.9.0            # Apache Solr integration
+sentence-transformers    # Vector embeddings
+fastapi==0.104.1        # REST API framework
+pydantic==2.5.0         # Data validation
+uvicorn[standard]==0.24.0 # ASGI server
+        </div>
+    </div>
+    <div class="slide-number">4</div>
+</div>
+
+<!-- Slide 5: Core Components -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🧩 Core Components</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>🔍 SolrManager</h3>
+                <p><strong>File:</strong> <code>backend/solr_manager.py</code></p>
+                <ul style="font-size: 1.1em;">
+                    <li>Apache Solr integration</li>
+                    <li>Component indexing & search</li>
+                    <li>SPARQL query processing</li>
+                    <li>Data validation & cleaning</li>
+                </ul>
+            </div>
+            <div class="feature-item">
+                <h3>🧠 LLM Engine</h3>
+                <p><strong>Files:</strong> <code>LLM/llm_search_engine.py</code></p>
+                <ul style="font-size: 1.1em;">
+                    <li>Natural language processing</li>
+                    <li>Query requirement extraction</li>
+                    <li>Semantic similarity search</li>
+                    <li>AI response generation</li>
+                </ul>
+            </div>
+            <div class="feature-item">
+                <h3>🎨 Web Interface</h3>
+                <p><strong>File:</strong> <code>frontend/ui.py</code></p>
+                <ul style="font-size: 1.1em;">
+                    <li>Dual search modes</li>
+                    <li>Interactive component cards</li>
+                    <li>Real-time result updates</li>
+                    <li>Responsive design</li>
+                </ul>
+            </div>
+            <div class="feature-item">
+                <h3>🌐 Vector Generation</h3>
+                <p><strong>File:</strong> <code>backend/vector_generator.py</code></p>
+                <ul style="font-size: 1.1em;">
+                    <li>Sentence-BERT embeddings</li>
+                    <li>384-dimension vectors</li>
+                    <li>CUDA acceleration</li>
+                    <li>Batch processing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">5</div>
+</div>
+
+<!-- Slide 6: Data Model & Ontology -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>📊 Data Model & Ontology</h2>
+        <div style="text-align: left;">
+            <h3>🏷️ Component Categories</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>LocalizationComponent (12)</strong><br>
+                    SLAM, pose estimation, mapping
+                </div>
+                <div class="feature-item">
+                    <strong>SensorDriverComponent (16)</strong><br>
+                    Camera, LiDAR, GPS, IMU drivers
+                </div>
+                <div class="feature-item">
+                    <strong>PathPlannerComponent (10)</strong><br>
+                    Navigation, trajectory planning
+                </div>
+                <div class="feature-item">
+                    <strong>ControllerComponent (38)</strong><br>
+                    Motor control, robot dynamics
+                </div>
+                <div class="feature-item">
+                    <strong>PerceptionComponent (26)</strong><br>
+                    Object detection, image processing
+                </div>
+                <div class="feature-item">
+                    <strong>ManipulationComponent</strong><br>
+                    Arm control, grasping
+                </div>
+            </div>
+        </div>
+        <h3>🔗 RDF Schema Structure</h3>
+        <div class="code-block">
+@prefix ros: &lt;http://example.org/ros-ontology#&gt; .
+@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .
+
+ros:navigation2 a ros:PathPlannerComponent ;
+    rdfs:label "Navigation2" ;
+    dcterms:description "The ROS2 successor to the navigation stack..." ;
+    ros:isInPackage "navigation2" ;
+    ros:hasUpdateRate "0.0"^^xsd:float ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic "topic_Odometry", "topic_LaserScan" ;
+    ros:publishesTopic "topic_Twist" .
+        </div>
+    </div>
+    <div class="slide-number">6</div>
+</div>
+
+<!-- Slide 7: Search Capabilities -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🔍 Advanced Search Capabilities</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>🎯 Traditional Search</h3>
+                <ul>
+                    <li><strong>Text Search:</strong> Keyword matching</li>
+                    <li><strong>Semantic Search:</strong> Vector similarity</li>
+                    <li><strong>Hybrid Search:</strong> Combined approach</li>
+                    <li><strong>Filtering:</strong> By category, type, ROS version</li>
+                </ul>
+            </div>
+            <div class="feature-item">
+                <h3>🧠 Natural Language</h3>
+                <ul>
+                    <li><strong>Question Answering:</strong> "What is the best..."</li>
+                    <li><strong>Recommendations:</strong> "I need a component for..."</li>
+                    <li><strong>Comparisons:</strong> "Compare SLAM algorithms"</li>
+                    <li><strong>Context Understanding:</strong> Environment, sensors</li>
+                </ul>
+            </div>
+        </div>
+        <h3>💬 Example Natural Language Queries</h3>
+        <div class="code-block">
+"What is the best SLAM package for a robot with a 3D LiDAR and an IMU in a large, outdoor environment?"
+
+"I need a navigation stack for indoor environments with stereo cameras"
+
+"Find perception components for object detection using depth cameras"
+
+"Recommend a localization package for outdoor robots with GPS and wheel odometry"
+
+"What planning algorithms work well with 2D LiDAR in real-time?"
+        </div>
+        <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin-top: 20px;">
+            <p><strong>🎯 Query Processing:</strong> The system extracts requirements (sensors, environment, performance) and matches them against component capabilities using both traditional search and AI reasoning.</p>
+        </div>
+    </div>
+    <div class="slide-number">7</div>
+</div>
+
+<!-- Slide 8: System Workflow -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>⚡ System Workflow</h2>
+        <div style="text-align: left;">
+            <h3>🔄 Query Processing Pipeline</h3>
+            <div class="flow-diagram" style="flex-direction: column; gap: 20px;">
+                <div style="background: #3498db; color: white; padding: 20px; border-radius: 15px; width: 100%; text-align: center;">
+                    <strong>1. User Input</strong><br>
+                    Natural language query or keyword search
+                </div>
+                <div style="background: #e74c3c; color: white; padding: 20px; border-radius: 15px; width: 100%; text-align: center;">
+                    <strong>2. Query Analysis</strong><br>
+                    LLM extracts requirements (categories, sensors, environment)
+                </div>
+                <div style="background: #f39c12; color: white; padding: 20px; border-radius: 15px; width: 100%; text-align: center;">
+                    <strong>3. Multi-Modal Search</strong><br>
+                    Text search + Semantic vectors + SPARQL queries
+                </div>
+                <div style="background: #27ae60; color: white; padding: 20px; border-radius: 15px; width: 100%; text-align: center;">
+                    <strong>4. AI Ranking & Synthesis</strong><br>
+                    Score results, generate explanations, provide recommendations
+                </div>
+                <div style="background: #9b59b6; color: white; padding: 20px; border-radius: 15px; width: 100%; text-align: center;">
+                    <strong>5. Response Delivery</strong><br>
+                    Web UI displays results with AI insights and component details
+                </div>
+            </div>
+        </div>
+        <h3>🎛️ Search Modes</h3>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <strong>🔤 Text Search</strong><br>
+                Traditional keyword matching with Solr's text analysis
+            </div>
+            <div class="feature-item">
+                <strong>🧠 Semantic Search</strong><br>
+                Vector similarity using Sentence-BERT embeddings
+            </div>
+            <div class="feature-item">
+                <strong>⚡ Hybrid Search</strong><br>
+                Combined text + semantic with weighted scoring
+            </div>
+            <div class="feature-item">
+                <strong>🤖 LLM Search</strong><br>
+                Natural language understanding with AI reasoning
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">8</div>
+</div>
+
+<!-- Slide 9: Key Features -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>✨ Key Features & Capabilities</h2>
+        <div style="text-align: left;">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🎯 Intelligent Discovery</h3>
+                    <ul>
+                        <li>Natural language component search</li>
+                        <li>Context-aware recommendations</li>
+                        <li>Requirement-based matching</li>
+                        <li>Alternative suggestions</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 Rich Metadata</h3>
+                    <ul>
+                        <li>Detailed component descriptions</li>
+                        <li>Input/output topic information</li>
+                        <li>Performance characteristics</li>
+                        <li>ROS version compatibility</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🌐 Modern Web Interface</h3>
+                    <ul>
+                        <li>Responsive design for all devices</li>
+                        <li>Real-time search results</li>
+                        <li>Interactive component cards</li>
+                        <li>Dark/light mode support</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>⚡ High Performance</h3>
+                    <ul>
+                        <li>Apache Solr for fast indexing</li>
+                        <li>CUDA-accelerated vectors</li>
+                        <li>Efficient caching mechanisms</li>
+                        <li>Scalable architecture</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>🎨 User Experience Highlights</h3>
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #3498db;">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li><strong>Dual Search Modes:</strong> Switch between traditional keyword and natural language search</li>
+                    <li><strong>Example-Driven:</strong> Built-in example queries to help users get started</li>
+                    <li><strong>AI Explanations:</strong> Not just results, but reasoning and recommendations</li>
+                    <li><strong>Component Details:</strong> Comprehensive information about each ROS component</li>
+                    <li><strong>Real-Time:</strong> Instant search results and dynamic UI updates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">9</div>
+</div>
+
+<!-- Slide 10: File Structure -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>📁 Project Structure</h2>
+        <div class="code-block" style="text-align: left; font-size: 1.1em;">
+ros-component-explorer/
+├── 🚀 main.py                          # Application entry point
+├── 📋 requirements.txt                 # Python dependencies
+├── 📚 README.md                        # Documentation
+├── 📊 data/
+│   ├── components.ttl                  # Original SPARQL format (1,370 lines)
+│   ├── components_converted.ttl        # Clean Turtle format (1,372 lines)
+│   ├── components_clean.ttl            # Legacy smaller dataset
+│   └── expanded_components_ros.ttl     # Additional premium components
+├── ⚙️ backend/
+│   ├── solr_manager.py                 # Apache Solr integration
+│   ├── vector_generator.py             # Sentence-BERT embeddings
+│   ├── schema_updater.py               # Solr schema management
+│   └── db_manager.py                   # Legacy RDF manager
+├── 🎨 frontend/
+│   ├── ui.py                           # Main web interface
+│   └── enhanced_ui.py                  # Advanced LLM interface
+├── 🧠 LLM/
+│   ├── llm_search_engine.py            # Natural language processing
+│   ├── query_processor.py              # Query understanding
+│   ├── api.py                          # REST API endpoints
+│   └── demo.py                         # Testing & examples
+├── 🔧 Utility Scripts/
+│   ├── convert_ttl.py                  # SPARQL to Turtle conversion
+│   ├── clear_and_reload_solr.py        # Database refresh
+│   ├── check_duplicates.py             # Data validation
+│   └── load_expanded_components_solr.py # Data loading
+└── 📄 Documentation/
+    ├── LLM_INTEGRATION_SUMMARY.md      # AI implementation details
+    ├── WEB_INTEGRATION_COMPLETE.md     # UI integration guide
+    └── CODEBASE_EXPLANATION.md         # Technical documentation
+        </div>
+    </div>
+    <div class="slide-number">10</div>
+</div>
+
+<!-- Slide 11: Data Processing Pipeline -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🔄 Data Processing Pipeline</h2>
+        <div style="text-align: left;">
+            <h3>📊 Data Flow & Transformation</h3>
+            <div class="flow-diagram" style="flex-direction: column; gap: 15px;">
+                <div style="background: #e74c3c; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Original Data:</strong> components.ttl (SPARQL INSERT format, 1,370 lines)
+                </div>
+                <div style="background: #f39c12; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Conversion:</strong> convert_ttl.py → Strip SPARQL wrapper, add Turtle prefixes
+                </div>
+                <div style="background: #27ae60; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Clean Data:</strong> components_converted.ttl (Standard Turtle, 1,372 lines)
+                </div>
+                <div style="background: #3498db; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Enhancement:</strong> + expanded_components_ros.ttl (12 premium components)
+                </div>
+                <div style="background: #9b59b6; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Indexing:</strong> Apache Solr with validation & vector generation
+                </div>
+                <div style="background: #2c3e50; color: white; padding: 15px; border-radius: 10px; width: 100%; text-align: center;">
+                    <strong>Final:</strong> 114 searchable components with AI-powered discovery
+                </div>
+            </div>
+            <h3>🛠️ Key Processing Steps</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>Format Conversion</strong><br>
+                    SPARQL INSERT → Turtle RDF with proper namespaces
+                </div>
+                <div class="feature-item">
+                    <strong>Data Validation</strong><br>
+                    Type checking, "Unknown" value handling, schema compliance
+                </div>
+                <div class="feature-item">
+                    <strong>Vector Generation</strong><br>
+                    384-dimension embeddings using all-MiniLM-L6-v2 model
+                </div>
+                <div class="feature-item">
+                    <strong>Solr Indexing</strong><br>
+                    Full-text search with semantic vector fields
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">11</div>
+</div>
+
+<!-- Slide 12: LLM Integration -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🧠 LLM Integration & AI Features</h2>
+        <div style="text-align: left;">
+            <h3>🎯 Natural Language Understanding</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>📝 Query Processing</h3>
+                    <ul>
+                        <li>Extract component categories</li>
+                        <li>Identify sensor requirements</li>
+                        <li>Understand environment context</li>
+                        <li>Parse performance needs</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🎨 Response Generation</h3>
+                    <ul>
+                        <li>Synthesized recommendations</li>
+                        <li>Detailed explanations</li>
+                        <li>Alternative suggestions</li>
+                        <li>Context-aware answers</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>🔍 AI-Powered Search Examples</h3>
+            <div class="code-block">
+Query: "I need a navigation stack for indoor environments with stereo cameras"
+
+AI Analysis:
+├─ Categories: [NAVIGATION]
+├─ Sensors: [STEREO_CAMERA, CAMERA]  
+├─ Environment: INDOOR
+└─ Keywords: ['navigation', 'stack', 'indoor', 'stereo', 'cameras']
+
+AI Response:
+"Based on your requirements for indoor navigation with stereo cameras, 
+I recommend the Navigation2 stack. It provides comprehensive navigation 
+capabilities including perception, planning, and control modules using 
+behavior trees for autonomous navigation."
+            </div>
+            <h3>⚡ Advanced Capabilities</h3>
+            <div style="background: #e8f5e8; padding: 25px; border-radius: 15px; border-left: 5px solid #27ae60;">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Multi-Modal Search:</strong> Combines text search, semantic vectors, and AI reasoning</li>
+                    <li><strong>Contextual Understanding:</strong> Recognizes robot types, environments, and constraints</li>
+                    <li><strong>Intelligent Ranking:</strong> Scores results based on requirement matching</li>
+                    <li><strong>Graceful Fallback:</strong> Automatic fallback to traditional search if AI unavailable</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">12</div>
+</div>
+
+<!-- Slide 13: Technical Implementation -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>⚙️ Technical Implementation Details</h2>
+        <div style="text-align: left;">
+            <h3>🔧 Core Technologies</h3>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h3>Apache Solr</h3>
+                    <p>Enterprise search platform<br>
+                    → Full-text indexing<br>
+                    → 114 documents indexed<br>
+                    → Real-time queries</p>
+                </div>
+                <div class="tech-item">
+                    <h3>Sentence Transformers</h3>
+                    <p>BERT-based embeddings<br>
+                    → all-MiniLM-L6-v2 model<br>
+                    → 384-dimension vectors<br>
+                    → CUDA acceleration</p>
+                </div>
+                <div class="tech-item">
+                    <h3>RDF/SPARQL</h3>
+                    <p>Semantic web standards<br>
+                    → RDFLib processing<br>
+                    → Turtle format data<br>
+                    → Rich ontologies</p>
+                </div>
+                <div class="tech-item">
+                    <h3>NiceGUI</h3>
+                    <p>Modern web framework<br>
+                    → Reactive UI components<br>
+                    → Real-time updates<br>
+                    → Python-based</p>
+                </div>
+            </div>
+            <h3>🏗️ Architecture Patterns</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>Modular Design</strong><br>
+                    Separated backend services, frontend UI, and AI components
+                </div>
+                <div class="feature-item">
+                    <strong>Event-Driven</strong><br>
+                    Real-time search results with reactive UI updates
+                </div>
+                <div class="feature-item">
+                    <strong>Microservice-Ready</strong><br>
+                    FastAPI endpoints for scalable deployment
+                </div>
+                <div class="feature-item">
+                    <strong>Data Pipeline</strong><br>
+                    ETL process from RDF to searchable index
+                </div>
+            </div>
+            <h3>📊 Performance Metrics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">114</span>
+                    <span class="stat-label">Components</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">384</span>
+                    <span class="stat-label">Vector Dims</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">&lt;100ms</span>
+                    <span class="stat-label">Query Time</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8080</span>
+                    <span class="stat-label">Web Port</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">13</div>
+</div>
+
+<!-- Slide 14: User Interface -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🎨 User Interface & Experience</h2>
+        <div style="text-align: left;">
+            <h3>🌐 Web Interface Features</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🔄 Dual Search Modes</h3>
+                    <ul>
+                        <li>Traditional keyword search</li>
+                        <li>Natural language queries</li>
+                        <li>Seamless mode switching</li>
+                        <li>Context preservation</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>📱 Responsive Design</h3>
+                    <ul>
+                        <li>Desktop & mobile optimized</li>
+                        <li>Touch-friendly interface</li>
+                        <li>Adaptive layouts</li>
+                        <li>Modern aesthetics</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>⚡ Real-Time Results</h3>
+                    <ul>
+                        <li>Instant search feedback</li>
+                        <li>Dynamic result updates</li>
+                        <li>Progress indicators</li>
+                        <li>Error handling</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 Rich Visualizations</h3>
+                    <ul>
+                        <li>Interactive component cards</li>
+                        <li>Detailed modal dialogs</li>
+                        <li>Syntax highlighting</li>
+                        <li>Status indicators</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>💡 User Experience Highlights</h3>
+            <div style="background: #f0f8ff; padding: 25px; border-radius: 15px; border-left: 5px solid #3498db;">
+                <p style="font-size: 1.3em; line-height: 1.8; margin-bottom: 20px;">
+                    <strong>🎯 Intuitive Discovery:</strong> Users can ask questions in natural language like "What's the best SLAM for outdoor robots?" and get intelligent recommendations with explanations.
+                </p>
+                <p style="font-size: 1.3em; line-height: 1.8;">
+                    <strong>📚 Learning-Oriented:</strong> Built-in examples and detailed component information help users understand ROS ecosystem and make informed decisions.
+                </p>
+            </div>
+            <h3>🚀 Access Points</h3>
+            <div class="flow-diagram">
+                <div class="flow-box">http://localhost:8080</div>
+                <div class="flow-box">Web Browser</div>
+                <div class="flow-box">Interactive Search</div>
+                <div class="flow-box">Component Discovery</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">14</div>
+</div>
+
+<!-- Slide 15: Future Enhancements -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🚀 Future Enhancements & Roadmap</h2>
+        <div style="text-align: left;">
+            <h3>🎯 Short-Term Goals</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>📈 Scale & Performance</h3>
+                    <ul>
+                        <li>Expand to 1000+ components</li>
+                        <li>Optimize vector search speed</li>
+                        <li>Add caching mechanisms</li>
+                        <li>Database sharding</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🧠 Enhanced AI</h3>
+                    <ul>
+                        <li>Fine-tuned ROS domain models</li>
+                        <li>Multi-language support</li>
+                        <li>Conversational interfaces</li>
+                        <li>Learning from user feedback</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>🌟 Long-Term Vision</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🌐 Ecosystem Integration</h3>
+                    <ul>
+                        <li>ROS Index integration</li>
+                        <li>GitHub package scanning</li>
+                        <li>Automated component discovery</li>
+                        <li>Real-time package updates</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 Advanced Analytics</h3>
+                    <ul>
+                        <li>Usage pattern analysis</li>
+                        <li>Component popularity metrics</li>
+                        <li>Recommendation optimization</li>
+                        <li>Community insights</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🤝 Collaborative Features</h3>
+                    <ul>
+                        <li>User reviews & ratings</li>
+                        <li>Component comparisons</li>
+                        <li>Community contributions</li>
+                        <li>Expert annotations</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🔧 Developer Tools</h3>
+                    <ul>
+                        <li>Code generation assistants</li>
+                        <li>Dependency analysis</li>
+                        <li>Integration templates</li>
+                        <li>Best practice guides</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>🎨 Research Opportunities</h3>
+            <div style="background: #fff5f5; padding: 25px; border-radius: 15px; border-left: 5px solid #e74c3c;">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Graph Neural Networks:</strong> Model component relationships and dependencies</li>
+                    <li><strong>Reinforcement Learning:</strong> Optimize search ranking based on user behavior</li>
+                    <li><strong>Federated Learning:</strong> Learn from distributed ROS installations</li>
+                    <li><strong>Semantic Reasoning:</strong> Automated compatibility checking and conflict detection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">15</div>
+</div>
+
+<!-- Slide 16: Conclusion -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>✨ Conclusion & Impact</h2>
+        <div style="text-align: left;">
+            <h3>🎯 Key Achievements</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">✅</span>
+                    <span class="stat-label">Proof of Concept</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">🧠</span>
+                    <span class="stat-label">AI Integration</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">🌐</span>
+                    <span class="stat-label">Web Platform</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">🚀</span>
+                    <span class="stat-label">Scalable Design</span>
+                </div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>💡 Innovation</h3>
+                    <ul>
+                        <li>First AI-powered ROS component discovery</li>
+                        <li>Natural language interface for robotics</li>
+                        <li>Semantic web meets modern AI</li>
+                        <li>Open source & extensible</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🌍 Impact</h3>
+                    <ul>
+                        <li>Accelerates robotics development</li>
+                        <li>Reduces component discovery time</li>
+                        <li>Enables better architecture decisions</li>
+                        <li>Democratizes ROS knowledge</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>🎓 Technical Contributions</h3>
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #28a745;">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li><strong>🔬 Research Foundation:</strong> Demonstrates feasibility of semantic ROS component discovery</li>
+                    <li><strong>🏗️ Architectural Pattern:</strong> Modular design for AI-enhanced search systems</li>
+                    <li><strong>📊 Data Model:</strong> RDF ontology for rich robotics component descriptions</li>
+                    <li><strong>🤖 AI Integration:</strong> Practical implementation of LLM + vector search</li>
+                    <li><strong>🌐 User Experience:</strong> Intuitive interface bridging AI and robotics domains</li>
+                </ul>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 20px; font-size: 1.4em;">
+                    <strong>🚀 Ready for Production Scaling</strong><br>
+                    <span style="font-size: 1.1em;">The foundation is built. The future is intelligent robotics discovery.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">16</div>
+</div>
+
+<script>
+// Add smooth scrolling between slides
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+    }
+});
+
+// Add print styles for PDF export
+window.addEventListener('beforeprint', function() {
+    document.body.style.background = 'white';
+});
+
+console.log('🎉 ROS Component Explorer - Technical Presentation Loaded');
+console.log('📚 Use Arrow Keys or Spacebar to navigate slides');
+console.log('🖨️ Use Ctrl+P to print or export as PDF');
+</script>
+
+</body>
+</html>

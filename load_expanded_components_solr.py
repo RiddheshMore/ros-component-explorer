@@ -27,7 +27,7 @@ def load_expanded_components_to_solr():
         solr = Solr(SOLR_URL, timeout=10)
         
         # Read the expanded components TTL file
-        ttl_file_path = "data/expanded_components.ttl"
+        ttl_file_path = "data/components.ttl"
         
         if not os.path.exists(ttl_file_path):
             logger.error(f"TTL file not found: {ttl_file_path}")

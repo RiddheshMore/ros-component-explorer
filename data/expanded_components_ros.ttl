@@ -1,0 +1,126 @@
+# data/expanded_components_ros.ttl
+# This file is a converted version of expanded_components.ttl using the ros: namespace and field names for compatibility.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ros: <http://example.org/ros-ontology#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# -- Additional ROS Topic types for new components --
+ros:topic_NavSatFix             a ros:ROS_Topic ; rdfs:label "NavSatFix Topic" ; ros:hasMessageType "sensor_msgs/NavSatFix" .
+ros:topic_DepthImage            a ros:ROS_Topic ; rdfs:label "DepthImage Topic" ; ros:hasMessageType "sensor_msgs/Image" .
+ros:topic_CompressedImage       a ros:ROS_Topic ; rdfs:label "CompressedImage Topic" ; ros:hasMessageType "sensor_msgs/CompressedImage" .
+ros:topic_AprilTagDetectionArray a ros:ROS_Topic ; rdfs:label "AprilTagDetectionArray Topic" ; ros:hasMessageType "apriltag_ros/AprilTagDetectionArray" .
+ros:topic_BoundingBoxes         a ros:ROS_Topic ; rdfs:label "BoundingBoxes Topic" ; ros:hasMessageType "darknet_ros_msgs/BoundingBoxes" .
+ros:topic_ObjectCount           a ros:ROS_Topic ; rdfs:label "ObjectCount Topic" ; ros:hasMessageType "darknet_ros_msgs/ObjectCount" .
+ros:topic_TemperatureMsg        a ros:ROS_Topic ; rdfs:label "Temperature Topic" ; ros:hasMessageType "sensor_msgs/Temperature" .
+
+# -- LOCALIZATION COMPONENTS --
+ros:robot_localization a ros:LocalizationComponent ;
+    rdfs:label "robot_localization" ;
+    dcterms:description "A collection of state estimation nodes for ROS that provides sensor fusion for localization and mapping. Includes Extended Kalman Filter (EKF) and Unscented Kalman Filter (UKF) implementations." ;
+    ros:isInPackage "robot_localization" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic "imu/data", "odom", "gps/fix", "pose" ;
+    ros:publishesTopic "odometry/filtered", "pose/filtered" .
+
+ros:hector_slam a ros:LocalizationComponent ;
+    rdfs:label "Hector SLAM" ;
+    dcterms:description "A flexible and scalable SLAM approach that does not require odometry. Uses high update rate 2D range scan matching and provides 2D pose estimates at scan rate." ;
+    ros:isInPackage "hector_slam" ;
+    ros:hasUpdateRate "40.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic "scan" ;
+    ros:publishesTopic "map", "pose" .
+
+ros:orb_slam2 a ros:LocalizationComponent ;
+    rdfs:label "ORB_SLAM2" ;
+    dcterms:description "A real-time SLAM library for monocular, stereo and RGB-D cameras that computes the camera trajectory and a sparse 3D reconstruction in real-time." ;
+    ros:isInPackage "orb_slam2_ros" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic "camera/image_raw", "camera/camera_info", "camera/depth/image_raw" ;
+    ros:publishesTopic "pose", "pointcloud" .
+
+# -- SENSOR DRIVER COMPONENTS --
+ros:realsense_ros a ros:SensorDriverComponent ;
+    rdfs:label "realsense-ros" ;
+    dcterms:description "ROS drivers for Intel RealSense cameras including D400, L500, and T265 series. Provides RGB, depth, and IMU data streams with configurable parameters." ;
+    ros:isInPackage "realsense2_camera" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:publishesTopic "color/image_raw", "depth/image_rect_raw", "camera_info", "imu", "points" .
+
+ros:flir_camera_driver a ros:SensorDriverComponent ;
+    rdfs:label "flir_camera_driver" ;
+    dcterms:description "ROS driver for FLIR thermal and visible cameras using the Spinnaker SDK. Supports various FLIR camera models with configurable exposure, gain, and frame rate settings." ;
+    ros:isInPackage "flir_camera_driver" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:publishesTopic "image_raw", "camera_info", "image_raw/compressed", "temperature" .
+
+ros:ublox_gps a ros:SensorDriverComponent ;
+    rdfs:label "ublox_gps" ;
+    dcterms:description "ROS driver for u-blox GPS receivers. Provides GNSS positioning data, supports RTK corrections, and includes configuration utilities for various u-blox modules." ;
+    ros:isInPackage "ublox_gps" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:publishesTopic "fix", "navsat" .
+
+# -- PATH PLANNING COMPONENTS --
+ros:teb_local_planner a ros:PathPlannerComponent ;
+    rdfs:label "TEB Local Planner" ;
+    dcterms:description "A local trajectory planner that optimizes the robot's trajectory with respect to trajectory execution time, separation from obstacles, and compliance with kinodynamic constraints." ;
+    ros:isInPackage "teb_local_planner" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic "scan", "map", "odom", "goal" ;
+    ros:publishesTopic "cmd_vel", "local_plan" .
+
+ros:smac_planner a ros:PathPlannerComponent ;
+    rdfs:label "Smac Planner" ;
+    dcterms:description "A hybrid A* planner for Nav2 that creates kinematically feasible paths for differential drive and car-like robots. Supports lattice-based and hybrid approaches." ;
+    ros:isInPackage "nav2_smac_planner" ;
+    ros:hasUpdateRate "1.0"^^xsd:float ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic "costmap", "start", "goal" ;
+    ros:publishesTopic "path" .
+
+ros:rrt_star_planner a ros:PathPlannerComponent ;
+    rdfs:label "RRT* Planner" ;
+    dcterms:description "An asymptotically optimal rapidly-exploring random tree planner. Provides probabilistically complete and asymptotically optimal path planning in complex environments." ;
+    ros:isInPackage "rrt_star_planner" ;
+    ros:hasUpdateRate "2.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic "costmap", "start", "goal" ;
+    ros:publishesTopic "path" .
+
+# -- PERCEPTION COMPONENTS --
+ros:darknet_ros a ros:PerceptionComponent ;
+    rdfs:label "darknet_ros (YOLO)" ;
+    dcterms:description "Real-time object detection using YOLO (You Only Look Once) neural networks. Detects multiple object classes in images with bounding boxes and confidence scores." ;
+    ros:isInPackage "darknet_ros" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic "camera/image_raw" ;
+    ros:publishesTopic "bounding_boxes", "detection_image", "object_detector/detected_objects" .
+
+ros:apriltag_ros a ros:PerceptionComponent ;
+    rdfs:label "apriltag_ros" ;
+    dcterms:description "A ROS wrapper for the AprilTag visual fiducial detection system. Detects AprilTag markers in images and provides their 6DOF poses for localization and navigation." ;
+    ros:isInPackage "apriltag_ros" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic "image_rect", "camera_info" ;
+    ros:publishesTopic "tag_detections", "tag_detections_image" .
+
+ros:laser_filters a ros:PerceptionComponent ;
+    rdfs:label "laser_filters" ;
+    dcterms:description "A collection of filters for processing laser scan data. Includes filters for removing spurious readings, angular bounds, intensity filtering, and temporal smoothing." ;
+    ros:isInPackage "laser_filters" ;
+    ros:hasUpdateRate "40.0"^^xsd:float ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic "scan_raw" ;
+    ros:publishesTopic "scan_filtered" .
