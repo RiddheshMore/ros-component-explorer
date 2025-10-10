@@ -1,7 +1,12 @@
 """
-Solr schema updater for vector embeddings.
-Updates the Solr schema to add vector field for storing vector embeddings.
-Supports different Solr versions and field types.
+Apache Solr Schema Updater for Vector Embeddings.
+
+Updates the Solr schema to support vector embeddings for semantic search.
+Handles adding vector fields, configuring field types, and managing
+schema compatibility across different Solr versions.
+
+This enables the storage and indexing of dense vector representations
+of ROS component descriptions for similarity-based search capabilities.
 """
 
 import logging
@@ -13,7 +18,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class SolrSchemaUpdater:
-    """Updates Solr schema to support vector embeddings."""
+    """
+    Updates Apache Solr schema to support vector embeddings for semantic search.
+    
+    Manages schema modifications including:
+    - Adding vector field types for different Solr versions
+    - Configuring dense vector storage and indexing
+    - Handling schema compatibility and validation
+    """
     
     def __init__(self, solr_url: str = "http://localhost:8984/solr/ros_explorer"):
         self.solr_url = solr_url

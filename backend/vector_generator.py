@@ -1,6 +1,9 @@
 """
 Vector embedding generator for ROS components.
-Generates dense vector representations using pre-trained Sentence-BERT models.
+
+Generates dense vector representations using pre-trained Sentence-BERT models
+for semantic search capabilities. This enables similarity-based component matching
+beyond traditional keyword search.
 """
 
 import logging
@@ -13,7 +16,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class VectorGenerator:
-    """Generates vector embeddings for ROS component text data."""
+    """
+    Generates vector embeddings for ROS component text data.
+    
+    Uses pre-trained Sentence-BERT models to create dense vector representations
+    of component descriptions, enabling semantic similarity search and clustering.
+    """
     
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
         """

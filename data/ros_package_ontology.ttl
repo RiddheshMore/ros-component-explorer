@@ -1,0 +1,501 @@
+# ROS Package Ontology - Comprehensive Template
+# Hierarchical modeling for ROS components with relationships and dependencies
+# Focus on package properties relevant for discovery and integration
+
+@prefix ros: <http://www.ros.org/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dep: <http://www.ros.org/dependency#> .
+@prefix hw: <http://www.ros.org/hardware#> .
+@prefix msg: <http://www.ros.org/message#> .
+
+# =====================================
+# CORE ONTOLOGY CLASSES
+# =====================================
+
+# Root Package Hierarchy
+ros:ROSPackage a owl:Class ;
+    rdfs:label "ROS Package" ;
+    rdfs:comment "Base class for all ROS packages and components" .
+
+# Primary Functional Categories
+ros:SensorPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Sensor Package" ;
+    rdfs:comment "Packages that interface with physical sensors" .
+
+ros:ActuatorPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Actuator Package" ;
+    rdfs:comment "Packages that control physical actuators and motors" .
+
+ros:AlgorithmPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Algorithm Package" ;
+    rdfs:comment "Packages implementing computational algorithms" .
+
+ros:IntegrationPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Integration Package" ;
+    rdfs:comment "Packages that integrate multiple subsystems" .
+
+ros:UtilityPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Utility Package" ;
+    rdfs:comment "Utility packages providing common functionality" .
+
+# Specialized Algorithm Categories
+ros:LocalizationPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Localization Package" ;
+    rdfs:comment "Packages for robot pose estimation and localization" .
+
+ros:NavigationPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Navigation Package" ;
+    rdfs:comment "Packages for path planning and navigation" .
+
+ros:PerceptionPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Perception Package" ;
+    rdfs:comment "Packages for environmental perception and object detection" .
+
+ros:ControlPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Control Package" ;
+    rdfs:comment "Packages for robot control and motion planning" .
+
+ros:MappingPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Mapping Package" ;
+    rdfs:comment "Packages for environment mapping and SLAM" .
+
+ros:ManipulationPackage rdfs:subClassOf ros:AlgorithmPackage ;
+    rdfs:label "Manipulation Package" ;
+    rdfs:comment "Packages for robotic arm control and manipulation" .
+
+# Domain-Specific Categories
+ros:MobileRobotPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Mobile Robot Package" ;
+    rdfs:comment "Packages specifically for mobile robot platforms" .
+
+ros:ManipulatorPackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Manipulator Package" ;
+    rdfs:comment "Packages for robotic arm and manipulation systems" .
+
+ros:DronePackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Drone Package" ;
+    rdfs:comment "Packages for UAV and aerial robotics" .
+
+ros:MarinePackage rdfs:subClassOf ros:ROSPackage ;
+    rdfs:label "Marine Package" ;
+    rdfs:comment "Packages for underwater and marine robotics" .
+
+# =====================================
+# DEPENDENCY RELATIONSHIPS
+# =====================================
+
+# Dependency Types
+dep:DependencyType a owl:Class ;
+    rdfs:label "Dependency Type" ;
+    rdfs:comment "Types of dependencies between packages" .
+
+dep:BuildDependency rdfs:subClassOf dep:DependencyType ;
+    rdfs:label "Build Dependency" ;
+    rdfs:comment "Required for building the package" .
+
+dep:RuntimeDependency rdfs:subClassOf dep:DependencyType ;
+    rdfs:label "Runtime Dependency" ;
+    rdfs:comment "Required for executing the package" .
+
+dep:TestDependency rdfs:subClassOf dep:DependencyType ;
+    rdfs:label "Test Dependency" ;
+    rdfs:comment "Required for testing the package" .
+
+dep:OptionalDependency rdfs:subClassOf dep:DependencyType ;
+    rdfs:label "Optional Dependency" ;
+    rdfs:comment "Optional functionality enhancement" .
+
+# Dependency Properties
+ros:dependsOn a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "depends on" ;
+    rdfs:comment "General dependency relationship between packages" .
+
+ros:buildDependsOn rdfs:subPropertyOf ros:dependsOn ;
+    rdfs:label "build depends on" ;
+    rdfs:comment "Build-time dependency" .
+
+ros:runtimeDependsOn rdfs:subPropertyOf ros:dependsOn ;
+    rdfs:label "runtime depends on" ;
+    rdfs:comment "Runtime dependency" .
+
+ros:optionallyDependsOn rdfs:subPropertyOf ros:dependsOn ;
+    rdfs:label "optionally depends on" ;
+    rdfs:comment "Optional dependency for enhanced functionality" .
+
+# Compatibility Relationships
+ros:compatibleWith a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "compatible with" ;
+    rdfs:comment "Packages that work well together" .
+
+ros:conflictsWith a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "conflicts with" ;
+    rdfs:comment "Packages that cannot be used together" .
+
+ros:replacedBy a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "replaced by" ;
+    rdfs:comment "Package has been superseded by another" .
+
+# =====================================
+# HARDWARE REQUIREMENTS
+# =====================================
+
+# Hardware Categories
+hw:HardwareComponent a owl:Class ;
+    rdfs:label "Hardware Component" ;
+    rdfs:comment "Physical hardware components" .
+
+hw:SensorHardware rdfs:subClassOf hw:HardwareComponent ;
+    rdfs:label "Sensor Hardware" ;
+    rdfs:comment "Physical sensor devices" .
+
+hw:ActuatorHardware rdfs:subClassOf hw:HardwareComponent ;
+    rdfs:label "Actuator Hardware" ;
+    rdfs:comment "Physical actuator and motor devices" .
+
+hw:ComputeHardware rdfs:subClassOf hw:HardwareComponent ;
+    rdfs:label "Compute Hardware" ;
+    rdfs:comment "Computational hardware requirements" .
+
+hw:CommunicationHardware rdfs:subClassOf hw:HardwareComponent ;
+    rdfs:label "Communication Hardware" ;
+    rdfs:comment "Communication and networking hardware" .
+
+# Specific Hardware Types
+hw:LaserScanner rdfs:subClassOf hw:SensorHardware ;
+    rdfs:label "Laser Scanner" .
+
+hw:Camera rdfs:subClassOf hw:SensorHardware ;
+    rdfs:label "Camera" .
+
+hw:IMU rdfs:subClassOf hw:SensorHardware ;
+    rdfs:label "Inertial Measurement Unit" .
+
+hw:GPS rdfs:subClassOf hw:SensorHardware ;
+    rdfs:label "GPS Receiver" .
+
+hw:WheelEncoder rdfs:subClassOf hw:SensorHardware ;
+    rdfs:label "Wheel Encoder" .
+
+hw:Motor rdfs:subClassOf hw:ActuatorHardware ;
+    rdfs:label "Motor" .
+
+hw:Servo rdfs:subClassOf hw:ActuatorHardware ;
+    rdfs:label "Servo Motor" .
+
+hw:Gripper rdfs:subClassOf hw:ActuatorHardware ;
+    rdfs:label "Robotic Gripper" .
+
+# Hardware Requirement Properties
+ros:requiresHardware a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range hw:HardwareComponent ;
+    rdfs:label "requires hardware" ;
+    rdfs:comment "Hardware component required by package" .
+
+ros:supportsHardware a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range hw:HardwareComponent ;
+    rdfs:label "supports hardware" ;
+    rdfs:comment "Hardware component supported by package" .
+
+ros:optionalHardware a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range hw:HardwareComponent ;
+    rdfs:label "optional hardware" ;
+    rdfs:comment "Optional hardware for enhanced functionality" .
+
+# =====================================
+# MESSAGE AND TOPIC INTERFACES
+# =====================================
+
+# Message Categories
+msg:MessageType a owl:Class ;
+    rdfs:label "Message Type" ;
+    rdfs:comment "ROS message types" .
+
+msg:SensorMessage rdfs:subClassOf msg:MessageType ;
+    rdfs:label "Sensor Message" ;
+    rdfs:comment "Messages carrying sensor data" .
+
+msg:ControlMessage rdfs:subClassOf msg:MessageType ;
+    rdfs:label "Control Message" ;
+    rdfs:comment "Messages for robot control" .
+
+msg:NavigationMessage rdfs:subClassOf msg:MessageType ;
+    rdfs:label "Navigation Message" ;
+    rdfs:comment "Messages for navigation systems" .
+
+msg:GeometryMessage rdfs:subClassOf msg:MessageType ;
+    rdfs:label "Geometry Message" ;
+    rdfs:comment "Messages for geometric data" .
+
+# Topic Interface Properties
+ros:publishesTopic a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "publishes topic" ;
+    rdfs:comment "Topic published by the package" .
+
+ros:subscribesToTopic a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "subscribes to topic" ;
+    rdfs:comment "Topic subscribed to by the package" .
+
+ros:providesService a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "provides service" ;
+    rdfs:comment "Service provided by the package" .
+
+ros:usesService a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "uses service" ;
+    rdfs:comment "Service used by the package" .
+
+# =====================================
+# PACKAGE PROPERTIES
+# =====================================
+
+# Basic Package Information
+ros:packageName a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "package name" ;
+    rdfs:comment "Name of the ROS package" .
+
+ros:packageVersion a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "package version" ;
+    rdfs:comment "Version of the package" .
+
+ros:rosVersion a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "ROS version" ;
+    rdfs:comment "Compatible ROS version (ROS1, ROS2, or both)" .
+
+ros:maintainer a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "maintainer" ;
+    rdfs:comment "Package maintainer" .
+
+ros:licenseType a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "license type" ;
+    rdfs:comment "Software license" .
+
+ros:repositoryURL a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "repository URL" ;
+    rdfs:comment "Source code repository URL" .
+
+ros:documentationURL a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "documentation URL" ;
+    rdfs:comment "Package documentation URL" .
+
+# Functional Properties
+ros:primaryFunction a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "primary function" ;
+    rdfs:comment "Main functionality provided by the package" .
+
+ros:implementsAlgorithm a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "implements algorithm" ;
+    rdfs:comment "Algorithm implemented by the package" .
+
+ros:hasUpdateRate a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:float ;
+    rdfs:label "has update rate" ;
+    rdfs:comment "Typical update rate in Hz" .
+
+ros:hasLatency a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:float ;
+    rdfs:label "has latency" ;
+    rdfs:comment "Typical processing latency in ms" .
+
+ros:hasAccuracy a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:float ;
+    rdfs:label "has accuracy" ;
+    rdfs:comment "Accuracy metric (0.0 to 1.0)" .
+
+ros:hasComplexity a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "has complexity" ;
+    rdfs:comment "Computational complexity (Big O notation)" .
+
+# Platform and Environment
+ros:supportedPlatforms a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "supported platforms" ;
+    rdfs:comment "Robot platforms supported by the package" .
+
+ros:operatingSystem a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "operating system" ;
+    rdfs:comment "Supported operating systems" .
+
+ros:architecture a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "architecture" ;
+    rdfs:comment "Supported CPU architectures" .
+
+# Quality and Maturity
+ros:maturityLevel a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:string ;
+    rdfs:label "maturity level" ;
+    rdfs:comment "Package maturity (experimental, stable, deprecated)" .
+
+ros:testCoverage a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:float ;
+    rdfs:label "test coverage" ;
+    rdfs:comment "Test coverage percentage" .
+
+ros:communityRating a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:float ;
+    rdfs:label "community rating" ;
+    rdfs:comment "Community rating (1.0 to 5.0)" .
+
+ros:downloadCount a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:integer ;
+    rdfs:label "download count" ;
+    rdfs:comment "Number of downloads" .
+
+ros:lastUpdated a owl:DatatypeProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range xsd:date ;
+    rdfs:label "last updated" ;
+    rdfs:comment "Date of last update" .
+
+# =====================================
+# SEMANTIC RELATIONSHIPS
+# =====================================
+
+# Package Groupings
+ros:belongsToStack a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "belongs to stack" ;
+    rdfs:comment "Package belongs to a larger software stack" .
+
+ros:isPartOfMetapackage a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "is part of metapackage" ;
+    rdfs:comment "Package is part of a metapackage" .
+
+# Functional Relationships
+ros:complementedBy a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "complemented by" ;
+    rdfs:comment "Packages that complement each other's functionality" .
+
+ros:enhancedBy a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "enhanced by" ;
+    rdfs:comment "Package functionality enhanced by another package" .
+
+ros:alternativeTo a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "alternative to" ;
+    rdfs:comment "Packages providing similar functionality" .
+
+# Usage Patterns
+ros:typicallyUsedWith a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "typically used with" ;
+    rdfs:comment "Packages commonly used together" .
+
+ros:recommendedWith a owl:ObjectProperty ;
+    rdfs:domain ros:ROSPackage ;
+    rdfs:range ros:ROSPackage ;
+    rdfs:label "recommended with" ;
+    rdfs:comment "Recommended package combinations" .
+
+# =====================================
+# TEMPLATE STRUCTURE
+# =====================================
+
+# Template for Package Definition
+# ros:ExamplePackage a ros:SpecificCategory ;
+#     rdfs:label "Package Display Name" ;
+#     dcterms:description "Detailed package description" ;
+#     
+#     # Core Properties
+#     ros:packageName "exact_package_name" ;
+#     ros:packageVersion "1.0.0" ;
+#     ros:rosVersion "ROS 1/2" ;
+#     ros:maintainer "Maintainer Name" ;
+#     ros:licenseType "License" ;
+#     ros:repositoryURL "https://github.com/user/repo" ;
+#     ros:lastUpdated "2025-09-10"^^xsd:date ;
+#     
+#     # Functional Properties
+#     ros:primaryFunction "Main functionality" ;
+#     ros:implementsAlgorithm "Algorithm name" ;
+#     ros:hasUpdateRate "10.0"^^xsd:float ;
+#     ros:hasComplexity "O(n)" ;
+#     ros:hasAccuracy "0.95"^^xsd:float ;
+#     
+#     # Dependencies
+#     ros:buildDependsOn ros:dependency1, ros:dependency2 ;
+#     ros:runtimeDependsOn ros:dependency3 ;
+#     ros:optionallyDependsOn ros:dependency4 ;
+#     
+#     # Hardware Requirements
+#     ros:requiresHardware hw:LaserScanner, hw:WheelEncoder ;
+#     ros:supportsHardware hw:Camera, hw:IMU ;
+#     
+#     # Topic Interfaces
+#     ros:publishesTopic "topic1", "topic2" ;
+#     ros:subscribesToTopic "topic3", "topic4" ;
+#     
+#     # Platform Support
+#     ros:supportedPlatforms "turtlebot", "pr2", "generic" ;
+#     ros:operatingSystem "Ubuntu 20.04", "Ubuntu 22.04" ;
+#     
+#     # Relationships
+#     ros:compatibleWith ros:other_package ;
+#     ros:typicallyUsedWith ros:common_package ;
+#     ros:alternativeTo ros:alternative_package ;
+#     
+#     # Quality Metrics
+#     ros:maturityLevel "stable" ;
+#     ros:testCoverage "0.85"^^xsd:float ;
+#     ros:communityRating "4.2"^^xsd:float .

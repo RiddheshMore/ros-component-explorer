@@ -1,0 +1,378 @@
+# ROS Mobile Robot Packages - Hierarchical Models
+# Implementation using the comprehensive ROS package ontology
+# Focus on package properties, dependencies, and correlations
+
+@prefix ros: <http://www.ros.org/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dep: <http://www.ros.org/dependency#> .
+@prefix hw: <http://www.ros.org/hardware#> .
+
+# =====================================
+# LOCALIZATION PACKAGES HIERARCHY
+# =====================================
+
+# AMCL - Monte Carlo Localization
+ros:amcl a ros:LocalizationPackage ;
+    rdfs:label "AMCL (Adaptive Monte Carlo Localization)" ;
+    dcterms:description "Probabilistic localization system using particle filters to estimate robot pose from laser scans and odometry data." ;
+    
+    # Core Package Properties
+    ros:packageName "amcl" ;
+    ros:packageVersion "2.1.0" ;
+    ros:rosVersion "ROS 1/2" ;
+    ros:maintainer "Navigation2 Team" ;
+    ros:licenseType "LGPL-2.1" ;
+    ros:repositoryURL "https://github.com/ros-planning/navigation2" ;
+    ros:documentationURL "https://navigation.ros.org/configuration/packages/configuring-amcl.html" ;
+    ros:lastUpdated "2025-08-15"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Robot pose estimation using particle filter" ;
+    ros:implementsAlgorithm "Monte Carlo Localization", "KLD Sampling", "Particle Filter" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasLatency "50.0"^^xsd:float ;
+    ros:hasAccuracy "0.95"^^xsd:float ;
+    ros:hasComplexity "O(n*m)" ; # n=particles, m=laser_beams
+    
+    # Hardware Requirements (CRITICAL for discovery)
+    ros:requiresHardware hw:LaserScanner, hw:WheelEncoder ;
+    ros:supportsHardware hw:Camera ; # for visual odometry
+    ros:optionalHardware hw:IMU ; # for better motion model
+    
+    # Topic Interfaces (CRITICAL for integration)
+    ros:subscribesToTopic "scan", "tf", "initialpose", "map" ;
+    ros:publishesTopic "amcl_pose", "particlecloud", "tf" ;
+    
+    # Dependencies (CRITICAL for package management)
+    ros:buildDependsOn ros:geometry_msgs, ros:nav_msgs, ros:sensor_msgs, ros:tf2_ros ;
+    ros:runtimeDependsOn ros:message_filters, ros:nav2_util ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot3", "turtlebot4", "husky", "jackal", "pr2" ;
+    ros:operatingSystem "Ubuntu 20.04", "Ubuntu 22.04" ;
+    ros:architecture "x86_64", "arm64" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.85"^^xsd:float ;
+    ros:communityRating "4.3"^^xsd:float ;
+    ros:downloadCount "500000"^^xsd:integer .
+
+# Robot Localization - Multi-sensor fusion
+ros:robot_localization a ros:LocalizationPackage ;
+    rdfs:label "Robot Localization" ;
+    dcterms:description "Extended Kalman Filter-based sensor fusion for robot state estimation combining GPS, IMU, odometry, and visual odometry." ;
+    
+    # Core Package Properties
+    ros:packageName "robot_localization" ;
+    ros:packageVersion "3.4.2" ;
+    ros:rosVersion "ROS 1/2" ;
+    ros:maintainer "Tom Moore" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL "https://github.com/cra-ros-pkg/robot_localization" ;
+    ros:lastUpdated "2025-07-20"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Multi-sensor state estimation and fusion" ;
+    ros:implementsAlgorithm "Extended Kalman Filter", "Unscented Kalman Filter" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:hasLatency "33.0"^^xsd:float ;
+    ros:hasAccuracy "0.98"^^xsd:float ;
+    ros:hasComplexity "O(n^3)" ; # n=state_dimensions
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:WheelEncoder ; # minimum requirement
+    ros:supportsHardware hw:IMU, hw:GPS, hw:Camera ;
+    ros:optionalHardware hw:LaserScanner ;
+    
+    # Topic Interfaces
+    ros:subscribesToTopic "odom", "imu/data", "gps/fix", "pose" ;
+    ros:publishesTopic "odometry/filtered", "accel/filtered", "tf" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:geometry_msgs, ros:nav_msgs, ros:sensor_msgs, ros:tf2_ros ;
+    ros:runtimeDependsOn ros:diagnostic_updater ;
+    
+    # Platform Support
+    ros:supportedPlatforms "generic", "clearpath", "outdoor_robots" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04", "Ubuntu 22.04" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.78"^^xsd:float ;
+    ros:communityRating "4.1"^^xsd:float .
+
+# =====================================
+# NAVIGATION PACKAGES HIERARCHY
+# =====================================
+
+# Move Base - Navigation Stack Core
+ros:move_base a ros:NavigationPackage ;
+    rdfs:label "Move Base" ;
+    dcterms:description "Complete navigation framework providing goal-directed motion for mobile robots with global and local path planning." ;
+    
+    # Core Package Properties
+    ros:packageName "move_base" ;
+    ros:packageVersion "1.17.2" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "Navigation Stack Maintainers" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL "https://github.com/ros-planning/navigation" ;
+    ros:lastUpdated "2025-06-30"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Goal-directed mobile robot navigation" ;
+    ros:implementsAlgorithm "Dijkstra", "A*", "Dynamic Window Approach", "Trajectory Rollout" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:hasLatency "100.0"^^xsd:float ;
+    ros:hasAccuracy "0.90"^^xsd:float ;
+    ros:hasComplexity "O(n*m)" ; # n=map_cells, m=trajectory_samples
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner, hw:WheelEncoder ;
+    ros:supportsHardware hw:Camera, hw:IMU ;
+    
+    # Topic Interfaces
+    ros:subscribesToTopic "move_base_simple/goal", "scan", "odom", "map", "tf" ;
+    ros:publishesTopic "cmd_vel", "move_base/feedback", "move_base/result", "move_base/global_costmap/costmap" ;
+    ros:providesService "move_base/make_plan", "move_base/clear_costmaps" ;
+    
+    # Dependencies (COMPLEX dependency tree)
+    ros:buildDependsOn ros:geometry_msgs, ros:nav_msgs, ros:sensor_msgs, ros:tf2_ros, ros:move_base_msgs ;
+    ros:runtimeDependsOn ros:nav_core, ros:costmap_2d, ros:base_local_planner, ros:global_planner ;
+    ros:optionallyDependsOn ros:dwa_local_planner, ros:teb_local_planner ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot", "pr2", "husky", "jackal", "generic_differential_drive" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.72"^^xsd:float ;
+    ros:communityRating "4.0"^^xsd:float .
+
+# Nav2 - ROS2 Navigation Stack
+ros:nav2_stack a ros:NavigationPackage ;
+    rdfs:label "Navigation2 Stack" ;
+    dcterms:description "Complete ROS2 navigation system with behavior trees, lifecycle management, and modern planning algorithms." ;
+    
+    # Core Package Properties
+    ros:packageName "nav2_bringup" ;
+    ros:packageVersion "1.2.7" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "Steve Macenski" ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL "https://github.com/ros-planning/navigation2" ;
+    ros:lastUpdated "2025-09-01"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Modern navigation framework with behavior trees" ;
+    ros:implementsAlgorithm "Behavior Trees", "Smac Planner", "DWB Controller", "Regulated Pure Pursuit" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:hasLatency "80.0"^^xsd:float ;
+    ros:hasAccuracy "0.92"^^xsd:float ;
+    ros:hasComplexity "O(n*log(n))" ; # improved algorithms
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner ;
+    ros:supportsHardware hw:Camera, hw:IMU, hw:WheelEncoder ;
+    
+    # Topic Interfaces
+    ros:subscribesToTopic "scan", "odom", "map", "goal_pose" ;
+    ros:publishesTopic "cmd_vel", "plan", "local_costmap/costmap", "global_costmap/costmap" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:geometry_msgs, ros:nav_msgs, ros:sensor_msgs, ros:tf2_ros, ros:nav2_msgs ;
+    ros:runtimeDependsOn ros:nav2_core, ros:nav2_costmap_2d, ros:nav2_planner, ros:nav2_controller ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot3", "turtlebot4", "nav2_compatible_robots" ;
+    ros:operatingSystem "Ubuntu 22.04" ;
+    ros:architecture "x86_64", "arm64" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.88"^^xsd:float ;
+    ros:communityRating "4.5"^^xsd:float .
+
+# =====================================
+# PERCEPTION PACKAGES HIERARCHY
+# =====================================
+
+# PCL ROS - Point Cloud Processing
+ros:pcl_ros a ros:PerceptionPackage ;
+    rdfs:label "PCL ROS" ;
+    dcterms:description "ROS interface for Point Cloud Library providing 3D perception and point cloud processing capabilities." ;
+    
+    # Core Package Properties
+    ros:packageName "pcl_ros" ;
+    ros:packageVersion "1.7.4" ;
+    ros:rosVersion "ROS 1/2" ;
+    ros:maintainer "PCL Maintainers" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL "https://github.com/ros-perception/perception_pcl" ;
+    ros:lastUpdated "2025-08-10"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "3D point cloud processing and analysis" ;
+    ros:implementsAlgorithm "ICP", "RANSAC", "Octree", "KdTree", "Clustering" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasLatency "200.0"^^xsd:float ;
+    ros:hasAccuracy "0.85"^^xsd:float ;
+    ros:hasComplexity "O(n*log(n))" ; # depends on algorithm
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:Camera ; # 3D camera or stereo
+    ros:supportsHardware hw:LaserScanner ; # 3D lidar
+    
+    # Topic Interfaces
+    ros:subscribesToTopic "points2", "camera_info" ;
+    ros:publishesTopic "points_filtered", "points_clustered", "markers" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:sensor_msgs, ros:geometry_msgs, ros:std_msgs, ros:tf2_ros ;
+    ros:runtimeDependsOn ros:pcl_conversions ;
+    
+    # Platform Support
+    ros:supportedPlatforms "generic", "manipulation_robots", "mobile_robots" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04", "Ubuntu 22.04" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.65"^^xsd:float ;
+    ros:communityRating "3.8"^^xsd:float .
+
+# =====================================
+# SENSOR DRIVER PACKAGES
+# =====================================
+
+# Velodyne Driver
+ros:velodyne_driver a ros:SensorPackage ;
+    rdfs:label "Velodyne Driver" ;
+    dcterms:description "ROS driver for Velodyne 3D LiDAR sensors providing point cloud data acquisition." ;
+    
+    # Core Package Properties
+    ros:packageName "velodyne_driver" ;
+    ros:packageVersion "1.7.0" ;
+    ros:rosVersion "ROS 1/2" ;
+    ros:maintainer "Josh Whitley" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL "https://github.com/ros-drivers/velodyne" ;
+    ros:lastUpdated "2025-07-15"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Velodyne LiDAR data acquisition and processing" ;
+    ros:implementsAlgorithm "UDP packet processing", "Calibration correction" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasLatency "100.0"^^xsd:float ;
+    ros:hasAccuracy "0.99"^^xsd:float ;
+    ros:hasComplexity "O(n)" ; # linear with points
+    
+    # Hardware Requirements (SPECIFIC to Velodyne)
+    ros:requiresHardware hw:VelodyneLidar ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "velodyne_points", "scan" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:sensor_msgs, ros:diagnostic_updater ;
+    ros:runtimeDependsOn ros:velodyne_msgs ;
+    
+    # Platform Support
+    ros:supportedPlatforms "generic", "outdoor_robots", "autonomous_vehicles" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04", "Ubuntu 22.04" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.70"^^xsd:float ;
+    ros:communityRating "4.2"^^xsd:float .
+
+# =====================================
+# PACKAGE CORRELATIONS & RELATIONSHIPS
+# =====================================
+
+# Localization Package Relationships
+ros:amcl ros:compatibleWith ros:move_base, ros:nav2_stack ;
+      ros:typicallyUsedWith ros:map_server, ros:gmapping ;
+      ros:alternativeTo ros:robot_localization ;
+      ros:enhancedBy ros:robot_localization . # can be used together
+
+ros:robot_localization ros:compatibleWith ros:move_base, ros:nav2_stack ;
+                      ros:typicallyUsedWith ros:imu_filter_madgwick ;
+                      ros:alternativeTo ros:amcl ;
+                      ros:complementedBy ros:amcl . # for global localization
+
+# Navigation Package Relationships  
+ros:move_base ros:replacedBy ros:nav2_stack ; # ROS1 -> ROS2 migration
+           ros:dependsOn ros:amcl ; # typically requires localization
+           ros:typicallyUsedWith ros:map_server, ros:global_planner, ros:base_local_planner .
+
+ros:nav2_stack ros:dependsOn ros:amcl ; # uses AMCL for localization
+            ros:compatibleWith ros:robot_localization ;
+            ros:typicallyUsedWith ros:slam_toolbox, ros:nav2_simple_commander .
+
+# Sensor Integration Relationships
+ros:velodyne_driver ros:enhancedBy ros:pcl_ros ; # point cloud processing
+                   ros:compatibleWith ros:amcl, ros:gmapping ;
+                   ros:typicallyUsedWith ros:laser_geometry .
+
+ros:pcl_ros ros:compatibleWith ros:velodyne_driver ;
+          ros:typicallyUsedWith ros:image_pipeline, ros:cv_bridge .
+
+# =====================================
+# HARDWARE-SPECIFIC SPECIALIZATIONS  
+# =====================================
+
+# Define specific hardware types
+hw:VelodyneLidar rdfs:subClassOf hw:LaserScanner ;
+               rdfs:label "Velodyne LiDAR" ;
+               rdfs:comment "Velodyne 3D rotating LiDAR sensors" .
+
+hw:SickLaserScanner rdfs:subClassOf hw:LaserScanner ;
+                   rdfs:label "SICK Laser Scanner" ;
+                   rdfs:comment "SICK 2D laser range finders" .
+
+hw:TurtleBotBase rdfs:subClassOf hw:ActuatorHardware ;
+                rdfs:label "TurtleBot Mobile Base" ;
+                rdfs:comment "TurtleBot differential drive base" .
+
+hw:KobukiBase rdfs:subClassOf hw:TurtleBotBase ;
+             rdfs:label "Kobuki Base" ;
+             rdfs:comment "TurtleBot2 Kobuki mobile base" .
+
+# =====================================
+# METAPACKAGE RELATIONSHIPS
+# =====================================
+
+# Navigation Stack as Metapackage
+ros:navigation_stack a ros:IntegrationPackage ;
+    rdfs:label "ROS Navigation Stack" ;
+    dcterms:description "Complete navigation system metapackage" ;
+    ros:packageName "navigation" ;
+    ros:packageVersion "1.17.2" ;
+    ros:rosVersion "ROS 1" ;
+    
+    # Contains these packages
+    ros:isPartOfMetapackage ros:move_base, ros:amcl, ros:map_server, ros:global_planner ;
+    
+    # Metapackage dependencies
+    ros:buildDependsOn ros:geometry_msgs, ros:nav_msgs, ros:sensor_msgs ;
+    
+    # Platform support
+    ros:supportedPlatforms "turtlebot", "pr2", "husky" .
+
+# Navigation2 Stack as Metapackage  
+ros:navigation2_stack a ros:IntegrationPackage ;
+    rdfs:label "Navigation2 Stack" ;
+    dcterms:description "ROS2 navigation system metapackage" ;
+    ros:packageName "navigation2" ;
+    ros:packageVersion "1.2.7" ;
+    ros:rosVersion "ROS 2" ;
+    
+    # Contains these packages
+    ros:isPartOfMetapackage ros:nav2_bringup, ros:nav2_planner, ros:nav2_controller ;
+    
+    # Migration relationship
+    ros:replacedBy ros:navigation_stack .

@@ -7,8 +7,8 @@ This module provides structured search capabilities by combining:
 3. Template-based result synthesis and ranking
 4. Context-aware recommendations using predefined rules
 
-NOTE: Despite the name "LLM", this uses rule-based pattern matching and structured
-templates, not actual Large Language Models or AI/ML processing.
+This system combines rule-based pattern matching with semantic search capabilities
+to understand user queries and provide relevant component recommendations.
 """
 
 import json
@@ -20,37 +20,39 @@ import os
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from LLM.query_processor import NLQueryProcessor, QueryToSearchTranslator, QueryRequirements
+from NLP.query_processor import NLQueryProcessor, QueryToSearchTranslator, QueryRequirements
 from backend.solr_manager import SolrManager
 from backend.vector_generator import VectorGenerator
+from backend.vector_search_manager import VectorSearchManager
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class LLMSearchEngine:
+class NLPSearchEngine:
     """
     Rule-based natural language search engine for ROS components.
     
-    NOTE: Despite the class name, this uses structured pattern matching and
-    template-based response generation, not actual LLM/AI processing.
+    Uses structured pattern matching and template-based response generation
+    to understand user queries and provide relevant ROS component recommendations.
     """
     
-    def __init__(self, ttl_file: str, use_local_llm: bool = True):
+    def __init__(self, ttl_file: str, use_semantic_search: bool = True):
         """
         Initialize the rule-based natural language search engine.
         
         Args:
             ttl_file: Path to the TTL knowledge base file
-            use_local_llm: Parameter kept for compatibility but unused (no actual LLM)
+            use_semantic_search: Whether to enable semantic vector search alongside text search
         """
         self.ttl_file = ttl_file
-        self.use_local_llm = use_local_llm  # Unused - kept for compatibility
+        self.use_semantic_search = use_semantic_search
         
         # Initialize rule-based processing components
         self.query_processor = NLQueryProcessor()  # Pattern matching processor
         self.translator = QueryToSearchTranslator()  # Rule-based query translator
         self.solr_manager = SolrManager(ttl_file)  # Database interface
         self.vector_generator = VectorGenerator()  # Semantic embedding generator
+        self.vector_search_manager = VectorSearchManager(ttl_file)  # Enhanced vector search
         
         # Response synthesis templates (predefined structured templates)
         self.response_templates = {
@@ -65,7 +67,7 @@ class LLMSearchEngine:
         Process a natural language query using rule-based pattern matching.
         
         NOTE: Despite the method name, this uses structured pattern matching,
-        keyword extraction, and predefined templates - not actual LLM processing.
+        keyword extraction, and predefined response templates.
         
         Args:
             query: Natural language query string
@@ -116,11 +118,38 @@ class LLMSearchEngine:
     def _execute_enhanced_search(self, search_params: Dict[str, Any], 
                                 requirements: QueryRequirements, 
                                 max_results: int) -> List[Dict]:
-        """Execute enhanced search combining text and semantic search."""
+        """Execute enhanced search using vector-based k-NN and hybrid search."""
+        
+        # Determine if we should use hybrid search or vector-only search
+        should_use_hybrid = (
+            search_params["text_query"] and 
+            (requirements.keywords or requirements.primary_function)
+        )
+        
+        if should_use_hybrid:
+            # Use hybrid search combining text and vector similarity
+            semantic_query = self._build_semantic_query(requirements)
+            if semantic_query:
+                try:
+                    results = self.vector_search_manager.hybrid_search(
+                        query=semantic_query,
+                        k=max_results,
+                        semantic_weight=0.7  # Favor semantic similarity
+                    )
+                    
+                    for result in results:
+                        result["search_type"] = "hybrid"
+                        
+                    logger.info(f"Hybrid search found {len(results)} results")
+                    return results
+                    
+                except Exception as e:
+                    logger.warning(f"Hybrid search failed: {e}")
+        
+        # Fallback to separate text and vector searches
         all_results = []
         
         # Text-based search
-        text_results = []
         if search_params["text_query"]:
             try:
                 text_results = self.solr_manager.search_components(
@@ -135,35 +164,24 @@ class LLMSearchEngine:
             except Exception as e:
                 logger.warning(f"Text search failed: {e}")
         
-        # Only do semantic search if text search found few results or if specifically needed
-        should_do_semantic = (
-            len(text_results) < 3 or  # Few text results found
-            (requirements.keywords and any(k in ['best', 'recommend', 'suggest'] for k in requirements.keywords))
-        )
-        
-        # Semantic/vector search
-        if should_do_semantic and (requirements.keywords or requirements.primary_function):
+        # Vector-based semantic search
+        semantic_query = self._build_semantic_query(requirements)
+        if semantic_query:
             try:
-                # Create semantic query from requirements
-                semantic_query = self._build_semantic_query(requirements)
-                if semantic_query:
-                    # Generate query vector
-                    query_vector = self.vector_generator.model.encode([semantic_query])[0].tolist()
-                    
-                    # Perform semantic search
-                    semantic_results = self.solr_manager.semantic_search(
-                        query_vector, 
-                        k=max_results
-                    )
-                    
-                    for result in semantic_results:
-                        result["search_type"] = "semantic"
-                        result["relevance_score"] = result.get("score", 0.0)
-                    
-                    all_results.extend(semantic_results)
-                    logger.info(f"Semantic search found {len(semantic_results)} results")
+                # Use enhanced vector search manager for k-NN similarity search
+                semantic_results = self.vector_search_manager.vector_search(
+                    query=semantic_query,
+                    k=max_results
+                )
+                
+                for result in semantic_results:
+                    result["search_type"] = "vector_knn"
+                    result["relevance_score"] = result.get("score", 0.0)
+                
+                all_results.extend(semantic_results)
+                logger.info(f"Vector k-NN search found {len(semantic_results)} results")
             except Exception as e:
-                logger.warning(f"Semantic search failed: {e}")
+                logger.warning(f"Vector search failed: {e}")
         
         return all_results
     
@@ -483,11 +501,11 @@ class LLMSearchEngine:
     def _get_list_template(self) -> str:
         return "I found {count} components: {list}"
 
-def test_llm_search_engine():
-    """Test the LLM search engine with example queries."""
+def test_nlp_search_engine():
+    """Test the NLP search engine with example queries."""
     # Initialize with your TTL file
     ttl_file = "/home/ritz/Desktop/RnD/data/components.ttl"
-    engine = LLMSearchEngine(ttl_file)
+    engine = NLPSearchEngine(ttl_file)
     
     test_queries = [
         "What is the best SLAM package for a robot with a 3D LiDAR and an IMU in a large, outdoor environment?",
@@ -510,4 +528,4 @@ def test_llm_search_engine():
         print(f"Search type: {result['metadata']['search_type']}")
 
 if __name__ == "__main__":
-    test_llm_search_engine()
+    test_nlp_search_engine()

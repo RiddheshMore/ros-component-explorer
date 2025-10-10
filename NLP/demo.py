@@ -5,8 +5,8 @@ Command-line demo of the Rule-Based Natural Language ROS Component Explorer.
 This script demonstrates the structured natural language search capabilities
 of the ROS Component Explorer system in interactive and batch modes.
 
-NOTE: Despite references to "LLM", this system uses rule-based pattern matching
-and structured templates, not actual Large Language Models or AI processing.
+This system uses rule-based pattern matching and structured templates to
+provide natural language search capabilities for ROS components.
 """
 
 import sys
@@ -16,7 +16,7 @@ import logging
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from LLM.llm_search_engine import LLMSearchEngine
+from NLP.nlp_search_engine import NLPSearchEngine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -104,7 +104,7 @@ def interactive_demo():
     
     try:
         print("🔧 Initializing Natural Language Search Engine...")
-        engine = LLMSearchEngine(ttl_file)
+        engine = NLPSearchEngine(ttl_file)
         print("✅ Rule-Based Search Engine ready!")
         print()
     except Exception as e:
@@ -208,7 +208,7 @@ def batch_demo():
     
     try:
         print("🔧 Initializing Natural Language Search Engine...")
-        engine = LLMSearchEngine(ttl_file)
+        engine = NLPSearchEngine(ttl_file)
         print("✅ Rule-Based Search Engine ready!")
         print()
     except Exception as e:

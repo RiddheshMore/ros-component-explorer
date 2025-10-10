@@ -7,8 +7,8 @@ This module enables structured natural language querying of the ROS component da
 3. Executing searches against the knowledge graph
 4. Synthesizing results into human-readable answers using templates
 
-NOTE: Despite the filename suggesting LLM functionality, this uses rule-based pattern
-matching, keyword extraction, and structured templates - not actual AI/ML processing.
+This module uses rule-based pattern matching, keyword extraction, and structured
+templates to process natural language queries about ROS components.
 """
 
 import json

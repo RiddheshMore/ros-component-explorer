@@ -1,7 +1,12 @@
 """
-Solr manager for the ROS Component Explorer.
-Handles data loading and search queries for component information using Apache Solr.
-Supports both traditional text search and vector-based semantic search.
+Apache Solr Database Manager for the ROS Component Explorer.
+
+Handles data loading and search queries for ROS component information using Apache Solr.
+Provides functionality for:
+- Loading ROS component data from TTL/RDF knowledge graphs
+- Indexing components in Solr for full-text search
+- Supporting both traditional text search and vector-based semantic search
+- Managing component metadata, properties, and relationships
 """
 
 import json
@@ -9,16 +14,26 @@ import logging
 from typing import List, Dict, Optional, Tuple
 from pysolr import Solr
 import rdflib
-from rdflib import Graph, Namespace, RDF, RDFS
+from rdflib import Graph, Namespace, RDF, RDFS, URIRef
 import numpy as np
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 SOLR_URL = "http://localhost:8984/solr/ros_explorer"
+ROS = Namespace("http://www.ros.org/ontology#")
+DCTERMS = Namespace("http://purl.org/dc/terms/")
 
 class SolrManager:
-    """Manages the Solr search engine for ROS components with vector support."""
+    """
+    Manages the Apache Solr search engine for ROS components.
+    
+    Provides comprehensive database functionality including:
+    - TTL/RDF data loading and parsing
+    - Component indexing with metadata
+    - Text-based and semantic search capabilities
+    - Component relationship management
+    """
     
     def __init__(self, ttl_file: str):
         self.ttl_file = ttl_file
@@ -26,7 +41,12 @@ class SolrManager:
         self._ensure_data_loaded()
     
     def _ensure_data_loaded(self):
-        """Load TTL data into Solr if the core is empty."""
+        """
+        Ensure ROS component data is loaded into Solr.
+        
+        Checks if Solr already contains indexed data, and if not,
+        loads and indexes the TTL/RDF knowledge graph data.
+        """
         try:
             # Check if data exists
             results = self.solr.search("*:*", rows=1)
@@ -54,9 +74,7 @@ class SolrManager:
         Returns:
             List of component dictionaries ready for Solr indexing
         """
-        # Define namespaces
-        ROS = Namespace("http://example.org/ros-ontology#")
-        DCTERMS = Namespace("http://purl.org/dc/terms/")
+        # Use global namespaces
         
         # Extract component data
         components = []
@@ -65,10 +83,12 @@ class SolrManager:
         logger.info("Looking for component instances...")
         component_types = [
             ROS.LocalizationComponent,
+            ROS.NavigationComponent,
             ROS.SensorDriverComponent,
             ROS.PathPlannerComponent,
             ROS.ControllerComponent,
-            ROS.PerceptionComponent
+            ROS.PerceptionComponent,
+            ROS.IntegrationComponent
         ]
         
         # Add additional component types for expanded files
@@ -130,6 +150,12 @@ class SolrManager:
                     ros_version = str(version_obj)
                     break
                 
+                # Get repository URL
+                repository_url = None
+                for _, _, repo_obj in g.triples((component_uri, ROS.repositoryURL, None)):
+                    repository_url = str(repo_obj)
+                    break
+                
                 # Get subscribed topics
                 subscribed_topics = []
                 for _, _, topic_obj in g.triples((component_uri, ROS.subscribesToTopic, None)):
@@ -151,6 +177,7 @@ class SolrManager:
                     'package': package or "Unknown package",
                     'update_rate': update_rate or "0.0",  # Default to "0.0" for missing values
                     'ros_version': ros_version or "Unknown",
+                    'repository_url': repository_url or "",
                     'subscribed_topics': subscribed_topics,
                     'published_topics': published_topics,
                     'content': f"{label} {type_name} {description or ''} {package or ''} {' '.join(subscribed_topics)} {' '.join(published_topics)}"
@@ -283,7 +310,8 @@ class SolrManager:
                     'uri': doc.get('id', ''),
                     'name': doc.get('name', ''),
                     'class': doc.get('type', ''),
-                    'description': doc.get('description', 'No description available')
+                    'description': doc.get('description', 'No description available'),
+                    'repository_url': doc.get('repository_url', '')
                 })
             return components
         except Exception as e:
@@ -313,6 +341,7 @@ class SolrManager:
                     'name': doc.get('name', ''),
                     'class': doc.get('type', ''),
                     'description': doc.get('description', 'No description available'),
+                    'repository_url': doc.get('repository_url', ''),
                     'relevance_score': doc.get('score', 0.0),
                     'search_type': 'text'
                 })

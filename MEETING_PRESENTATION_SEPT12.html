@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROS Component Explorer - Technical Overview</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5; /* Light gray background for the page */
+            color: #333;
+            overflow-x: hidden;
+            -webkit-print-color-adjust: exact; /* Ensures background colors print */
+        }
+
+        /* Slide Styles */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            page-break-after: always; /* Ensure each slide is on a new page when printing */
+            background: white; /* Default white background for slides */
+        }
+
+        .slide-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 70px; /* Increased padding */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* Specific Slide Backgrounds */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .title-slide .slide-content {
+             background: rgba(255, 255, 255, 0.1);
+             backdrop-filter: blur(10px);
+             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+         .title-slide h1, .title-slide p, .title-slide h2, .title-slide strong {
+            color: white;
+        }
+
+        /* Typography */
+        h1 { font-size: 3.5rem; font-weight: 700; color: #1a202c; margin-bottom: 1rem; }
+        h2 { font-size: 2.5rem; font-weight: 700; color: #2d3748; margin-bottom: 2rem; border-bottom: 3px solid #667eea; padding-bottom: 0.5rem; display: inline-block; }
+        h3 { font-size: 1.6rem; font-weight: 600; color: #4a5568; margin-top: 1.5rem; margin-bottom: 1rem; }
+        p, li { font-size: 1.25rem; line-height: 1.7; text-align: left; color: #4a5568; }
+        ul { list-style-position: inside; text-align: left; margin-top: 1rem; }
+        
+        /* Code Blocks & Highlights */
+        .code-block {
+            background: #1e293b; /* Darker blue-gray */
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 1rem;
+            text-align: left;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border: 1px solid #334155;
+        }
+        .highlight { color: #667eea; font-weight: 600; }
+
+        /* Diagrams & Layout */
+        .flow-diagram-item {
+            background-color: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flow-diagram-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .arrow { font-size: 2.5rem; color: #a0aec0; align-self: center; }
+
+        /* Logos */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px; /* Space between logos */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-height: 70px; /* Control logo size */
+            width: auto;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 1rem;
+            color: #a0aec0;
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+            }
+            .slide {
+                width: 100%;
+                height: 100vh;
+                box-shadow: none;
+                border: none;
+                padding: 20px;
+            }
+            .slide-content {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 40px;
+            }
+            .slide-number {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Introduction -->
+<div class="slide title-slide">
+    <div class="slide-content">
+        <h1>ROS Component Explorer</h1>
+        <p style="font-size: 1.8rem; margin-top: 1rem; color: #e2e8f0;">An Intelligent Search & Discovery System for Robotics</p>
+        
+        <div style="margin-top: 2rem; font-size: 1.2rem; color: #d1d5db;">
+            <p><strong>Presented by:</strong> Riddhesh P More</p>
+            <p style="margin-top: 0.5rem;"><strong>Advisor:</strong> Kahl, Björn (Fraunhofer IPA)</p>
+        </div>
+
+        <div class="logo-container">
+            <img src="https://www.ipa.fraunhofer.de/content/dam/ipa/images/logos/fraunhofer-ipa-logo.svg" alt="Fraunhofer IPA Logo" class="logo">
+            <img src="https://www.h-brs.de/sites/default/files/styles/logo/public/2020-09/h-brs_logo_rgb_positiv_0.png?itok=zGG9P-m7" alt="Hochschule Bonn-Rhein-Sieg Logo" class="logo">
+        </div>
+        <p style="font-size: 1.1rem; margin-top: 1rem; text-align:center; color: #d1d5db;">This work is supported by the IAM4RAIL project.</p>
+    </div>
+    <div class="slide-number">1</div>
+</div>
+
+<!-- Slide 2: Project Context: IAM4RAIL -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Project Context: IAM4RAIL</h2>
+        <p style="text-align:center; font-size:1.4rem; color: #4a5568; margin-bottom: 2rem;">"Intelligent Asset Management for RAIL"</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left;">
+            <div style="background: #f0f5ff; padding: 25px; border-radius: 10px; border-left: 5px solid #667eea;">
+                <h3 style="color: #4c51bf;">Project Goal</h3>
+                <p>To develop a holistic, rail-centric asset management system using AI, data analytics, and robotics to improve the reliability, capacity, and safety of European railway networks.</p>
+            </div>
+            <div style="background: #f0fff4; padding: 25px; border-radius: 10px; border-left: 5px solid #48bb78;">
+                <h3 style="color: #2f855a;">Our Contribution</h3>
+                <p>The <span class="highlight">ROS Component Explorer</span> is a foundational tool within this vision. It accelerates the development of complex robotic systems for inspection and maintenance by enabling developers to rapidly discover and reuse the right software components.</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">2</div>
+</div>
+
+
+<!-- Slide 3: The Core Problem -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>The Core Problem: The "Semantic Gap"</h2>
+        <p class="text-center" style="font-size:1.4rem; color: #4a5568; margin-bottom: 2rem;">In ROS, it's easy to connect components, but hard to know if they <span class="highlight">should</span> be connected.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left;">
+            <div style="background: #fff5f5; padding: 25px; border-radius: 10px; border-left: 5px solid #f56565;">
+                <h3 style="color: #c53030;">Challenge</h3>
+                <p>Developers rely on keyword searches, which often fail to capture the true functionality, hardware requirements, or compatibility of a ROS package.</p>
+            </div>
+            <div style="background: #f0fff4; padding: 25px; border-radius: 10px; border-left: 5px solid #48bb78;">
+                <h3 style="color: #2f855a;">Solution</h3>
+                <p>Build an intelligent system that understands queries based on their <span class="highlight">meaning</span>, not just keywords, to provide accurate, context-aware component recommendations.</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">3</div>
+</div>
+
+<!-- Slide 4: High-Level Architecture -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>High-Level Architecture</h2>
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 20px; align-items: stretch; margin-top: 2rem;">
+            <div class="flow-diagram-item" style="display:flex; flex-direction:column; justify-content:center;">
+                <h3 style="font-size: 1.5rem;">Frontend</h3>
+                <p>NiceGUI Web UI</p>
+            </div>
+            <div class="arrow">&#10140;</div>
+            <div class="flow-diagram-item" style="display:flex; flex-direction:column; justify-content:center;">
+                <h3 style="font-size: 1.5rem;">AI & Logic Layer (The Brains)</h3>
+                <p>LLM Query Processing, Vector Embeddings, Search Logic</p>
+            </div>
+            <div class="arrow">&#10140;</div>
+            <div class="flow-diagram-item" style="display:flex; flex-direction:column; justify-content:center;">
+                <h3 style="font-size: 1.5rem;">Data Layer</h3>
+                <p>Apache Solr & RDF/TTL Knowledge Base</p>
+            </div>
+        </div>
+        <p style="margin-top: 2.5rem; text-align:center; font-size: 1.2rem;">This layered approach separates user interaction from the complex logic of understanding queries and retrieving data from the specialized knowledge base.</p>
+    </div>
+    <div class="slide-number">4</div>
+</div>
+
+<!-- Slide 5: Building the Knowledge Foundation: The Ontology -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Building the Foundation: The Ontology Model</h2>
+        <p>Before we can store facts, we need a blueprint. This is the Ontology, defined in files like <span class="highlight">ros_package_ontology.ttl</span>. It acts as a formal vocabulary or schema for our knowledge graph.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 1.5rem;">
+            <div>
+                <h3>1. Defining Classes (The "Nouns")</h3>
+                <p>We created a hierarchy of component types. This allows us to understand that a `LocalizationPackage` is a type of `AlgorithmPackage`.</p>
+                <div class="code-block">
+# A LocalizationPackage is a type of AlgorithmPackage
+ros:LocalizationPackage rdfs:subClassOf ros:AlgorithmPackage .
+                </div>
+            </div>
+            <div>
+                <h3>2. Defining Properties (The "Verbs")</h3>
+                <p>We defined the relationships components can have, such as dependencies, hardware requirements, and compatibility.</p>
+                <div class="code-block">
+# A property to link a package to hardware
+ros:requiresHardware a owl:ObjectProperty .
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; text-align:center; font-size: 1.2rem;">This ontology provides the essential <span class="highlight">structure</span> for our knowledge, ensuring data is consistent and queryable.</p>
+    </div>
+    <div class="slide-number">5</div>
+</div>
+
+<!-- Slide 6: Populating the Knowledge Graph with Data -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Populating the Knowledge Graph with Data</h2>
+        <p>With the ontology as our blueprint, we populate it with facts about real ROS packages. This process turns documentation into structured, machine-readable knowledge.</p>
+        <h3>From Fact to Triple</h3>
+        <p>Each piece of information is stored as a "triple" (Subject-Predicate-Object). This is the core of our model.</p>
+        <div class="code-block"><pre style="white-space: pre-wrap; word-wrap: break-word;">
+# Subject            Predicate                 Object
+#------------------   -----------------------   -------------------------
+# The 'amcl' package is a type of               'LocalizationPackage'.
+ros:amcl             rdf:type                  ros:LocalizationPackage ;
+
+# It has the label                              "AMCL".
+                     rdfs:label                "AMCL" ;
+
+# It requires the hardware                      'LaserScanner'.
+                     ros:requiresHardware      hw:LaserScanner ;
+
+# It is compatible with                         the 'move_base' package.
+                     ros:compatibleWith        ros:move_base .
+</pre></div>
+        <p style="margin-top: 2rem; text-align:center; font-size: 1.2rem;">This structured data is then loaded into Apache Solr, making it a searchable knowledge base.</p>
+    </div>
+    <div class="slide-number">6</div>
+</div>
+
+<!-- Slide 7: From Fact to Triple: A Deeper Look -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>From Fact to Triple: A Deeper Look</h2>
+        <p>This process is the bedrock of our knowledge model. We are translating human-readable facts into a language that databases and algorithms can understand and reason with.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; margin-top: 1.5rem; text-align: left;">
+            <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
+                <h3 style="font-weight: bold;">Subject</h3>
+                <p>The 'thing' we are describing. The central node in a given fact.</p>
+                <p class="code-block" style="font-size: 0.9rem; margin-top: 10px;">ros:amcl</p>
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
+                <h3 style="font-weight: bold;">Predicate</h3>
+                <p>The property of the subject, or the relationship it has.</p>
+                 <p class="code-block" style="font-size: 0.9rem; margin-top: 10px;">rdf:type<br>rdfs:label<br>ros:requiresHardware</p>
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 10px;">
+                <h3 style="font-weight: bold;">Object</h3>
+                <p>The value of the property, or the other 'thing' it's related to.</p>
+                 <p class="code-block" style="font-size: 0.9rem; margin-top: 10px;">ros:LocalizationPackage<br>"AMCL"<br>hw:LaserScanner</p>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 1.2rem; text-align:center;">By repeating this for thousands of facts, we build a complex web, or <span class="highlight">graph</span>, of interconnected knowledge that the system can navigate to answer questions.</p>
+    </div>
+    <div class="slide-number">7</div>
+</div>
+
+<!-- Slide 8: Adding "Understanding": Vector Embeddings -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Adding "Understanding": Vector Embeddings</h2>
+        <p>The TTL model is for structured facts but doesn't understand natural language. To bridge this gap, we use Vector Embeddings.</p>
+        <p style="text-align:center; font-size:1.4rem; color: #4a5568; margin: 1.5rem 0;">Think of it as giving each component a unique "meaning fingerprint" in the form of numbers.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 1.5rem;">
+            <div>
+                <h3>The Process (<code>vector_generator.py</code>)</h3>
+                <ol style="list-style-type: decimal; padding-left: 25px; text-align:left; space-y: 10px;">
+                    <li>Create a rich text description for each component (name, description, topics).</li>
+                    <li>Use a Sentence Transformer model (<span class="highlight">all-MiniLM-L6-v2</span>) to convert this text into a 384-dimension vector.</li>
+                    <li>Store this vector in Apache Solr alongside the component's other data.</li>
+                </ol>
+            </div>
+            <div>
+                <h3>The Result</h3>
+                <p>We can now find components that are <span class="highlight">semantically similar</span>, not just those that share keywords. A search for "path planning" can now find components described as "motion control" or "trajectory generation".</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">8</div>
+</div>
+
+<!-- Slide 9: The Query Lifecycle -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>The Query Lifecycle: From You to an Answer</h2>
+        <div style="space-y: 10px; margin-top: 1.5rem;">
+            <div class="flow-diagram-item" style="padding: 1rem;"><strong style="font-size: 1.2rem;">1. User Query:</strong> "I need a SLAM package for a robot with a LiDAR."</div>
+            <p class="arrow text-center">↓</p>
+            <div class="flow-diagram-item" style="padding: 1rem;"><strong style="font-size: 1.2rem;">2. LLM Processing (<code>query_processor.py</code>):</strong> The AI identifies key requirements: Category: `SLAM`, Sensor: `LIDAR`.</div>
+            <p class="arrow text-center">↓</p>
+            <div class="flow-diagram-item" style="padding: 1rem;"><strong style="font-size: 1.2rem;">3. Hybrid Search (<code>llm_search_engine.py</code>):</strong>
+                <ul style="font-size: 1.1rem; list-style-type: disc; margin-top: 0.5rem; text-align:left; padding-left: 20px;">
+                    <li><strong>Text Search:</strong> Solr finds documents with "SLAM", "LiDAR".</li>
+                    <li><strong>Vector Search:</strong> Solr finds documents with a similar "meaning fingerprint".</li>
+                    <li><strong>TTL Enrichment:</strong> Results are enhanced with compatibility info from the graph.</li>
+                </ul>
+            </div>
+            <p class="arrow text-center">↓</p>
+            <div class="flow-diagram-item" style="padding: 1rem;"><strong style="font-size: 1.2rem;">4. AI Synthesis:</strong> The LLM combines results and context into a human-readable recommendation.</div>
+        </div>
+    </div>
+    <div class="slide-number">9</div>
+</div>
+
+
+<!-- Slide 10: Conclusion -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>Conclusion: A Multi-Layered Knowledge Model</h2>
+        <p style="text-align:center; font-size:1.4rem; color: #4a5568; margin-bottom: 2rem;">The system's intelligence comes from integrating different models, each with a specific strength.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; text-align: center;">
+            <div style="background: #ebf8ff; padding: 25px; border-radius: 10px;">
+                <h3 style="color: #3182ce;">The Ontology (TTL)</h3>
+                <p>Provides the <span class="highlight">structured, factual backbone</span>. It knows *what* things are and how they are formally related.</p>
+            </div>
+            <div style="background: #f0fff4; padding: 25px; border-radius: 10px;">
+                <h3 style="color: #38a169;">Vector Embeddings</h3>
+                <p>Adds a layer of <span class="highlight">semantic understanding</span>. It knows what things *mean* and what concepts are similar.</p>
+            </div>
+            <div style="background: #faf5ff; padding: 25px; border-radius: 10px;">
+                <h3 style="color: #805ad5;">The LLM</h3>
+                <p>Acts as the <span class="highlight">intelligent orchestrator</span>, translating human language and synthesizing results.</p>
+            </div>
+        </div>
+        <p style="margin-top: 2.5rem; text-align:center; font-size: 1.3rem;">This creates a search experience that is both powerful and intuitive, bridging the gap between human intent and machine-readable data.</p>
+    </div>
+    <div class="slide-number">10</div>
+</div>
+
+<!-- Slide 11: Future Scope -->
+<div class="slide">
+    <div class="slide-content">
+        <h2>🚀 Future Scope & Research Directions</h2>
+        <p style="text-align:center; font-size:1.4rem; color: #4a5568; margin-bottom: 2rem;">Inspired by recent academic research, we can enhance the system's intelligence and automation significantly.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; text-align: left;">
+            <div style="background: #f0f5ff; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #4c51bf;">1. Automated Knowledge Graph Construction</h3>
+                <ul style="list-style-type: disc; padding-left: 20px; space-y: 5px;">
+                    <li>Automatically parse ROS repositories (code, `package.xml`, READMEs) to populate the graph.</li>
+                    <li>Employ <span class="highlight">LLM-based autonomous agents</span> to read documentation and generate semantic triples directly.</li>
+                </ul>
+            </div>
+            <div style="background: #f0fff4; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #2f855a;">2. Domain-Specific Semantic Models</h3>
+                <ul style="list-style-type: disc; padding-left: 20px; space-y: 5px;">
+                    <li><span class="highlight">Fine-tune a language model</span> (e.g., BERT-ROS) on a large corpus of ROS documentation for more accurate semantic matching.</li>
+                </ul>
+            </div>
+            <div style="background: #fffaf0; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #dd6b20;">3. Advanced Feature Fusion & Ranking</h3>
+                <ul style="list-style-type: disc; padding-left: 20px; space-y: 5px;">
+                    <li>Replace ad-hoc scoring with a <span class="highlight">trained regression model</span> to intelligently weigh features (Function, Hardware) based on query context.</li>
+                </ul>
+            </div>
+            <div style="background: #fff5f7; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #c53030;">4. Graph-Native Search & Reasoning</h3>
+                <ul style="list-style-type: disc; padding-left: 20px; space-y: 5px;">
+                    <li>Implement true graph-native queries to find components based on complex relationship patterns, not just attributes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">11</div>
+</div>
+
+
+<!-- Slide 12: Q&A -->
+<div class="slide title-slide">
+    <div class="slide-content">
+        <h1>Thank You</h1>
+        <p style="font-size: 2.5rem; margin-top: 2rem; color: #e2e8f0;">Questions?</p>
+    </div>
+    <div class="slide-number">12</div>
+</div>
+
+</body>
+</html>
+
+
