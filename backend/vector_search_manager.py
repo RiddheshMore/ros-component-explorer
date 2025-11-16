@@ -10,11 +10,17 @@ Note: For primary search operations (text, semantic, hybrid), use SolrManager di
 This class provides auxiliary vector-based analysis tools.
 """
 
+import os
 import logging
 import numpy as np
 from typing import List, Dict, Optional, Tuple
 from sentence_transformers import SentenceTransformer
 import json
+
+# Force offline mode
+os.environ['TRANSFORMERS_OFFLINE'] = '1'
+os.environ['HF_DATASETS_OFFLINE'] = '1'
+os.environ['HF_HUB_OFFLINE'] = '1'
 
 from backend.solr_manager import SolrManager
 from backend.vector_generator import VectorGenerator

@@ -6,11 +6,17 @@ for semantic search capabilities. This enables similarity-based component matchi
 beyond traditional keyword search.
 """
 
+import os
 import logging
 import numpy as np
 from typing import List, Dict, Tuple
 from sentence_transformers import SentenceTransformer
 import json
+
+# Force offline mode for transformers
+os.environ['TRANSFORMERS_OFFLINE'] = '1'
+os.environ['HF_DATASETS_OFFLINE'] = '1'
+os.environ['HF_HUB_OFFLINE'] = '1'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,10 +37,20 @@ class VectorGenerator:
             model_name: Name of the Sentence-BERT model to use
         """
         self.model_name = model_name
-        logger.info(f"Loading Sentence-BERT model: {model_name}")
-        self.model = SentenceTransformer(model_name)
-        self.vector_dimension = self.model.get_sentence_embedding_dimension()
-        logger.info(f"Model loaded successfully. Vector dimension: {self.vector_dimension}")
+        logger.info(f"Loading Sentence-BERT model: {model_name} (OFFLINE MODE)")
+        
+        # Check if model is cached
+        cache_dir = os.path.expanduser("~/.cache/torch/sentence_transformers")
+        logger.info(f"Using cache directory: {cache_dir}")
+        
+        try:
+            self.model = SentenceTransformer(model_name)
+            self.vector_dimension = self.model.get_sentence_embedding_dimension()
+            logger.info(f"Model loaded successfully. Vector dimension: {self.vector_dimension}")
+        except Exception as e:
+            logger.error(f"Failed to load model: {e}")
+            logger.error("Model may not be cached. Run setup_offline.sh to download the model.")
+            raise
     
     def generate_embeddings(self, components: List[Dict]) -> List[Dict]:
         """
