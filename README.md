@@ -23,9 +23,37 @@ A hybrid semantic search system for discovering and exploring ROS 2 packages usi
    ```
 
 2. **Set up Apache Solr**
+   
+   **Option A: Automated Setup (Recommended)**
    ```bash
    # Download and start Solr 9.x
    ./setup.sh
+   ```
+
+   **Option B: Manual Setup**
+   ```bash
+   # Download Apache Solr 9.x
+   wget https://archive.apache.org/dist/lucene/solr/9.0.0/solr-9.0.0.tgz
+   tar -xzf solr-9.0.0.tgz
+   
+   # Start Solr on port 8984
+   cd solr-9.0.0
+   bin/solr start -p 8984
+   
+   # Create the 'ros_packages' collection
+   bin/solr create -c ros_packages -p 8984
+   ```
+
+   **To manage Solr:**
+   ```bash
+   # Check Solr status
+   bin/solr status
+   
+   # Stop Solr
+   bin/solr stop -p 8984
+   
+   # Restart Solr
+   bin/solr restart -p 8984
    ```
 
 3. **Install Python dependencies**
@@ -37,6 +65,8 @@ A hybrid semantic search system for discovering and exploring ROS 2 packages usi
    ```bash
    python main.py
    ```
+   
+   **Note**: The application expects Solr to be running on `http://localhost:8984`. Make sure Solr is started before running the application.
 
 5. **Access the web interface**
    Open your browser to `http://localhost:8083`
