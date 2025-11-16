@@ -1,0 +1,380 @@
+% !TeX program = pdflatex
+\documentclass{beamer}
+\mode<presentation>{\usetheme{Madrid}}
+
+% --- Removes the footer from all slides ---
+\setbeamertemplate{footline}{}
+
+%List of packages
+\usepackage{amsmath}
+\usepackage{booktabs} % For nice tables
+\usepackage{graphicx} % For images
+\usepackage[utf8]{inputenc} % For UTF-8 support
+\usepackage[T1]{fontenc} % For font encoding
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{positioning, shapes, arrows.meta, calc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Metadata %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% hyperref is loaded by beamer automatically
+\hypersetup
+{
+    pdfauthor={Riddhesh P. More},
+    pdftitle={Rich Descriptive Models for Reusable ROS Software Components},
+    pdfsubject={Robotics, Semantic Search, ROS, Knowledge Graphs},
+    pdfkeywords={ROS, Robotics, Semantic Search, Ontology, Knowledge Graph, Vector Embeddings},
+    colorlinks=false
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Title related %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{subsection in toc}[default]
+
+%The contact for one of the authors MUST be embedded on the title
+\title[]{Rich Descriptive Models for Reusable ROS Software Components}
+%Subtitle (if needed)
+
+\date[]{November 17, 2025}
+\author[]{Riddhesh P. More}
+\institute[]{Supervised by: Prof. Sebastian Houben, Dr. Björn Kahl
+
+Bonn-Rhein-Sieg University of Applied Sciences
+
+\vspace{1.5cm} % Adds space above the logos
+{
+  \makebox[\textwidth][c]{
+  \hfill % Flexible space on the left
+  \includegraphics[height=0.70 cm]{hbrs.png}
+  \hfill % Flexible space in the middl
+  \includegraphics[height=0.70 cm]{event.jpg}
+  \hfill % Flexible space on the right
+}
+}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Presentation begins here %%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+% --- Title Frame ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Outline Frame ---
+\begin{frame} 
+  \frametitle{Presentation Outline}
+  \tableofcontents
+\end{frame} 
+
+% --- The Hook (WHY) ---
+\section{The WHY: Problem }
+\begin{frame}
+  \frametitle{WHY: The "Semantic Gap"}
+  \begin{itemize}
+    \item \textbf{The Problem:} Finding the right ROS (Robot Operating System) package is difficult.
+    \item Developers rely on keyword searches (e.g., "path planning", "slam").
+    \item This fails to capture:
+    \begin{itemize}
+        \item True functionality (e.g., "motion control" vs. "path planning")
+        \item Hardware requirements (e.g., "LiDAR", "IMU")
+        \item Package compatibility
+    \end{itemize}
+    \item \textbf{The "Why":} This "semantic gap" between human intent and machine data is a critical bottleneck in robotics development.
+  \end{itemize}
+\end{frame}
+
+% --- Added Motivating Context Slide ---
+\begin{frame}
+  \frametitle{Motivating Context: IAM4RAIL}
+  \begin{itemize}
+    \item \textbf{Project:} "Intelligent Asset Management for RAIL"
+    \item \textbf{Aim:} Use robotics and AI to improve reliability and safety of European railway networks.
+    \item \textbf{Challenge:} Railway operators lack ROS expertise, making it difficult to find and integrate the right software components for robotic inspection and maintenance systems.
+    \item \textbf{Our Contribution:} The ROS Component Explorer was developed to
+accelerate this process by enabling rapid discovery and reuse of
+software components.
+  \end{itemize}
+\end{frame}
+
+
+% --- The "HOW" and "WHAT" ---
+\section{The HOW \& WHAT: Our Solution}
+\begin{frame}
+  \frametitle{System Architecture}
+    % --- Image Placeholder - Replace with \includegraphics ---
+    \includegraphics[width=0.9\textwidth, keepaspectratio]{blank.pdf} 
+ 
+    % --- End Placeholder ---
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Knowledge Graph Generation Pipeline}
+  \begin{center}
+    \scalebox{0.65}{
+    \begin{tikzpicture}[
+      node distance=1.5cm,
+      agent/.style={rectangle, draw, fill=blue!20, text width=3.2cm, text centered, minimum height=1.3cm, font=\small, rounded corners},
+      tech/.style={rectangle, draw=gray, fill=yellow!10, text width=2.8cm, text centered, minimum height=0.7cm, font=\tiny, dashed},
+      data/.style={cylinder, draw, fill=green!15, text width=2.4cm, text centered, minimum height=0.9cm, font=\small, aspect=0.25},
+      arrow/.style={->, >=stealth, thick, blue!70},
+      label/.style={font=\scriptsize, text=red!70!black}
+    ]
+      
+      % Agent 1 (merged scraper + parser)
+      \node[agent] (agent1) at (0, 0) {\textbf{Agent 1}\\ Data Collection\\ \& Parsing};
+      \node[tech, below=0.3cm of agent1] (tech1) {GitPython\\ lxml\\ HuggingFace LLM │  │                    │  │                    │  │                    │
+│    (gpt-oss-20b)  };
+      
+      % Agent 2 (was Agent 3)
+      \node[agent, right=of agent1] (agent2) {\textbf{Agent 2}\\ RDF Generator};
+      \node[tech, below=0.3cm of agent2] (tech2) {RDFLib\\ Turtle};
+      
+      % Agent 3 (was Agent 4)
+      \node[agent, right=of agent2] (agent3) {\textbf{Agent 3}\\ Validator};
+      \node[tech, below=0.3cm of agent3] (tech3) {SPARQL\\ PySHACL};
+      
+      % Agent 4 (was Agent 5)
+      \node[agent, right=of agent3] (agent4) {\textbf{Agent 4}\\ Merger};
+      \node[tech, below=0.3cm of agent4] (tech4) {RDFLib\\ Graph};
+      
+      % Data flow
+      \node[data, above=0.9cm of agent1] (input) {90 GitHub\\ URLs};
+      \node[data, above=0.9cm of agent2] (parsed) {JSON\\ Parsed Data};
+      \node[data, above=0.9cm of agent3] (valid) {Valid\\ Triples};
+      \node[data, above=0.9cm of agent4] (output) {Knowledge\\ Graph};
+      
+      % Arrows
+      \draw[arrow] (input) -- (agent1);
+      \draw[arrow] (agent1) -- (parsed);
+      \draw[arrow] (parsed) -- (agent2);
+      \draw[arrow] (agent2) -- node[above, label] {RDF triples} (agent3);
+      \draw[arrow] (agent3) -- (valid);
+      \draw[arrow] (valid) -- (agent4);
+      \draw[arrow] (agent4) -- (output);
+      
+      % Orchestrator
+      \node[rectangle, draw=red!70, fill=red!5, text width=13cm, text centered, minimum height=0.7cm, 
+            font=\small, rounded corners, below=1.9cm of agent2.south east] (orchestrator) 
+            {\textbf{LangGraph Orchestrator}};
+      
+      % Connect orchestrator to agents
+      \draw[dashed, gray] (orchestrator.north) -- (agent1.south);
+      \draw[dashed, gray] (orchestrator.north) -- (agent2.south);
+      \draw[dashed, gray] (orchestrator.north) -- (agent3.south);
+      \draw[dashed, gray] (orchestrator.north) -- (agent4.south);
+      
+    \end{tikzpicture}
+    }
+  \end{center}
+  
+  \vspace{0.2cm}
+  
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Structured Knowledge (RDF/OWL Ontology)}
+  \begin{itemize}
+    \item \textbf{What it is:} A formal ontology and knowledge graph built with RDF/OWL.
+    \item \textbf{How it works:} All data is stored as \textbf{RDF triples (Subject-Predicate-Object)}.
+    \item \textbf{Strength:} Captures factual, structured relationships between components.
+    \item \textbf{Overall Metrics}
+90 ROS2 Packages, 
+3,909 RDF Triples, 
+15 Predicate Types, 
+8 Package Categories ( Control, Perception, Localization... etc)
+  \end{itemize} 
+\end{frame}
+
+\begin{frame}
+  \frametitle{RDF Triple Example}
+  \begin{block}{Example: `rplidar\_ros` Package}
+    \small
+    \begin{tabular}{lll}
+      \textbf{Subject} & \textbf{Predicate} & \textbf{Object} \\
+      \midrule
+      \texttt{ros:rplidar\_ros} & \texttt{rdf:type} & \texttt{ros:PerceptionPackage} \\
+      \texttt{ros:rplidar\_ros} & \texttt{ros:packageName} & "rplidar\_ros" \\
+      \texttt{ros:rplidar\_ros} & \texttt{ros:requiresHardware} & \texttt{hw:LaserScanner} \\
+      \texttt{ros:rplidar\_ros} & \texttt{ros:supportsHardware} & \texttt{hw:RPLiDAR} \\
+      \texttt{ros:rplidar\_ros} & \texttt{ros:primaryFunction} & "2D laser scanning" \\
+    \end{tabular}
+  \end{block}
+\end{frame}
+
+
+
+
+% --- The Payoff / Credibility ---
+\section{Live Demo}
+\begin{frame}
+  \frametitle{System Demonstration}
+ 
+  \begin{center}
+    \Large\textbf{Live Demo}
+  \end{center}
+
+  \vspace{1cm}
+ 
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Evaluation Overview}
+  \begin{block}{Example Queries from Evaluation Dataset}
+  \small
+  \begin{enumerate}
+    \item \textit{"I'm using \texttt{nav2} for navigation. What localization packages are compatible?"}
+    \item \textit{"My robot uses \texttt{gazebo\_ros2\_control} for simulation. What controller plugins work?"}
+    \item \textit{"I use \texttt{ackermann\_steering\_controller}. What path planning algorithms support it?"}
+    \item \textit{"I have RPLIDAR A1. What SLAM packages support this 2D LIDAR?"}
+    \item \textit{"I have a RealSense D435 depth camera. What object detection packages work?"}
+    \item \textit{"I want to replace cartographer with a faster SLAM solution. What are alternatives?"}
+  \end{enumerate}
+  \end{block}
+  
+
+\end{frame}
+
+
+
+
+
+% --- Evaluation Results ---
+\section{Evaluation Results}
+
+\begin{frame}
+  \frametitle{Evaluation Overview}
+  \begin{itemize}
+    \item Evaluated 4 search methods on 30 natural language ROS queries
+    \item Dataset: Complex real-world scenarios (SLAM, navigation, perception, manipulation)
+    \item Metrics: F1@10, NDCG@10, MAP, Latency
+  \end{itemize}
+  
+  \vspace{0.5cm}
+
+
+\begin{block}{Evaluation Metrics}
+  \begin{itemize}
+    \item \textbf{F1@10:} Harmonic mean of precision and recall in top-10 results
+    \item \textbf{NDCG@10:} Normalized Discounted Cumulative Gain - measures ranking quality with position bias
+    \item \textbf{MAP@10:} Mean Average Precision - average precision across all relevant results
+    \item \textbf{Latency:} Average query response time in milliseconds
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Evaluation Results: Performance Metrics}
+  
+  \begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{lccc}
+      \toprule
+      \textbf{Metric} & \textbf{Keyword (BM25)} & \textbf{Vector Semantic} & \textbf{Hybrid ($\alpha$=0.7)} \\
+      \midrule
+      F1@10           & 0.17 & \textbf{0.19} & \textbf{0.19} \\
+      NDCG@10         & 0.35 & \textbf{0.41} & \textbf{0.41} \\
+      MAP@10          & 0.27 & \textbf{0.32} & 0.31 \\
+      Success@10      & 70.00\% & \textbf{76.67\%} & \textbf{76.67\%} \\
+      Latency (ms)    & 27.32 & \textbf{23.33} & 62.90 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \vspace{0.5cm} % Adds a bit of space
+
+  \begin{itemize}
+    \item \textbf{Vector Semantic} and \textbf{Hybrid} search significantly outperformed the \textbf{Keyword} baseline on all accuracy and relevance metrics (F1, NDCG, MAP, Success@10).
+    \item \textbf{Vector Semantic} is the clear winner, achieving the highest accuracy scores (or matching the Hybrid) while also having the \textbf{lowest latency} (23.33ms).
+ 
+  \end{itemize}
+
+\end{frame}
+
+
+
+
+% --- Conclusion & Future Work ---
+\section{Conclusion \& Next Steps}
+
+\begin{frame} 
+  \frametitle{Summary }
+  \begin{itemize}
+    \item The system's effectiveness comes from integrating two complementary technologies:
+        \begin{itemize}
+            \item \textbf{Knowledge Graph (RDF/OWL):}
+            \begin{itemize}
+                \item Provides structured, factual relationships
+                \item Enables precise filtering by type, hardware, functionality
+            \end{itemize}
+            \item \textbf{Vector Embeddings (BERT):}
+            \begin{itemize}
+                \item Captures semantic similarity and conceptual relationships
+                \item Handles natural language queries effectively
+            \end{itemize}
+        \end{itemize}
+ 
+    \item This novel contribution solves the "semantic gap"
+  \end{itemize}
+\end{frame}
+
+\begin{frame} 
+  \frametitle{Future Work \& Research Directions}
+  \begin{itemize}
+    \item \textbf{Source Code Parsing \& Analysis}
+    \begin{itemize}
+        \item Parse C++ and Python source code from ROS packages
+        \item Integrate LLM for code explanation and question answering
+    \end{itemize}
+
+    \item \textbf{Domain-Specific Semantic Models}
+    \begin{itemize}
+        \item Fine-tune BERT on ROS-specific corpus (e.g., BERT-ROS)
+        \item Improve semantic matching for robotics terminology
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ... your other frames ...
+
+\begin{frame}
+  \frametitle{Thank You}
+  
+  \vfill % Adds flexible space above "Thank You"
+  
+  \centering % Centers all the content horizontally
+  
+  \Huge\textbf{Thank You}
+  
+  \vfill % Adds flexible space between "Thank You" and "Questions?"
+  
+  \Huge\textbf{Questions?}
+  
+  \vfill % Adds flexible space between "Questions?" and the QR codes
+  
+  % This creates two side-by-side columns
+  \begin{columns}[T] % [T] option aligns the top of the content in each column
+    
+    % --- Left Column (GitHub) ---
+    \begin{column}{.5\textwidth} % This column is 50% of the text width
+      \centering
+      \includegraphics[height=3cm]{Github.png} % Adjust 3cm as needed
+    \end{column}
+    
+    % --- Right Column (LinkedIn) ---
+    \begin{column}{.5\textwidth} % This column is 50% of the text width
+      \centering
+      \includegraphics[height=3cm]{Linkdin.png} % Adjust 3cm as needed
+    \end{column}
+    
+  \end{columns}
+  
+  \vfill % Adds flexible space at the bottom of the slide
+  
+\end{frame}
+\end{document}

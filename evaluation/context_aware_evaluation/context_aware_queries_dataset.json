@@ -1,0 +1,344 @@
+{
+  "metadata": {
+    "description": "Context-aware queries for developer-centric ROS package search evaluation",
+    "total_queries": 30,
+    "creation_date": "2025-11-12",
+    "query_types": {
+      "integration_compatibility": 9,
+      "dependency_based": 6,
+      "hardware_constrained": 6,
+      "feature_addition": 6,
+      "replacement_alternative": 3
+    },
+    "note": "All queries reference actual packages from the knowledge graph (90 ROS 2 packages)"
+  },
+  "queries": [
+    {
+      "id": 1,
+      "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+      "context": {
+        "existing_packages": ["navigation2", "nav2_bringup"],
+        "use_case": "mobile robot navigation",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["robot_localization", "beluga_amcl", "slam_toolbox"],
+      "rationale": "These localization packages integrate with nav2 stack"
+    },
+    {
+      "id": 2,
+      "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+      "context": {
+        "existing_packages": ["ros2_control", "diff_drive_controller"],
+        "hardware": ["differential drive robot"],
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["imu_filter_madgwick", "robot_localization", "phidgets_spatial"],
+      "rationale": "IMU and sensor fusion packages that work with ros2_control"
+    },
+    {
+      "id": 3,
+      "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+      "context": {
+        "existing_packages": ["gazebo_ros2_control", "gazebo_ros_pkgs"],
+        "environment": "gazebo simulation",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["effort_controllers", "position_controllers", "velocity_controllers", "joint_trajectory_controller"],
+      "rationale": "ros2_controllers that work with gazebo_ros2_control"
+    },
+    {
+      "id": 4,
+      "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+      "context": {
+        "hardware": ["RPLIDAR A1", "2D LIDAR"],
+        "use_case": "indoor SLAM",
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["slam_toolbox", "andino_slam", "cartographer_rviz"],
+      "rationale": "SLAM packages that work with 2D LIDAR sensors"
+    },
+    {
+      "id": 5,
+      "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+      "context": {
+        "existing_packages": ["ackermann_steering_controller"],
+        "robot_type": "ackermann steering vehicle",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["nav2_mppi_controller", "teb_local_planner", "nav2_constrained_smoother"],
+      "rationale": "Planners that handle Ackermann steering constraints"
+    },
+    {
+      "id": 6,
+      "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+      "context": {
+        "hardware": ["RealSense D435", "depth camera"],
+        "use_case": "object detection",
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["perception_pcl", "object_recognition_msgs", "vision_msgs"],
+      "rationale": "Perception packages that work with depth cameras"
+    },
+    {
+      "id": 7,
+      "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+      "context": {
+        "existing_packages": ["robot_localization"],
+        "need": "IMU data",
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["phidgets_spatial", "microstrain_inertial", "adi_imu", "ess_imu_ros2_uart_driver"],
+      "rationale": "IMU packages that publish compatible messages for robot_localization"
+    },
+    {
+      "id": 8,
+      "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+      "context": {
+        "existing_packages": ["geometry2", "tf2"],
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["robot_localization", "nav2_amcl", "slam_toolbox", "moveit"],
+      "rationale": "Major packages that require tf2 for coordinate transformation"
+    },
+    {
+      "id": 9,
+      "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+      "context": {
+        "existing_packages": ["apriltag_ros"],
+        "use_case": "fiducial marker detection",
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["usb_cam", "v4l2_camera", "camera_aravis2", "avt_vimba_camera"],
+      "rationale": "Camera drivers that publish image topics for apriltag_ros"
+    },
+    {
+      "id": 10,
+      "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+      "context": {
+        "existing_packages": ["joint_trajectory_controller", "ros2_control"],
+        "robot_type": "manipulator",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["moveit", "pilz_industrial_motion", "trajectory_msgs"],
+      "rationale": "Motion planning packages that use joint_trajectory_controller"
+    },
+    {
+      "id": 11,
+      "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+      "context": {
+        "hardware": ["2D LIDAR", "depth camera"],
+        "need": "sensor fusion",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["ira_laser_tools", "depthimage_to_laserscan", "pointcloud_to_laserscan"],
+      "rationale": "Packages for merging and converting scan data"
+    },
+    {
+      "id": 12,
+      "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+      "context": {
+        "existing_packages": ["clearpath_control"],
+        "robot_type": "Clearpath Jackal",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["clearpath_simulator", "gazebo_ros_pkgs", "gazebo_ros2_control"],
+      "rationale": "Simulation packages compatible with Clearpath robots"
+    },
+    {
+      "id": 13,
+      "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+      "context": {
+        "hardware": ["FLIR thermal camera"],
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["spinnaker_camera_driver", "flir_camera_msgs"],
+      "rationale": "FLIR-specific camera drivers and message definitions"
+    },
+    {
+      "id": 14,
+      "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+      "context": {
+        "existing_packages": ["behaviortree_cpp"],
+        "use_case": "autonomous navigation",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["navigation2", "nav2_behavior_tree"],
+      "rationale": "Nav2 uses BehaviorTree.CPP for navigation behaviors"
+    },
+    {
+      "id": 15,
+      "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+      "context": {
+        "robot_type": "bicycle steering",
+        "need": "steering controller",
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["bicycle_steering_controller", "ackermann_steering_controller"],
+      "rationale": "Controllers specifically designed for bicycle kinematics"
+    },
+    {
+      "id": 16,
+      "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+      "context": {
+        "existing_packages": ["effort_controllers", "ros2_control"],
+        "need": "force feedback",
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["force_torque_sensor", "phidgets_high_speed_encoder"],
+      "rationale": "Sensor packages that provide effort feedback"
+    },
+    {
+      "id": 17,
+      "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+      "context": {
+        "existing_packages": ["andino_navigation", "andino_control"],
+        "robot_type": "Andino robot",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["andino_slam", "slam_toolbox"],
+      "rationale": "SLAM packages tested with Andino robot platform"
+    },
+    {
+      "id": 18,
+      "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+      "context": {
+        "hardware": ["Axis network camera"],
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["axis_camera", "camera_aravis2"],
+      "rationale": "Drivers for network-based cameras"
+    },
+    {
+      "id": 19,
+      "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+      "context": {
+        "existing_packages": ["nav2_costmap_2d", "navigation2"],
+        "need": "improved obstacle detection",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["spatio_temporal_voxel_layer", "range_sensor_layer"],
+      "rationale": "Additional costmap layers for nav2"
+    },
+    {
+      "id": 20,
+      "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+      "context": {
+        "existing_packages": ["navigation2", "nav2_planner"],
+        "need": "path smoothing",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["nav2_constrained_smoother", "nav2_simple_smoother"],
+      "rationale": "Nav2 path smoother plugins"
+    },
+    {
+      "id": 21,
+      "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+      "context": {
+        "existing_packages": ["admittance_controller", "ros2_control"],
+        "robot_type": "manipulator",
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["force_torque_sensor", "rokubimini"],
+      "rationale": "Force/torque sensors for impedance control"
+    },
+    {
+      "id": 22,
+      "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+      "context": {
+        "existing_packages": ["cartographer_ros"],
+        "problem": "high computational cost",
+        "query_type": "replacement_alternative"
+      },
+      "relevant_packages": ["slam_toolbox", "beluga_amcl"],
+      "rationale": "Lighter-weight SLAM alternatives to Cartographer"
+    },
+    {
+      "id": 23,
+      "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+      "context": {
+        "existing_packages": ["aruco_ros"],
+        "use_case": "marker-based localization",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["robot_localization", "geometry2", "vision_msgs"],
+      "rationale": "Packages that can fuse ArUco detections with localization"
+    },
+    {
+      "id": 24,
+      "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+      "context": {
+        "existing_packages": ["position_controllers", "ros2_control"],
+        "need": "trajectory planning",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["joint_trajectory_controller", "moveit", "pilz_industrial_motion"],
+      "rationale": "Planners that output position-based trajectories"
+    },
+    {
+      "id": 25,
+      "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+      "context": {
+        "existing_packages": ["autoware"],
+        "need": "message definitions",
+        "query_type": "dependency_based"
+      },
+      "relevant_packages": ["autoware_auto_perception_msgs", "autoware_perception_msgs", "autoware_auto_control_msgs", "autoware_control_msgs"],
+      "rationale": "Autoware message definition packages"
+    },
+    {
+      "id": 26,
+      "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+      "context": {
+        "hardware": ["event camera"],
+        "use_case": "high-speed vision",
+        "query_type": "hardware_constrained"
+      },
+      "relevant_packages": ["event_camera_renderer", "prophesee_event_msgs"],
+      "rationale": "Packages for event-based camera processing"
+    },
+    {
+      "id": 27,
+      "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+      "context": {
+        "existing_packages": ["cartographer_ros"],
+        "need": "visualization",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["cartographer_rviz", "rviz2"],
+      "rationale": "RViz plugins for Cartographer visualization"
+    },
+    {
+      "id": 28,
+      "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+      "context": {
+        "existing_packages": ["velocity_controllers"],
+        "problem": "jerky motion",
+        "query_type": "replacement_alternative"
+      },
+      "relevant_packages": ["joint_trajectory_controller", "admittance_controller"],
+      "rationale": "Controllers with trajectory smoothing capabilities"
+    },
+    {
+      "id": 29,
+      "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+      "context": {
+        "use_case": "automotive robotics",
+        "need": "industry-standard messages",
+        "query_type": "integration_compatibility"
+      },
+      "relevant_packages": ["automotive_navigation_msgs", "automotive_platform_msgs"],
+      "rationale": "Automotive-specific message definitions"
+    },
+    {
+      "id": 30,
+      "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+      "context": {
+        "need": "lifecycle management",
+        "use_case": "reliable robot operation",
+        "query_type": "feature_addition"
+      },
+      "relevant_packages": ["bond_core", "nav2_lifecycle_manager"],
+      "rationale": "Packages for managing node lifecycles and monitoring"
+    }
+  ]
+}

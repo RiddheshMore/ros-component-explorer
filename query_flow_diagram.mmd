@@ -1,0 +1,68 @@
+%% Query Flow Diagram - How a Search Query is Processed
+%% Example: "SLAM packages for RPLiDAR A1"
+
+graph TD
+    Start([👤 User Types Query<br/>'SLAM packages for RPLiDAR A1']) --> Input[🖥️ Search Input Box<br/>frontend/modern_ui.py]
+    
+    Input --> Capture[📝 Capture Event<br/>on_search_input_change<br/>self.search_term = query]
+    
+    Capture --> Update[🔄 Update Results<br/>update_results]
+    
+    Update --> Filter[🎯 Filter & Route<br/>_filter_packages]
+    
+    Filter --> Analyze{🔍 Analyze Query<br/>Has search term?<br/>Has tags?<br/>Empty?}
+    
+    Analyze -->|"Has search term ✅"| VectorPath[⚡ VECTOR SEMANTIC PATH]
+    Analyze -->|"Only tags"| TextPath[📄 TEXT SEARCH PATH]
+    Analyze -->|"Empty query"| AllPath[📋 Show All Packages]
+    
+    %% Vector Semantic Path (Primary)
+    VectorPath --> Encode[🧠 Encode Query<br/>VectorGenerator.encode<br/>Text → 384-dim vector]
+    
+    Encode --> VectorExample["📊 Query Vector<br/>[0.032, -0.145, 0.789, ..., 0.234]<br/>384 dimensions"]
+    
+    VectorExample --> KNN[🔎 KNN Search in Solr<br/>semantic_search<br/>Compare query vector with<br/>90 component vectors]
+    
+    KNN --> Similarity["📐 Calculate Similarity<br/>cosine_similarity(query, components)<br/>Score = dot(q, c) / (||q|| × ||c||)"]
+    
+    Similarity --> Ranking["🏆 Rank by Score<br/>1. RPLiDAR Ros: 0.832<br/>2. Slam Toolbox: 0.794<br/>3. Cartographer: 0.756<br/>...<br/>30. (lowest score)"]
+    
+    %% Text Search Path (Fallback)
+    TextPath --> Tokenize[✂️ Tokenize Query<br/>Remove stopwords<br/>Build Solr query]
+    
+    Tokenize --> BM25[📚 BM25 Search<br/>search_components<br/>TF-IDF scoring]
+    
+    BM25 --> TextRanking[🏆 Text-based Ranking<br/>Keyword match scores]
+    
+    %% Convergence
+    Ranking --> Normalize[⚙️ Normalize Results<br/>SolrManager<br/>Add metadata, scores]
+    TextRanking --> Normalize
+    AllPath --> Normalize
+    
+    Normalize --> Format["📦 Format Output<br/>List[Dict]:<br/>• uri, name, class<br/>• description, score<br/>• topics, metadata"]
+    
+    Format --> Display[🖼️ Display Results<br/>Create package cards<br/>Show top 20 results]
+    
+    Display --> Stats["📊 Show Statistics<br/>'Found 30 packages<br/>Vector Semantic<br/>20.54ms'"]
+    
+    Stats --> Cards["🃏 Render Cards<br/>Package name, type<br/>Description<br/>Topics, hardware<br/>ROS version"]
+    
+    Cards --> End([✅ User sees ranked results])
+    
+    %% Detailed Vector Search Explanation
+    KNN -.->|"Details"| VectorDetails["🔬 Inside Solr KNN:<br/>1. Load all 90 component vectors<br/>2. For each component:<br/>   score = cosine(query_vec, comp_vec)<br/>3. Sort by score descending<br/>4. Return top 30 results<br/><br/>Example matches:<br/>• slam_toolbox (0.794)<br/>  Why: 'SLAM' in description<br/>       '2D LIDAR' in hardware<br/>       '/scan' topic match<br/>• rplidar_ros (0.832)<br/>  Why: 'RPLiDAR' exact match<br/>       'laser scanner' keywords"]
+    
+    %% Styling
+    classDef startStyle fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef vectorStyle fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    classDef textStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef processStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef outputStyle fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef detailStyle fill:#fff9c4,stroke:#f57f17,stroke-width:1px,stroke-dasharray: 5 5
+    
+    class Start,Input,Capture startStyle
+    class VectorPath,Encode,VectorExample,KNN,Similarity,Ranking vectorStyle
+    class TextPath,Tokenize,BM25,TextRanking textStyle
+    class Analyze,Filter,Update,Normalize,Format processStyle
+    class Display,Stats,Cards,End outputStyle
+    class VectorDetails detailStyle

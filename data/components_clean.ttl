@@ -1,0 +1,1883 @@
+# ROS Component Explorer - Structured Component Definitions
+# Based on ROS Package Ontology Template
+# Updated to follow comprehensive ontology framework
+
+@prefix ros: <http://www.ros.org/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dep: <http://www.ros.org/dependency#> .
+@prefix hw: <http://www.ros.org/hardware#> .
+@prefix msg: <http://www.ros.org/message#> .
+
+# =====================================
+# HARDWARE COMPONENTS DEFINITIONS
+# =====================================
+
+# Sensor Hardware
+hw:LaserScanner a hw:SensorHardware ;
+    rdfs:label "Laser Scanner" ;
+    rdfs:comment "2D/3D laser range finder" .
+
+hw:Camera a hw:SensorHardware ;
+    rdfs:label "Camera" ;
+    rdfs:comment "Visual sensor for image capture" .
+
+hw:IMU a hw:SensorHardware ;
+    rdfs:label "Inertial Measurement Unit" ;
+    rdfs:comment "Motion and orientation sensor" .
+
+hw:GPS a hw:SensorHardware ;
+    rdfs:label "GPS Receiver" ;
+    rdfs:comment "Global positioning system receiver" .
+
+hw:WheelEncoder a hw:SensorHardware ;
+    rdfs:label "Wheel Encoder" ;
+    rdfs:comment "Rotational position and velocity sensor" .
+
+# Actuator Hardware  
+hw:Motor a hw:ActuatorHardware ;
+    rdfs:label "Motor" ;
+    rdfs:comment "Electric motor for robot movement" .
+
+hw:Servo a hw:ActuatorHardware ;
+    rdfs:label "Servo Motor" ;
+    rdfs:comment "Precision position-controlled motor" .
+
+hw:Gripper a hw:ActuatorHardware ;
+    rdfs:label "Robotic Gripper" ;
+    rdfs:comment "End-effector for manipulation" .
+
+# =====================================
+# MESSAGE TYPE DEFINITIONS
+# =====================================
+
+msg:LaserScan a msg:SensorMessage ;
+    rdfs:label "LaserScan Message" ;
+    ros:hasMessageType "sensor_msgs/LaserScan" ;
+    rdfs:comment "2D laser scan measurement data" .
+
+msg:Odometry a msg:NavigationMessage ;
+    rdfs:label "Odometry Message" ;
+    ros:hasMessageType "nav_msgs/Odometry" ;
+    rdfs:comment "Robot pose and velocity estimation" .
+
+msg:PointCloud2 a msg:SensorMessage ;
+    rdfs:label "PointCloud2 Message" ;
+    ros:hasMessageType "sensor_msgs/PointCloud2" ;
+    rdfs:comment "3D point cloud data" .
+
+msg:PoseWithCovariance a msg:GeometryMessage ;
+    rdfs:label "PoseWithCovarianceStamped Message" ;
+    ros:hasMessageType "geometry_msgs/PoseWithCovarianceStamped" ;
+    rdfs:comment "Robot pose with uncertainty estimation" .
+
+msg:OccupancyGrid a msg:NavigationMessage ;
+    rdfs:label "OccupancyGrid Message" ;
+    ros:hasMessageType "nav_msgs/OccupancyGrid" ;
+    rdfs:comment "2D occupancy grid map representation" .
+
+msg:Imu a msg:SensorMessage ;
+    rdfs:label "Imu Message" ;
+    ros:hasMessageType "sensor_msgs/Imu" ;
+    rdfs:comment "Inertial measurement unit data" .
+
+msg:PoseStamped a msg:GeometryMessage ;
+    rdfs:label "PoseStamped Message" ;
+    ros:hasMessageType "geometry_msgs/PoseStamped" ;
+    rdfs:comment "Timestamped pose information" .
+
+msg:Twist a msg:ControlMessage ;
+    rdfs:label "Twist Message" ;
+    ros:hasMessageType "geometry_msgs/Twist" ;
+    rdfs:comment "Linear and angular velocity commands" .
+
+msg:Path a msg:NavigationMessage ;
+    rdfs:label "Path Message" ;
+    ros:hasMessageType "nav_msgs/Path" ;
+    rdfs:comment "Sequence of poses forming a path" .
+msg:JointState a msg:ControlMessage ;
+    rdfs:label "JointState Message" ;
+    ros:hasMessageType "sensor_msgs/JointState" ;
+    rdfs:comment "Joint position and velocity data" .
+
+msg:Float64 a msg:ControlMessage ;
+    rdfs:label "Float64 Message" ;
+    ros:hasMessageType "std_msgs/Float64" ;
+    rdfs:comment "Single floating-point value" .
+
+msg:Image a msg:SensorMessage ;
+    rdfs:label "Image Message" ;
+    ros:hasMessageType "sensor_msgs/Image" ;
+    rdfs:comment "Camera image data" .
+
+msg:CameraInfo a msg:SensorMessage ;
+    rdfs:label "CameraInfo Message" ;
+    ros:hasMessageType "sensor_msgs/CameraInfo" ;
+    rdfs:comment "Camera calibration and metadata" .
+
+msg:Detection3DArray a msg:SensorMessage ;
+    rdfs:label "Detection3DArray Message" ;
+    ros:hasMessageType "vision_msgs/Detection3DArray" ;
+    rdfs:comment "Array of 3D object detections" .
+
+# =====================================
+# LOCALIZATION PACKAGES
+# =====================================
+
+# AMCL - Adaptive Monte Carlo Localization
+ros:amcl a ros:LocalizationPackage ;
+    rdfs:label "AMCL" ;
+    dcterms:description "Adaptive Monte Carlo Localization for a mobile robot. Uses particle filter to estimate robot pose." ;
+    
+    # Core Properties
+    ros:packageName "amcl" ;
+    ros:packageVersion "2.1.0" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "ROS Navigation Team" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL <https://github.com/ros-planning/navigation> ;
+    ros:lastUpdated "2024-03-15"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Monte Carlo localization using particle filters" ;
+    ros:implementsAlgorithm "Adaptive Monte Carlo Localization" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasLatency "50.0"^^xsd:float ;
+    ros:hasAccuracy "0.90"^^xsd:float ;
+    ros:hasComplexity "O(n)" ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner ;
+    ros:supportsHardware hw:Camera ;
+    ros:optionalHardware hw:WheelEncoder ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "amcl_pose", "particlecloud", "tf" ;
+    ros:subscribesToTopic "scan", "tf", "initialpose", "map" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot", "pr2", "generic_mobile_robot" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04" ;
+    ros:architecture "x86_64", "aarch64" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.75"^^xsd:float ;
+    ros:communityRating "4.3"^^xsd:float .
+
+# GMapping - SLAM Package
+ros:gmapping a ros:MappingPackage ;
+    rdfs:label "GMapping" ;
+    dcterms:description "Gmapping is a ROS wrapper for OpenSlam's GMapping. Creates 2D occupancy grid maps from laser data." ;
+    
+    # Core Properties
+    ros:packageName "gmapping" ;
+    ros:packageVersion "1.4.1" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "ROS Navigation Team" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL <https://github.com/ros-perception/slam_gmapping> ;
+    ros:lastUpdated "2024-01-20"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "2D SLAM using Rao-Blackwellized particle filters" ;
+    ros:implementsAlgorithm "Rao-Blackwellized Particle Filter SLAM" ;
+    ros:hasUpdateRate "5.0"^^xsd:float ;
+    ros:hasLatency "100.0"^^xsd:float ;
+    ros:hasAccuracy "0.85"^^xsd:float ;
+    ros:hasComplexity "O(n*log(n))" ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner ;
+    ros:supportsHardware hw:WheelEncoder ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "map", "map_metadata", "tf" ;
+    ros:subscribesToTopic "scan", "tf" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot", "generic_mobile_robot" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04" ;
+    ros:architecture "x86_64" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:nav_msgs, ros:sensor_msgs, ros:tf ;
+    ros:runtimeDependsOn ros:tf, ros:map_server ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.60"^^xsd:float ;
+    ros:communityRating "4.1"^^xsd:float .
+
+# =====================================
+# SENSOR DRIVER PACKAGES
+# =====================================
+
+# SICK Scan Driver - Laser Scanner
+ros:sick_scan_driver a ros:SensorPackage ;
+    rdfs:label "SICK Scan Driver" ;
+    dcterms:description "Driver for SICK TIM series laser scanners. Provides laser scan data for navigation and mapping." ;
+    
+    # Core Properties
+    ros:packageName "sick_scan" ;
+    ros:packageVersion "1.7.3" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "SICK AG" ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL <https://github.com/SICKAG/sick_scan_xd> ;
+    ros:lastUpdated "2024-06-10"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "SICK laser scanner device driver" ;
+    ros:implementsAlgorithm "SICK COLA protocol" ;
+    ros:hasUpdateRate "25.0"^^xsd:float ;
+    ros:hasLatency "40.0"^^xsd:float ;
+    ros:hasAccuracy "0.99"^^xsd:float ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "scan", "cloud" ;
+    ros:providesService "sick_scan/ColaMsg" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "industrial_robots", "mobile_robots" ;
+    ros:operatingSystem "Ubuntu 20.04", "Ubuntu 22.04", "Windows" ;
+    ros:architecture "x86_64", "aarch64" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.80"^^xsd:float ;
+    ros:communityRating "4.4"^^xsd:float .
+
+# Velodyne Driver - 3D LiDAR
+ros:velodyne_driver a ros:SensorPackage ;
+    rdfs:label "Velodyne Driver" ;
+    dcterms:description "Driver for Velodyne 3D LiDAR scanners. Provides point cloud data for 3D perception." ;
+    
+    # Core Properties
+    ros:packageName "velodyne_pointcloud" ;
+    ros:packageVersion "1.6.1" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "Josh Whitley" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL <https://github.com/ros-drivers/velodyne> ;
+    ros:lastUpdated "2024-02-28"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Velodyne 3D LiDAR data acquisition and processing" ;
+    ros:implementsAlgorithm "UDP packet decoding and point cloud generation" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasLatency "100.0"^^xsd:float ;
+    ros:hasAccuracy "0.95"^^xsd:float ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "velodyne_points", "scan" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "autonomous_vehicles", "mobile_robots", "industrial" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04" ;
+    ros:architecture "x86_64" ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.70"^^xsd:float ;
+    ros:communityRating "4.2"^^xsd:float .
+
+# =====================================
+# NAVIGATION PACKAGES
+# =====================================
+
+# Move Base - Navigation Framework
+ros:move_base a ros:NavigationPackage ;
+    rdfs:label "Move Base" ;
+    dcterms:description "Complete navigation framework providing goal-directed motion for mobile robots with global and local path planning." ;
+    
+    # Core Properties
+    ros:packageName "move_base" ;
+    ros:packageVersion "1.17.1" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "ROS Navigation Team" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL <https://github.com/ros-planning/navigation> ;
+    ros:lastUpdated "2024-04-12"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "Complete navigation stack integration" ;
+    ros:implementsAlgorithm "Action server based navigation" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:hasLatency "200.0"^^xsd:float ;
+    ros:hasAccuracy "0.88"^^xsd:float ;
+    ros:hasComplexity "O(n^2)" ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:LaserScanner, hw:WheelEncoder ;
+    ros:supportsHardware hw:IMU, hw:Camera ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "cmd_vel", "move_base/feedback", "move_base/result", "move_base/global_costmap/costmap" ;
+    ros:subscribesToTopic "move_base_simple/goal", "scan", "odom", "map", "tf" ;
+    ros:providesService "move_base/make_plan", "move_base/clear_costmaps" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "turtlebot", "pr2", "husky", "jackal" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04" ;
+    ros:architecture "x86_64", "armhf" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:actionlib, ros:geometry_msgs, ros:nav_msgs ;
+    ros:runtimeDependsOn ros:tf, ros:map_server, ros:amcl ;
+    ros:typicallyUsedWith ros:amcl, ros:map_server ;
+    ros:compatibleWith ros:gmapping ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.65"^^xsd:float ;
+    ros:communityRating "4.0"^^xsd:float .
+
+# =====================================
+# PERCEPTION PACKAGES
+# =====================================
+
+# OpenCV Bridge - Image Processing Interface
+ros:cv_bridge a ros:PerceptionPackage ;
+    rdfs:label "CV Bridge" ;
+    dcterms:description "ROS interface for OpenCV image processing. Converts between ROS Image messages and OpenCV matrices." ;
+    
+    # Core Properties
+    ros:packageName "cv_bridge" ;
+    ros:packageVersion "1.16.2" ;
+    ros:rosVersion "ROS 1/2" ;
+    ros:maintainer "ROS Vision Team" ;
+    ros:licenseType "BSD-3-Clause" ;
+    ros:repositoryURL <https://github.com/ros-perception/vision_opencv> ;
+    ros:lastUpdated "2024-05-20"^^xsd:date ;
+    
+    # Functional Properties
+    ros:primaryFunction "ROS-OpenCV image conversion and processing utilities" ;
+    ros:implementsAlgorithm "Image format conversion and basic processing" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:hasLatency "10.0"^^xsd:float ;
+    ros:hasAccuracy "1.0"^^xsd:float ;
+    ros:hasComplexity "O(n)" ;
+    
+    # Hardware Requirements
+    ros:requiresHardware hw:Camera ;
+    
+    # Topic Interfaces
+    ros:publishesTopic "image_processed", "camera_info" ;
+    ros:subscribesToTopic "image_raw", "camera_info" ;
+    
+    # Platform Support
+    ros:supportedPlatforms "universal" ;
+    ros:operatingSystem "Ubuntu 18.04", "Ubuntu 20.04", "Ubuntu 22.04", "Windows", "macOS" ;
+    ros:architecture "x86_64", "aarch64", "armhf" ;
+    
+    # Dependencies
+    ros:buildDependsOn ros:sensor_msgs, ros:opencv ;
+    ros:runtimeDependsOn ros:opencv ;
+    ros:complementedBy ros:image_transport ;
+    
+    # Quality Metrics
+    ros:maturityLevel "stable" ;
+    ros:testCoverage "0.90"^^xsd:float ;
+    ros:communityRating "4.6"^^xsd:float .
+
+  # -- 2. Define Sensor Components --
+  # NOTE: Duplicate velodyne_driver removed - already defined above as ros:SensorPackage
+
+  # IMU Driver removed - auto-generated packages below already define IMU-related packages
+
+  # -- 4. Define Path Planning Components --
+  # NOTE: Duplicate move_base removed - already defined above as ros:NavigationPackage
+
+  ros:global_planner a ros:NavigationPackage ;
+    rdfs:label "Global Planner" ;
+    dcterms:description "Global path planning component. Calculates optimal path from current position to goal." ;
+    ros:isInPackage "global_planner" ;
+    ros:hasUpdateRate "1.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Path .
+
+  ros:local_planner a ros:NavigationPackage ;
+    rdfs:label "Local Planner" ;
+    dcterms:description "Local path planning and obstacle avoidance. Generates velocity commands for robot movement." ;
+    ros:isInPackage "base_local_planner" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Path, ros:topic_LaserScan, ros:topic_PoseStamped ;
+    ros:publishesTopic ros:topic_Twist .
+
+  # -- 5. Define Controller Components --
+  ros:base_controller a ros:ControlPackage ;
+    rdfs:label "Base Controller" ;
+    dcterms:description "Low-level controller for mobile robot base. Converts velocity commands to motor signals." ;
+    ros:isInPackage "base_controller" ;
+    ros:hasUpdateRate "50.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:joint_controller a ros:ControlPackage ;
+    rdfs:label "Joint Controller" ;
+    dcterms:description "Controller for individual robot joints. Manages position, velocity, and effort control." ;
+    ros:isInPackage "joint_controller" ;
+    ros:hasUpdateRate "100.0"^^xsd:float ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  # -- 6. Define Perception Components --
+  ros:object_detection a ros:PerceptionPackage ;
+    rdfs:label "Object Detection" ;
+    dcterms:description "Computer vision-based object detection and recognition. Identifies objects in camera images." ;
+    ros:isInPackage "object_detection" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:implementsAlgorithm "yolo" ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo ;
+    ros:publishesTopic ros:topic_Detection3DArray .
+
+  ros:point_cloud_processor a ros:PerceptionPackage ;
+    rdfs:label "Point Cloud Processor" ;
+    dcterms:description "Processes 3D point cloud data for filtering, segmentation, and feature extraction." ;
+    ros:isInPackage "point_cloud_processor" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:implementsAlgorithm "pcl" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PointCloud2 .
+
+  ros:slam_processor a ros:MappingPackage ;
+    rdfs:label "SLAM Processor" ;
+    dcterms:description "Simultaneous Localization and Mapping processor. Builds maps while localizing the robot." ;
+    ros:isInPackage "slam_processor" ;
+    ros:hasUpdateRate "5.0"^^xsd:float ;
+    ros:implementsAlgorithm "graph_slam" ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Odometry ;
+    ros:publishesTopic ros:topic_OccupancyGrid, ros:topic_PoseWithCovariance .
+
+  # -- 7. Additional Railway Inspection Components --
+  ros:navigation2 a ros:NavigationPackage ;
+    rdfs:label "Navigation2" ;
+    dcterms:description "The ROS2 successor to the navigation stack. Nav2 provides perception, planning, and control modules (using behavior trees) for autonomous navigation." ;
+    ros:isInPackage "navigation2" ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_Odometry, ros:topic_LaserScan ;
+    ros:publishesTopic ros:topic_Twist .
+
+  ros:cartographer a ros:LocalizationPackage ;
+    rdfs:label "Cartographer" ;
+    dcterms:description "Google’s real-time SLAM library for 2D/3D mapping and localization. Takes input from LiDAR, IMU, odometry, etc., and produces consistent maps." ;
+    ros:isInPackage "cartographer_ros" ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry ;
+    ros:publishesTopic ros:topic_OccupancyGrid, ros:topic_PoseWithCovariance .
+
+  ros:pcl_ros a ros:PerceptionPackage ;
+    rdfs:label "PCL ROS" ;
+    dcterms:description "The ROS interface to the PCL library for 3D point-cloud processing. Includes tools to convert, filter, and segment LiDAR or depth-camera clouds." ;
+    ros:isInPackage "pcl_ros" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PointCloud2 .
+
+  ros:octomap_server a ros:PerceptionPackage ;
+    rdfs:label "OctoMap Server" ;
+    dcterms:description "A 3D occupancy-mapping system using octrees. The octomap_server node builds and publishes a volumetric map from point cloud input." ;
+    ros:isInPackage "octomap_server" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_OccupancyGrid .
+
+  ros:moveit a ros:ManipulationPackage ;
+    rdfs:label "MoveIt" ;
+    dcterms:description "A motion-planning framework for robot manipulators. MoveIt provides kinematics, collision checking, and path planning for robot arms." ;
+    ros:isInPackage "moveit" ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:subscribesToTopic ros:topic_JointState, ros:topic_PoseStamped ;
+    ros:publishesTopic ros:topic_JointState .
+
+# =====================================
+# SIMULATION PACKAGES
+# =====================================
+
+# Gazebo - Physics-based Robot Simulator
+  ros:gazebo a ros:SimulationPackage ;
+    rdfs:label "Gazebo Simulator" ;
+    dcterms:description "A high-fidelity physics simulator widely used with ROS. Gazebo can emulate realistic rail environments, vehicle dynamics, and sensors. Supports multiple physics engines (ODE, Bullet, Simbody, DART)." ;
+    
+    # Core Properties
+    ros:packageName "gazebo_ros_pkgs" ;
+    ros:isInPackage "gazebo_ros_pkgs" ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:maintainer "Open Source Robotics Foundation" ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL <https://github.com/ros-simulation/gazebo_ros_pkgs> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Gazebo Classic" ;
+    ros:physicsEngine "ODE, Bullet, Simbody, DART" ;
+    ros:hasRenderingEngine "OGRE" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean .
+
+# Ignition Gazebo - Next-Generation Simulator
+  ros:ignition_gazebo a ros:SimulationPackage ;
+    rdfs:label "Ignition Gazebo" ;
+    dcterms:description "Next-generation robot simulator (now called Gazebo) designed for ROS 2. Features improved performance, modularity, and distributed simulation capabilities." ;
+    
+    # Core Properties
+    ros:packageName "ros_gz_sim" ;
+    ros:isInPackage "ros_gz" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "Open Source Robotics Foundation" ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL <https://github.com/gazebosim/ros_gz> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Ignition Gazebo (Gazebo Sim)" ;
+    ros:physicsEngine "DART, TPE" ;
+    ros:hasRenderingEngine "Ignition Rendering (OGRE2)" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Dependencies
+    ros:buildDependsOn "ros_gz_bridge", "ros_gz_image" ;
+    ros:runtimeDependsOn "gz-sim", "gz-transport" .
+
+# Webots - Open Source Robot Simulator
+  ros:webots_ros2 a ros:SimulationPackage ;
+    rdfs:label "Webots ROS 2" ;
+    dcterms:description "ROS 2 interface for Webots robot simulator. Webots provides a fast prototyping environment with realistic physics and sensors for mobile robots, manipulators, and wheeled vehicles." ;
+    
+    # Core Properties
+    ros:packageName "webots_ros2" ;
+    ros:isInPackage "webots_ros2" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "Cyberbotics Ltd." ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL <https://github.com/cyberbotics/webots_ros2> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Webots" ;
+    ros:physicsEngine "ODE" ;
+    ros:hasRenderingEngine "OpenGL" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Topics
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_Odometry, ros:topic_LaserScan, ros:topic_Image ;
+    
+    # Dependencies
+    ros:buildDependsOn "rclcpp", "std_msgs", "sensor_msgs" ;
+    ros:runtimeDependsOn "webots" .
+
+# CoppeliaSim (V-REP) - Robot Simulator
+  ros:coppeliasim_ros2 a ros:SimulationPackage ;
+    rdfs:label "CoppeliaSim ROS 2 Interface" ;
+    dcterms:description "ROS 2 interface for CoppeliaSim (formerly V-REP) robot simulator. Offers integrated development environment with extensive APIs, multiple physics engines, and comprehensive sensor simulation." ;
+    
+    # Core Properties
+    ros:packageName "coppeliasim_ros2_interface" ;
+    ros:isInPackage "coppeliasim_ros2_interface" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "Coppelia Robotics" ;
+    ros:licenseType "GPL-3.0" ;
+    ros:repositoryURL <https://github.com/CoppeliaRobotics/ros2_coppeliasim_interface> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "CoppeliaSim" ;
+    ros:physicsEngine "Bullet, ODE, Vortex, Newton" ;
+    ros:hasRenderingEngine "OpenGL" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Topics
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_JointState, ros:topic_Image, ros:topic_LaserScan ;
+    
+    # Dependencies
+    ros:buildDependsOn "rclcpp", "geometry_msgs", "sensor_msgs" ;
+    ros:runtimeDependsOn "coppeliasim" .
+
+# Unity Robotics Hub - Game Engine Based Simulation
+  ros:unity_robotics a ros:SimulationPackage ;
+    rdfs:label "Unity Robotics Hub" ;
+    dcterms:description "Unity-based robotics simulation framework with ROS integration. Leverages Unity's powerful rendering, physics (PhysX), and machine learning capabilities for robot development and training." ;
+    
+    # Core Properties
+    ros:packageName "unity_robotics_demo" ;
+    ros:isInPackage "ROS-TCP-Connector" ;
+    ros:rosVersion "ROS 1 & ROS 2" ;
+    ros:maintainer "Unity Technologies" ;
+    ros:licenseType "Apache-2.0" ;
+    ros:repositoryURL <https://github.com/Unity-Technologies/Unity-Robotics-Hub> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Unity" ;
+    ros:physicsEngine "PhysX, Articulation Body" ;
+    ros:hasRenderingEngine "Unity Universal Render Pipeline" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Topics
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_Image, ros:topic_Odometry, ros:topic_JointState ;
+    
+    # Dependencies
+    ros:buildDependsOn "rospy", "geometry_msgs" ;
+    ros:runtimeDependsOn "ros_tcp_endpoint" .
+
+# NVIDIA Isaac Sim - High-Fidelity Robotics Simulator
+  ros:isaac_sim a ros:SimulationPackage ;
+    rdfs:label "NVIDIA Isaac Sim" ;
+    dcterms:description "NVIDIA's physically accurate, photorealistic robotics simulator built on Omniverse. Features RTX ray tracing, PhysX 5, synthetic data generation, and domain randomization for AI training." ;
+    
+    # Core Properties
+    ros:packageName "isaac_ros_simulation" ;
+    ros:isInPackage "isaac_ros_common" ;
+    ros:rosVersion "ROS 2" ;
+    ros:maintainer "NVIDIA Corporation" ;
+    ros:licenseType "NVIDIA Omniverse License" ;
+    ros:repositoryURL <https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Isaac Sim (Omniverse)" ;
+    ros:physicsEngine "PhysX 5" ;
+    ros:hasRenderingEngine "RTX Ray Tracing (Omniverse)" ;
+    ros:supports3DVisualization "true"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Topics
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2, ros:topic_LaserScan ;
+    
+    # Dependencies
+    ros:buildDependsOn "rclcpp", "sensor_msgs", "nav_msgs" ;
+    ros:runtimeDependsOn "isaac_sim_core" .
+
+# Stage - 2D Multi-Robot Simulator
+  ros:stage_ros a ros:SimulationPackage ;
+    rdfs:label "Stage ROS" ;
+    dcterms:description "Lightweight 2D multi-robot simulator for ROS. Efficient for testing navigation algorithms with large numbers of robots in 2D environments." ;
+    
+    # Core Properties
+    ros:packageName "stage_ros" ;
+    ros:isInPackage "stage_ros" ;
+    ros:rosVersion "ROS 1" ;
+    ros:maintainer "ROS Community" ;
+    ros:licenseType "GPL-2.0" ;
+    ros:repositoryURL <https://github.com/ros-simulation/stage_ros> ;
+    
+    # Simulation Properties
+    ros:simulationEngine "Stage" ;
+    ros:physicsEngine "2D Kinematic" ;
+    ros:hasRenderingEngine "FLTK" ;
+    ros:supports3DVisualization "false"^^xsd:boolean ;
+    ros:supportsSensorSimulation "true"^^xsd:boolean ;
+    ros:supportsPhysicsSimulation "true"^^xsd:boolean ;
+    
+    # Topics
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_Odometry, ros:topic_LaserScan ;
+    
+    # Dependencies
+    ros:buildDependsOn "roscpp", "nav_msgs", "sensor_msgs" ;
+    ros:runtimeDependsOn "stage" .
+
+  ros:ros_control a ros:ControlPackage ;
+    rdfs:label "ros_control" ;
+    dcterms:description "A set of controller frameworks and hardware interfaces for actuator control. Standardizes how joint and sensor data are handled." ;
+    ros:isInPackage "ros_control" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .  # -- Top 100 Mobile Robot Packages from ROS Index Humble API --
+  # -- Added on: 2025-08-26T21:37:18.208509 --
+
+  ros:mobile_robot_package_ackermann_steering_controller a ros:ControlPackage ;
+    rdfs:label "ackermann_steering_controller" ;
+    dcterms:description "ROS 2 Humble package: ackermann_steering_controller" ;
+    ros:isInPackage "ackermann_steering_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/ackermann_steering_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_adi_imu a ros:SensorPackage ;
+    rdfs:label "adi_imu" ;
+    dcterms:description "ROS 2 Humble package: adi_imu" ;
+    ros:isInPackage "adi_imu" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/analogdevicesinc/imu_ros2/tree/humble/." ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_admittance_controller a ros:ControlPackage ;
+    rdfs:label "admittance_controller" ;
+    dcterms:description "ROS 2 Humble package: admittance_controller" ;
+    ros:isInPackage "admittance_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/admittance_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_andino_control a ros:ControlPackage ;
+    rdfs:label "andino_control" ;
+    dcterms:description "ROS 2 Humble package: andino_control" ;
+    ros:isInPackage "andino_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/Ekumen-OS/andino/tree/humble/andino_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_andino_navigation a ros:NavigationPackage ;
+    rdfs:label "andino_navigation" ;
+    dcterms:description "ROS 2 Humble package: andino_navigation" ;
+    ros:isInPackage "andino_navigation" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/Ekumen-OS/andino/tree/humble/andino_navigation" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_andino_slam a ros:LocalizationPackage ;
+    rdfs:label "andino_slam" ;
+    dcterms:description "ROS 2 Humble package: andino_slam" ;
+    ros:isInPackage "andino_slam" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/Ekumen-OS/andino/tree/humble/andino_slam" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_as2_behaviors_path_planning a ros:NavigationPackage ;
+    rdfs:label "as2_behaviors_path_planning" ;
+    dcterms:description "ROS 2 Humble package: as2_behaviors_path_planning" ;
+    ros:isInPackage "as2_behaviors_path_planning" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_behaviors/as2_behaviors_path_planning" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_as2_behaviors_perception a ros:PerceptionPackage ;
+    rdfs:label "as2_behaviors_perception" ;
+    dcterms:description "ROS 2 Humble package: as2_behaviors_perception" ;
+    ros:isInPackage "as2_behaviors_perception" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_behaviors/as2_behaviors_perception" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_as2_behaviors_trajectory_generation a ros:UtilityPackage ;
+    rdfs:label "as2_behaviors_trajectory_generation" ;
+    dcterms:description "ROS 2 Humble package: as2_behaviors_trajectory_generation" ;
+    ros:isInPackage "as2_behaviors_trajectory_generation" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_behaviors/as2_behaviors_trajectory_generation" ;
+    .
+
+  ros:mobile_robot_package_as2_controller a ros:ControlPackage ;
+    rdfs:label "as2_controller" ;
+    dcterms:description "ROS 2 Humble package: as2_controller" ;
+    ros:isInPackage "as2_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_as2_motion_controller a ros:ControlPackage ;
+    rdfs:label "as2_motion_controller" ;
+    dcterms:description "ROS 2 Humble package: as2_motion_controller" ;
+    ros:isInPackage "as2_motion_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_motion_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_as2_platform_multirotor_simulator a ros:SensorPackage ;
+    rdfs:label "as2_platform_multirotor_simulator" ;
+    dcterms:description "ROS 2 Humble package: as2_platform_multirotor_simulator" ;
+    ros:isInPackage "as2_platform_multirotor_simulator" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_aerial_platforms/as2_platform_multirotor_simulator" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_as2_usb_camera_interface a ros:PerceptionPackage ;
+    rdfs:label "as2_usb_camera_interface" ;
+    dcterms:description "ROS 2 Humble package: as2_usb_camera_interface" ;
+    ros:isInPackage "as2_usb_camera_interface" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/aerostack2/aerostack2/tree/main/as2_hardware_drivers/as2_usb_camera_interface" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_automotive_navigation_msgs a ros:NavigationPackage ;
+    rdfs:label "automotive_navigation_msgs" ;
+    dcterms:description "ROS 2 Humble package: automotive_navigation_msgs" ;
+    ros:isInPackage "automotive_navigation_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/astuff/automotive_autonomy_msgs/tree/master/automotive_navigation_msgs" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_autoware_auto_control_msgs a ros:ControlPackage ;
+    rdfs:label "autoware_auto_control_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_auto_control_msgs" ;
+    ros:isInPackage "autoware_auto_control_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/tree/master/autoware_auto_control_msgs" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_autoware_auto_mapping_msgs a ros:LocalizationPackage ;
+    rdfs:label "autoware_auto_mapping_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_auto_mapping_msgs" ;
+    ros:isInPackage "autoware_auto_mapping_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/tree/master/autoware_auto_mapping_msgs" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_autoware_auto_perception_msgs a ros:PerceptionPackage ;
+    rdfs:label "autoware_auto_perception_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_auto_perception_msgs" ;
+    ros:isInPackage "autoware_auto_perception_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/tree/master/autoware_auto_perception_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_autoware_auto_vehicle_msgs a ros:UtilityPackage ;
+    rdfs:label "autoware_auto_vehicle_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_auto_vehicle_msgs" ;
+    ros:isInPackage "autoware_auto_vehicle_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://gitlab.com/autowarefoundation/autoware.auto/autoware_auto_msgs/-/tree/master/autoware_auto_vehicle_msgs" ;
+    .
+
+  ros:mobile_robot_package_autoware_control_msgs a ros:ControlPackage ;
+    rdfs:label "autoware_control_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_control_msgs" ;
+    ros:isInPackage "autoware_control_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_msgs/tree/main/autoware_control_msgs" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_autoware_internal_localization_msgs a ros:LocalizationPackage ;
+    rdfs:label "autoware_internal_localization_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_internal_localization_msgs" ;
+    ros:isInPackage "autoware_internal_localization_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_internal_msgs/tree/main/autoware_internal_localization_msgs" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_autoware_internal_perception_msgs a ros:PerceptionPackage ;
+    rdfs:label "autoware_internal_perception_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_internal_perception_msgs" ;
+    ros:isInPackage "autoware_internal_perception_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_internal_msgs/tree/main/autoware_internal_perception_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_autoware_localization_msgs a ros:LocalizationPackage ;
+    rdfs:label "autoware_localization_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_localization_msgs" ;
+    ros:isInPackage "autoware_localization_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_msgs/tree/main/autoware_localization_msgs" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_autoware_perception_msgs a ros:PerceptionPackage ;
+    rdfs:label "autoware_perception_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_perception_msgs" ;
+    ros:isInPackage "autoware_perception_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_msgs/tree/main/autoware_perception_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_autoware_vehicle_msgs a ros:UtilityPackage ;
+    rdfs:label "autoware_vehicle_msgs" ;
+    dcterms:description "ROS 2 Humble package: autoware_vehicle_msgs" ;
+    ros:isInPackage "autoware_vehicle_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/autowarefoundation/autoware_msgs/tree/main/autoware_vehicle_msgs" ;
+    .
+
+  ros:mobile_robot_package_avt_vimba_camera_msgs a ros:PerceptionPackage ;
+    rdfs:label "avt_vimba_camera_msgs" ;
+    dcterms:description "ROS 2 Humble package: avt_vimba_camera_msgs" ;
+    ros:isInPackage "avt_vimba_camera_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/astuff/avt_vimba_camera/tree/ros2_master/avt_vimba_camera_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_axis_camera a ros:PerceptionPackage ;
+    rdfs:label "axis_camera" ;
+    dcterms:description "ROS 2 Humble package: axis_camera" ;
+    ros:isInPackage "axis_camera" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-drivers/axis_camera/tree/humble-devel/axis_camera" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_base2d_kinematics a ros:UtilityPackage ;
+    rdfs:label "base2d_kinematics" ;
+    dcterms:description "ROS 2 Humble package: base2d_kinematics" ;
+    ros:isInPackage "base2d_kinematics" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/MetroRobots/metro_nav/tree/main/base2d_kinematics" ;
+    .
+
+  ros:mobile_robot_package_base2d_kinematics_msgs a ros:UtilityPackage ;
+    rdfs:label "base2d_kinematics_msgs" ;
+    dcterms:description "ROS 2 Humble package: base2d_kinematics_msgs" ;
+    ros:isInPackage "base2d_kinematics_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/MetroRobots/metro_nav/tree/main/base2d_kinematics_msgs" ;
+    .
+
+  ros:mobile_robot_package_beluga_amcl a ros:LocalizationPackage ;
+    rdfs:label "beluga_amcl" ;
+    dcterms:description "ROS 2 Humble package: beluga_amcl" ;
+    ros:isInPackage "beluga_amcl" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/Ekumen-OS/beluga/tree/main/beluga_amcl" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_bicycle_steering_controller a ros:ControlPackage ;
+    rdfs:label "bicycle_steering_controller" ;
+    dcterms:description "ROS 2 Humble package: bicycle_steering_controller" ;
+    ros:isInPackage "bicycle_steering_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/bicycle_steering_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_camera_aravis2 a ros:PerceptionPackage ;
+    rdfs:label "camera_aravis2" ;
+    dcterms:description "ROS 2 Humble package: camera_aravis2" ;
+    ros:isInPackage "camera_aravis2" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/FraunhoferIOSB/camera_aravis2/tree/main/camera_aravis2" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_camera_aravis2_msgs a ros:PerceptionPackage ;
+    rdfs:label "camera_aravis2_msgs" ;
+    dcterms:description "ROS 2 Humble package: camera_aravis2_msgs" ;
+    ros:isInPackage "camera_aravis2_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/FraunhoferIOSB/camera_aravis2/tree/main/camera_aravis2_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_camera_calibration_parsers a ros:PerceptionPackage ;
+    rdfs:label "camera_calibration_parsers" ;
+    dcterms:description "ROS 2 Humble package: camera_calibration_parsers" ;
+    ros:isInPackage "camera_calibration_parsers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/image_common/tree/humble/camera_calibration_parsers" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_camera_info_manager a ros:PerceptionPackage ;
+    rdfs:label "camera_info_manager" ;
+    dcterms:description "ROS 2 Humble package: camera_info_manager" ;
+    ros:isInPackage "camera_info_manager" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/image_common/tree/humble/camera_info_manager" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_camera_info_manager_py a ros:PerceptionPackage ;
+    rdfs:label "camera_info_manager_py" ;
+    dcterms:description "ROS 2 Humble package: camera_info_manager_py" ;
+    ros:isInPackage "camera_info_manager_py" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/image_common/tree/humble/camera_info_manager_py" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_camera_ros a ros:PerceptionPackage ;
+    rdfs:label "camera_ros" ;
+    dcterms:description "ROS 2 Humble package: camera_ros" ;
+    ros:isInPackage "camera_ros" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/christianrauch/camera_ros/tree/main/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_canopen_ros2_control a ros:ControlPackage ;
+    rdfs:label "canopen_ros2_control" ;
+    dcterms:description "ROS 2 Humble package: canopen_ros2_control" ;
+    ros:isInPackage "canopen_ros2_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-industrial/ros2_canopen/tree/humble/canopen_ros2_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_canopen_ros2_controllers a ros:ControlPackage ;
+    rdfs:label "canopen_ros2_controllers" ;
+    dcterms:description "ROS 2 Humble package: canopen_ros2_controllers" ;
+    ros:isInPackage "canopen_ros2_controllers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-industrial/ros2_canopen/tree/humble/canopen_ros2_controllers" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_cartographer a ros:LocalizationPackage ;
+    rdfs:label "cartographer" ;
+    dcterms:description "ROS 2 Humble package: cartographer" ;
+    ros:isInPackage "cartographer" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros2/cartographer/tree/ros2/." ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_cartographer_ros a ros:LocalizationPackage ;
+    rdfs:label "cartographer_ros" ;
+    dcterms:description "ROS 2 Humble package: cartographer_ros" ;
+    ros:isInPackage "cartographer_ros" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros2/cartographer_ros/tree/ros2/cartographer_ros" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_cartographer_ros_msgs a ros:LocalizationPackage ;
+    rdfs:label "cartographer_ros_msgs" ;
+    dcterms:description "ROS 2 Humble package: cartographer_ros_msgs" ;
+    ros:isInPackage "cartographer_ros_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros2/cartographer_ros/tree/ros2/cartographer_ros_msgs" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_cartographer_rviz a ros:LocalizationPackage ;
+    rdfs:label "cartographer_rviz" ;
+    dcterms:description "ROS 2 Humble package: cartographer_rviz" ;
+    ros:isInPackage "cartographer_rviz" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros2/cartographer_ros/tree/ros2/cartographer_rviz" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:mobile_robot_package_clearpath_control a ros:NavigationPackage ;
+    rdfs:label "clearpath_control" ;
+    dcterms:description "ROS 2 Humble package: clearpath_control" ;
+    ros:isInPackage "clearpath_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/clearpathrobotics/clearpath_common/tree/humble/clearpath_control" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_clearpath_nav2_demos a ros:NavigationPackage ;
+    rdfs:label "clearpath_nav2_demos" ;
+    dcterms:description "ROS 2 Humble package: clearpath_nav2_demos" ;
+    ros:isInPackage "clearpath_nav2_demos" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/clearpathrobotics/clearpath_nav2_demos/tree/main/." ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_clearpath_simulator a ros:NavigationPackage ;
+    rdfs:label "clearpath_simulator" ;
+    dcterms:description "ROS 2 Humble package: clearpath_simulator" ;
+    ros:isInPackage "clearpath_simulator" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/clearpathrobotics/clearpath_simulator/tree/main/clearpath_simulator" ;
+    ros:subscribesToTopic ros:topic_PoseStamped, ros:topic_LaserScan, ros:topic_OccupancyGrid ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:mobile_robot_package_control_box_rst a ros:ControlPackage ;
+    rdfs:label "control_box_rst" ;
+    dcterms:description "ROS 2 Humble package: control_box_rst" ;
+    ros:isInPackage "control_box_rst" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/rst-tu-dortmund/control_box_rst/tree/foxy-devel/." ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_control_msgs a ros:ControlPackage ;
+    rdfs:label "control_msgs" ;
+    dcterms:description "ROS 2 Humble package: control_msgs" ;
+    ros:isInPackage "control_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/control_msgs/tree/humble/control_msgs" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_control_toolbox a ros:ControlPackage ;
+    rdfs:label "control_toolbox" ;
+    dcterms:description "ROS 2 Humble package: control_toolbox" ;
+    ros:isInPackage "control_toolbox" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/control_toolbox/tree/humble/." ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_controller_interface a ros:ControlPackage ;
+    rdfs:label "controller_interface" ;
+    dcterms:description "ROS 2 Humble package: controller_interface" ;
+    ros:isInPackage "controller_interface" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_control/tree/humble/controller_interface" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_controller_manager a ros:ControlPackage ;
+    rdfs:label "controller_manager" ;
+    dcterms:description "ROS 2 Humble package: controller_manager" ;
+    ros:isInPackage "controller_manager" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_control/tree/humble/controller_manager" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_controller_manager_msgs a ros:ControlPackage ;
+    rdfs:label "controller_manager_msgs" ;
+    dcterms:description "ROS 2 Humble package: controller_manager_msgs" ;
+    ros:isInPackage "controller_manager_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_control/tree/humble/controller_manager_msgs" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_crane_plus_control a ros:ControlPackage ;
+    rdfs:label "crane_plus_control" ;
+    dcterms:description "ROS 2 Humble package: crane_plus_control" ;
+    ros:isInPackage "crane_plus_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/rt-net/crane_plus/tree/humble-devel/crane_plus_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_create_bringup a ros:UtilityPackage ;
+    rdfs:label "create_bringup" ;
+    dcterms:description "ROS 2 Humble package: create_bringup" ;
+    ros:isInPackage "create_bringup" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/AutonomyLab/create_robot/tree/humble/create_bringup" ;
+    .
+
+  ros:mobile_robot_package_create_description a ros:UtilityPackage ;
+    rdfs:label "create_description" ;
+    dcterms:description "ROS 2 Humble package: create_description" ;
+    ros:isInPackage "create_description" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/AutonomyLab/create_robot/tree/humble/create_description" ;
+    .
+
+  ros:mobile_robot_package_create_driver a ros:SensorPackage ;
+    rdfs:label "create_driver" ;
+    dcterms:description "ROS 2 Humble package: create_driver" ;
+    ros:isInPackage "create_driver" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/AutonomyLab/create_robot/tree/humble/create_driver" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_create_msgs a ros:UtilityPackage ;
+    rdfs:label "create_msgs" ;
+    dcterms:description "ROS 2 Humble package: create_msgs" ;
+    ros:isInPackage "create_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/AutonomyLab/create_robot/tree/humble/create_msgs" ;
+    .
+
+  ros:mobile_robot_package_create_robot a ros:UtilityPackage ;
+    rdfs:label "create_robot" ;
+    dcterms:description "ROS 2 Humble package: create_robot" ;
+    ros:isInPackage "create_robot" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/AutonomyLab/create_robot/tree/humble/create_robot" ;
+    .
+
+  ros:mobile_robot_package_depthimage_to_laserscan a ros:PerceptionPackage ;
+    rdfs:label "depthimage_to_laserscan" ;
+    dcterms:description "ROS 2 Humble package: depthimage_to_laserscan" ;
+    ros:isInPackage "depthimage_to_laserscan" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/depthimage_to_laserscan/tree/ros2/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_diff_drive_controller a ros:ControlPackage ;
+    rdfs:label "diff_drive_controller" ;
+    dcterms:description "ROS 2 Humble package: diff_drive_controller" ;
+    ros:isInPackage "diff_drive_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/diff_drive_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_draco_point_cloud_transport a ros:UtilityPackage ;
+    rdfs:label "draco_point_cloud_transport" ;
+    dcterms:description "ROS 2 Humble package: draco_point_cloud_transport" ;
+    ros:isInPackage "draco_point_cloud_transport" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/point_cloud_transport_plugins/tree/humble/draco_point_cloud_transport" ;
+    .
+
+  ros:mobile_robot_package_dual_laser_merger a ros:UtilityPackage ;
+    rdfs:label "dual_laser_merger" ;
+    dcterms:description "ROS 2 Humble package: dual_laser_merger" ;
+    ros:isInPackage "dual_laser_merger" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/pradyum/dual_laser_merger/tree/humble/." ;
+    .
+
+  ros:mobile_robot_package_dummy_robot_bringup a ros:UtilityPackage ;
+    rdfs:label "dummy_robot_bringup" ;
+    dcterms:description "ROS 2 Humble package: dummy_robot_bringup" ;
+    ros:isInPackage "dummy_robot_bringup" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros2/demos/tree/humble/dummy_robot/dummy_robot_bringup" ;
+    .
+
+  ros:mobile_robot_package_ecl_mobile_robot a ros:UtilityPackage ;
+    rdfs:label "ecl_mobile_robot" ;
+    dcterms:description "ROS 2 Humble package: ecl_mobile_robot" ;
+    ros:isInPackage "ecl_mobile_robot" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/stonier/ecl_core/tree/release/1.2.x/ecl_mobile_robot" ;
+    .
+
+  ros:mobile_robot_package_effort_controllers a ros:ControlPackage ;
+    rdfs:label "effort_controllers" ;
+    dcterms:description "ROS 2 Humble package: effort_controllers" ;
+    ros:isInPackage "effort_controllers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/effort_controllers" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_ess_imu_driver2 a ros:SensorPackage ;
+    rdfs:label "ess_imu_driver2" ;
+    dcterms:description "ROS 2 Humble package: ess_imu_driver2" ;
+    ros:isInPackage "ess_imu_driver2" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/cubicleguy/ess_imu_driver2/tree/humble/." ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_event_camera_codecs a ros:PerceptionPackage ;
+    rdfs:label "event_camera_codecs" ;
+    dcterms:description "ROS 2 Humble package: event_camera_codecs" ;
+    ros:isInPackage "event_camera_codecs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-event-camera/event_camera_codecs/tree/release/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_event_camera_msgs a ros:PerceptionPackage ;
+    rdfs:label "event_camera_msgs" ;
+    dcterms:description "ROS 2 Humble package: event_camera_msgs" ;
+    ros:isInPackage "event_camera_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-event-camera/event_camera_msgs/tree/release/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_event_camera_py a ros:PerceptionPackage ;
+    rdfs:label "event_camera_py" ;
+    dcterms:description "ROS 2 Humble package: event_camera_py" ;
+    ros:isInPackage "event_camera_py" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-event-camera/event_camera_py/tree/release/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_event_camera_renderer a ros:PerceptionPackage ;
+    rdfs:label "event_camera_renderer" ;
+    dcterms:description "ROS 2 Humble package: event_camera_renderer" ;
+    ros:isInPackage "event_camera_renderer" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-event-camera/event_camera_renderer/tree/release/." ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_example_multi_robot a ros:UtilityPackage ;
+    rdfs:label "example_multi_robot" ;
+    dcterms:description "ROS 2 Humble package: example_multi_robot" ;
+    ros:isInPackage "example_multi_robot" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/IntelLabs/scenario_execution/tree/humble/examples/example_multi_robot" ;
+    .
+
+  ros:mobile_robot_package_example_scenario_control a ros:ControlPackage ;
+    rdfs:label "example_scenario_control" ;
+    dcterms:description "ROS 2 Humble package: example_scenario_control" ;
+    ros:isInPackage "example_scenario_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/IntelLabs/scenario_execution/tree/humble/examples/example_scenario_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_example_simulation a ros:SensorPackage ;
+    rdfs:label "example_simulation" ;
+    dcterms:description "ROS 2 Humble package: example_simulation" ;
+    ros:isInPackage "example_simulation" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/IntelLabs/scenario_execution/tree/humble/examples/example_simulation" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_flir_camera_description a ros:PerceptionPackage ;
+    rdfs:label "flir_camera_description" ;
+    dcterms:description "ROS 2 Humble package: flir_camera_description" ;
+    ros:isInPackage "flir_camera_description" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-drivers/flir_camera_driver/tree/ros2-release/flir_camera_description" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_flir_camera_msgs a ros:PerceptionPackage ;
+    rdfs:label "flir_camera_msgs" ;
+    dcterms:description "ROS 2 Humble package: flir_camera_msgs" ;
+    ros:isInPackage "flir_camera_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-drivers/flir_camera_driver/tree/ros2-release/flir_camera_msgs" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_forward_command_controller a ros:ControlPackage ;
+    rdfs:label "forward_command_controller" ;
+    dcterms:description "ROS 2 Humble package: forward_command_controller" ;
+    ros:isInPackage "forward_command_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/forward_command_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_franka_example_controllers a ros:ControlPackage ;
+    rdfs:label "franka_example_controllers" ;
+    dcterms:description "ROS 2 Humble package: franka_example_controllers" ;
+    ros:isInPackage "franka_example_controllers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/frankaemika/franka_ros2/tree/humble/franka_example_controllers" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_franka_ign_ros2_control a ros:ControlPackage ;
+    rdfs:label "franka_ign_ros2_control" ;
+    dcterms:description "ROS 2 Humble package: franka_ign_ros2_control" ;
+    ros:isInPackage "franka_ign_ros2_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/frankaemika/franka_ros2/tree/humble/franka_gazebo/franka_ign_ros2_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_franka_inria_inverse_dynamics_solver a ros:UtilityPackage ;
+    rdfs:label "franka_inria_inverse_dynamics_solver" ;
+    dcterms:description "ROS 2 Humble package: franka_inria_inverse_dynamics_solver" ;
+    ros:isInPackage "franka_inria_inverse_dynamics_solver" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/unisa-acg/inverse-dynamics-solver/tree/humble/franka_inria_inverse_dynamics_solver" ;
+    .
+
+  ros:mobile_robot_package_franka_robot_state_broadcaster a ros:UtilityPackage ;
+    rdfs:label "franka_robot_state_broadcaster" ;
+    dcterms:description "ROS 2 Humble package: franka_robot_state_broadcaster" ;
+    ros:isInPackage "franka_robot_state_broadcaster" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/frankaemika/franka_ros2/tree/humble/franka_robot_state_broadcaster" ;
+    .
+
+  ros:mobile_robot_package_fri_configuration_controller a ros:ControlPackage ;
+    rdfs:label "fri_configuration_controller" ;
+    dcterms:description "ROS 2 Humble package: fri_configuration_controller" ;
+    ros:isInPackage "fri_configuration_controller" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/kroshu/kuka_drivers/tree/humble/controllers/fri_configuration_controller" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_game_controller_spl a ros:ControlPackage ;
+    rdfs:label "game_controller_spl" ;
+    dcterms:description "ROS 2 Humble package: game_controller_spl" ;
+    ros:isInPackage "game_controller_spl" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-sports/game_controller_spl/tree/humble/game_controller_spl" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_game_controller_spl_interfaces a ros:ControlPackage ;
+    rdfs:label "game_controller_spl_interfaces" ;
+    dcterms:description "ROS 2 Humble package: game_controller_spl_interfaces" ;
+    ros:isInPackage "game_controller_spl_interfaces" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-sports/game_controller_spl/tree/humble/game_controller_spl_interfaces" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gazebo_ros2_control a ros:ControlPackage ;
+    rdfs:label "gazebo_ros2_control" ;
+    dcterms:description "ROS 2 Humble package: gazebo_ros2_control" ;
+    ros:isInPackage "gazebo_ros2_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-simulation/gazebo_ros2_control/tree/humble/gazebo_ros2_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gazebo_ros2_control_demos a ros:ControlPackage ;
+    rdfs:label "gazebo_ros2_control_demos" ;
+    dcterms:description "ROS 2 Humble package: gazebo_ros2_control_demos" ;
+    ros:isInPackage "gazebo_ros2_control_demos" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-simulation/gazebo_ros2_control/tree/humble/gazebo_ros2_control_demos" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gazebo_static_camera a ros:PerceptionPackage ;
+    rdfs:label "gazebo_static_camera" ;
+    dcterms:description "ROS 2 Humble package: gazebo_static_camera" ;
+    ros:isInPackage "gazebo_static_camera" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/IntelLabs/scenario_execution/tree/humble/simulation/gazebo/gazebo_static_camera" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_Detection3DArray, ros:topic_PointCloud2 .
+
+  ros:mobile_robot_package_gpio_controllers a ros:ControlPackage ;
+    rdfs:label "gpio_controllers" ;
+    dcterms:description "ROS 2 Humble package: gpio_controllers" ;
+    ros:isInPackage "gpio_controllers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/gpio_controllers" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gps_msgs a ros:SensorPackage ;
+    rdfs:label "gps_msgs" ;
+    dcterms:description "ROS 2 Humble package: gps_msgs" ;
+    ros:isInPackage "gps_msgs" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/swri-robotics/gps_umd/tree/ros2-devel/gps_msgs" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_gps_tools a ros:SensorPackage ;
+    rdfs:label "gps_tools" ;
+    dcterms:description "ROS 2 Humble package: gps_tools" ;
+    ros:isInPackage "gps_tools" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/swri-robotics/gps_umd/tree/ros2-devel/gps_tools" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_gps_umd a ros:SensorPackage ;
+    rdfs:label "gps_umd" ;
+    dcterms:description "ROS 2 Humble package: gps_umd" ;
+    ros:isInPackage "gps_umd" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/swri-robotics/gps_umd/tree/ros2-devel/gps_umd" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_gpsd_client a ros:SensorPackage ;
+    rdfs:label "gpsd_client" ;
+    dcterms:description "ROS 2 Humble package: gpsd_client" ;
+    ros:isInPackage "gpsd_client" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/swri-robotics/gps_umd/tree/ros2-devel/gpsd_client" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_gripper_controllers a ros:ControlPackage ;
+    rdfs:label "gripper_controllers" ;
+    dcterms:description "ROS 2 Humble package: gripper_controllers" ;
+    ros:isInPackage "gripper_controllers" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/ros2_controllers/tree/humble/gripper_controllers" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gz_ros2_control a ros:ControlPackage ;
+    rdfs:label "gz_ros2_control" ;
+    dcterms:description "ROS 2 Humble package: gz_ros2_control" ;
+    ros:isInPackage "gz_ros2_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/gz_ros2_control/tree/humble/gz_ros2_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gz_ros2_control_demos a ros:ControlPackage ;
+    rdfs:label "gz_ros2_control_demos" ;
+    dcterms:description "ROS 2 Humble package: gz_ros2_control_demos" ;
+    ros:isInPackage "gz_ros2_control_demos" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/gz_ros2_control/tree/humble/gz_ros2_control_demos" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_gz_ros2_control_tests a ros:ControlPackage ;
+    rdfs:label "gz_ros2_control_tests" ;
+    dcterms:description "ROS 2 Humble package: gz_ros2_control_tests" ;
+    ros:isInPackage "gz_ros2_control_tests" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/gz_ros2_control/tree/humble/gz_ros2_control_tests" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_ign_ros2_control a ros:ControlPackage ;
+    rdfs:label "ign_ros2_control" ;
+    dcterms:description "ROS 2 Humble package: ign_ros2_control" ;
+    ros:isInPackage "ign_ros2_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/gz_ros2_control/tree/humble/ign_ros2_control" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_ign_ros2_control_demos a ros:ControlPackage ;
+    rdfs:label "ign_ros2_control_demos" ;
+    dcterms:description "ROS 2 Humble package: ign_ros2_control_demos" ;
+    ros:isInPackage "ign_ros2_control_demos" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-controls/gz_ros2_control/tree/humble/ign_ros2_control_demos" ;
+    ros:subscribesToTopic ros:topic_Twist, ros:topic_Float64 ;
+    ros:publishesTopic ros:topic_JointState .
+
+  ros:mobile_robot_package_imu_complementary_filter a ros:SensorPackage ;
+    rdfs:label "imu_complementary_filter" ;
+    dcterms:description "ROS 2 Humble package: imu_complementary_filter" ;
+    ros:isInPackage "imu_complementary_filter" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/CCNYRoboticsLab/imu_tools/tree/humble/imu_complementary_filter" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_imu_filter_madgwick a ros:SensorPackage ;
+    rdfs:label "imu_filter_madgwick" ;
+    dcterms:description "ROS 2 Humble package: imu_filter_madgwick" ;
+    ros:isInPackage "imu_filter_madgwick" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/CCNYRoboticsLab/imu_tools/tree/humble/imu_filter_madgwick" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_imu_pipeline a ros:SensorPackage ;
+    rdfs:label "imu_pipeline" ;
+    dcterms:description "ROS 2 Humble package: imu_pipeline" ;
+    ros:isInPackage "imu_pipeline" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/imu_pipeline/tree/jazzy/imu_pipeline" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+  ros:mobile_robot_package_imu_processors a ros:SensorPackage ;
+    rdfs:label "imu_processors" ;
+    dcterms:description "ROS 2 Humble package: imu_processors" ;
+    ros:isInPackage "imu_processors" ;
+    ros:rosVersion "ROS 2" ;
+    ros:distribution "humble" ;
+    ros:category "Unknown" ;
+    ros:maintainer "Unknown" ;
+    ros:repositoryUrl "https://github.com/ros-perception/imu_pipeline/tree/jazzy/imu_processors" ;
+    ros:publishesTopic ros:topic_LaserScan, ros:topic_PointCloud2, ros:topic_Imu, ros:topic_Odometry .
+
+

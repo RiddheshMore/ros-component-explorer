@@ -112,6 +112,23 @@ class VectorGenerator:
         # Join all parts with spaces
         return " ".join(text_parts)
     
+    def embed(self, text: str) -> List[float]:
+        """
+        Generate a vector embedding for a single text string (e.g., a query).
+        
+        Args:
+            text: Text string to embed
+            
+        Returns:
+            Vector embedding as a list of floats
+        """
+        try:
+            embedding = self.model.encode([text], convert_to_numpy=True)[0]
+            return embedding.tolist()
+        except Exception as e:
+            logger.error(f"Error embedding text: {e}")
+            return None
+    
     def get_vector_dimension(self) -> int:
         """Get the dimension of the generated vectors."""
         return self.vector_dimension

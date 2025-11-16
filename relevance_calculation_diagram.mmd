@@ -1,0 +1,50 @@
+%% Relevance Calculation & Package Retrieval Process
+%% Mathematical details of how similarity scores determine relevant packages
+
+graph TB
+    Query["🔍 User Query<br/>'SLAM packages for RPLiDAR A1'"]
+    
+    Query --> Step1["STEP 1: Text → Vector<br/>Sentence-BERT Embedding"]
+    
+    Step1 --> QueryVec["Query Vector (q)<br/>[0.032, -0.145, 0.789, ..., 0.234]<br/>384 dimensions<br/><br/>Semantic representation captures:<br/>• 'SLAM' → mapping, localization<br/>• 'RPLiDAR' → 2D laser, sensor<br/>• 'packages' → ROS components"]
+    
+    QueryVec --> Step2["STEP 2: Load Component Vectors<br/>From Solr content_vector field"]
+    
+    Step2 --> Components["90 Component Vectors (c₁, c₂, ..., c₉₀)<br/>Each 384 dimensions<br/><br/>Examples:<br/>• slam_toolbox_vec<br/>• rplidar_ros_vec<br/>• cartographer_vec<br/>• robot_localization_vec<br/>• ..."]
+    
+    Components --> Step3["STEP 3: Calculate Similarity<br/>Cosine Similarity Formula"]
+    
+    Step3 --> Formula["📐 Mathematical Formula<br/><br/>similarity(q, cᵢ) = cos(θ)<br/><br/>= (q · cᵢ) / (||q|| × ||cᵢ||)<br/><br/>Where:<br/>• q · cᵢ = Σ(qⱼ × cᵢⱼ) for j=1..384<br/>• ||q|| = √(Σqⱼ²)<br/>• ||cᵢ|| = √(Σcᵢⱼ²)<br/><br/>Result: Score ∈ [0, 1]<br/>1 = identical, 0 = orthogonal"]
+    
+    Formula --> Step4["STEP 4: Score All Components<br/>Calculate for each of 90 packages"]
+    
+    Step4 --> Scores["Component Scores<br/><br/>rplidar_ros:<br/>  q·c = 245.67<br/>  ||q||×||c|| = 295.23<br/>  score = 0.832 ⭐⭐⭐<br/><br/>slam_toolbox:<br/>  q·c = 198.45<br/>  ||q||×||c|| = 249.89<br/>  score = 0.794 ⭐⭐<br/><br/>cartographer_ros:<br/>  q·c = 187.34<br/>  ||q||×||c|| = 247.91<br/>  score = 0.756 ⭐⭐<br/><br/>robot_localization:<br/>  q·c = 123.45<br/>  ||q||×||c|| = 248.12<br/>  score = 0.498 ⭐"]
+    
+    Scores --> Step5["STEP 5: Rank by Score<br/>Sort descending"]
+    
+    Step5 --> Ranked["🏆 Ranked Results<br/><br/>Rank 1: rplidar_ros (0.832)<br/>  ✅ 'RPLiDAR' exact match<br/>  ✅ Laser scanner driver<br/>  ✅ Publishes /scan topic<br/><br/>Rank 2: slam_toolbox (0.794)<br/>  ✅ 'SLAM' in description<br/>  ✅ Supports 2D LIDAR<br/>  ✅ Subscribes to /scan<br/><br/>Rank 3: cartographer_ros (0.756)<br/>  ✅ SLAM mapping package<br/>  ✅ Works with laser data<br/>  ✅ 3D capable<br/><br/>Rank 4-30: Other packages...<br/><br/>Not returned:<br/>❌ robot_localization (0.498)<br/>   Low score - not SLAM specific"]
+    
+    Ranked --> Step6["STEP 6: Apply Top-K Filter<br/>Return top 30 results"]
+    
+    Step6 --> Final["📦 Final Results<br/>30 most relevant packages<br/>Score threshold ≥ 0.4<br/><br/>Returned to UI for display"]
+    
+    %% Why Vector Search Works Better
+    Final -.->|"Why better than text?"| Comparison["🔬 Vector vs Text Comparison<br/><br/>TEXT SEARCH (BM25):<br/>❌ Requires exact word match<br/>❌ 'SLAM' won't match 'mapping'<br/>❌ 'RPLiDAR' won't match 'laser'<br/>❌ Misses semantic relationships<br/><br/>VECTOR SEARCH (BERT):<br/>✅ Understands 'SLAM' ≈ 'mapping'<br/>✅ Knows 'RPLiDAR' = '2D LIDAR'<br/>✅ Captures concept relationships<br/>✅ Handles synonyms naturally<br/><br/>Performance on Real Queries:<br/>Vector:  F1=0.13, Success=60%<br/>Text:    F1=0.09, Success=47%<br/>Improvement: +43% F1 score"]
+    
+    %% What gets embedded
+    QueryVec -.->|"How is text embedded?"| EmbedDetails["🧠 Component Embedding Process<br/><br/>Input text for slam_toolbox:<br/>'Slam Toolbox LocalizationComponent<br/>Graph-based SLAM with loop closure.<br/>Supports 2D laser scanners including<br/>RPLiDAR. slam_toolbox subscribes to:<br/>/scan /odom publishes: /map /pose<br/>ROS version: ROS 2 rate: 20.0'<br/><br/>↓ BERT Model Processing ↓<br/><br/>Output: 384-dim vector<br/>[0.123, -0.456, 0.789, ..., 0.234]<br/><br/>This captures:<br/>• Semantic meaning<br/>• Contextual relationships<br/>• Domain knowledge<br/>• Technical capabilities"]
+    
+    %% Styling
+    classDef queryStyle fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef vectorStyle fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    classDef mathStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef scoreStyle fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef resultStyle fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef detailStyle fill:#fff9c4,stroke:#f57f17,stroke-width:1px,stroke-dasharray: 5 5
+    
+    class Query,QueryVec queryStyle
+    class Step1,Step2,Components vectorStyle
+    class Step3,Formula,Step4 mathStyle
+    class Scores,Step5,Ranked scoreStyle
+    class Step6,Final resultStyle
+    class Comparison,EmbedDetails detailStyle

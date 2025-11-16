@@ -1,0 +1,4462 @@
+{
+  "metadata": {
+    "evaluation_type": "context_aware",
+    "dataset": "context_aware_queries_dataset.json",
+    "num_queries": 30,
+    "evaluation_date": "2025-11-15T23:58:59.158984",
+    "query_types": {
+      "integration_compatibility": 9,
+      "dependency_based": 6,
+      "hardware_constrained": 6,
+      "feature_addition": 6,
+      "replacement_alternative": 3
+    }
+  },
+  "methods": [
+    {
+      "method": "keyword",
+      "alpha": null,
+      "per_query_metrics": [
+        {
+          "query_id": 1,
+          "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_bringup"
+            ],
+            "use_case": "mobile robot navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.148,
+          "map@10": 0.0417,
+          "mrr": 0.125,
+          "success@10": true,
+          "latency_ms": 28.27,
+          "top_5_results": [
+            "Andino Navigation",
+            "Nav2 Msgs",
+            "Nav2 Core",
+            "Automotive Navigation Msgs",
+            "Turtlebot4 Navigation"
+          ]
+        },
+        {
+          "query_id": 2,
+          "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+          "context": {
+            "existing_packages": [
+              "ros2_control",
+              "diff_drive_controller"
+            ],
+            "hardware": [
+              "differential drive robot"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.1815,
+          "map@10": 0.0667,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 28.4,
+          "top_5_results": [
+            "Sensor Msgs",
+            "Gz Ros2 Control",
+            "Ros2 Control",
+            "Gazebo Ros2 Control",
+            "Robot Localization"
+          ]
+        },
+        {
+          "query_id": 3,
+          "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+          "context": {
+            "existing_packages": [
+              "gazebo_ros2_control",
+              "gazebo_ros_pkgs"
+            ],
+            "environment": "gazebo simulation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1391,
+          "map@10": 0.0417,
+          "mrr": 0.1667,
+          "success@10": true,
+          "latency_ms": 27.22,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Control Toolbox",
+            "Robot State Publisher",
+            "Ros Gz Sim",
+            "Nav2 Core"
+          ]
+        },
+        {
+          "query_id": 4,
+          "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+          "context": {
+            "hardware": [
+              "RPLIDAR A1",
+              "2D LIDAR"
+            ],
+            "use_case": "indoor SLAM",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 1.0,
+          "f1@10": 0.4615,
+          "ndcg@10": 0.6871,
+          "map@10": 0.5317,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 28.18,
+          "top_5_results": [
+            "Rplidar Ros",
+            "Slam Toolbox",
+            "Andino Slam",
+            "Robot State Publisher",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 5,
+          "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+          "context": {
+            "existing_packages": [
+              "ackermann_steering_controller"
+            ],
+            "robot_type": "ackermann steering vehicle",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 29,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0357,
+          "success@10": false,
+          "latency_ms": 31.5,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Event Camera Renderer",
+            "Global Planner",
+            "Robot State Publisher",
+            "Gazebo Ros2 Control"
+          ]
+        },
+        {
+          "query_id": 6,
+          "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+          "context": {
+            "hardware": [
+              "RealSense D435",
+              "depth camera"
+            ],
+            "use_case": "object detection",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 30.93,
+          "top_5_results": [
+            "Realsense2 Camera",
+            "Depthimage To Laserscan",
+            "Apriltag Ros",
+            "Flir Camera Msgs",
+            "Image Pipeline"
+          ]
+        },
+        {
+          "query_id": 7,
+          "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+          "context": {
+            "existing_packages": [
+              "robot_localization"
+            ],
+            "need": "IMU data",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.5,
+          "f1@10": 0.2857,
+          "ndcg@10": 0.3183,
+          "map@10": 0.1458,
+          "mrr": 0.3333,
+          "success@10": true,
+          "latency_ms": 31.93,
+          "top_5_results": [
+            "Phidgets Drivers",
+            "Robot Localization",
+            "Ess Imu Ros2 Uart Driver",
+            "Sensor Msgs",
+            "Imu Filter Madgwick"
+          ]
+        },
+        {
+          "query_id": 8,
+          "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+          "context": {
+            "existing_packages": [
+              "geometry2",
+              "tf2"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 25,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1128,
+          "map@10": 0.025,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 25.93,
+          "top_5_results": [
+            "Navigation2",
+            "Tf2",
+            "Turtlebot4 Navigation",
+            "Nav2 Msgs",
+            "Andino Navigation"
+          ]
+        },
+        {
+          "query_id": 9,
+          "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+          "context": {
+            "existing_packages": [
+              "apriltag_ros"
+            ],
+            "use_case": "fiducial marker detection",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1391,
+          "map@10": 0.0417,
+          "mrr": 0.1667,
+          "success@10": true,
+          "latency_ms": 33.28,
+          "top_5_results": [
+            "Apriltag Ros",
+            "Robot State Publisher",
+            "Kobuki Ros",
+            "Camera Calibration Parsers",
+            "Camera Info Manager"
+          ]
+        },
+        {
+          "query_id": 10,
+          "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+          "context": {
+            "existing_packages": [
+              "joint_trajectory_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.4693,
+          "map@10": 0.3333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 29.34,
+          "top_5_results": [
+            "Moveit",
+            "Robot State Publisher",
+            "Gazebo Ros2 Control",
+            "Base Local Planner",
+            "Robot Localization"
+          ]
+        },
+        {
+          "query_id": 11,
+          "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+          "context": {
+            "hardware": [
+              "2D LIDAR",
+              "depth camera"
+            ],
+            "need": "sensor fusion",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.6049,
+          "map@10": 0.4,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 28.24,
+          "top_5_results": [
+            "Ira Laser Tools",
+            "Base Local Planner",
+            "Realsense2 Camera",
+            "Robot State Publisher",
+            "Camera Calibration Parsers"
+          ]
+        },
+        {
+          "query_id": 12,
+          "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+          "context": {
+            "existing_packages": [
+              "clearpath_control"
+            ],
+            "robot_type": "Clearpath Jackal",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.6508,
+          "map@10": 0.4667,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 27.26,
+          "top_5_results": [
+            "Clearpath Simulator",
+            "Clearpath Control",
+            "Robot State Publisher",
+            "Ros Gz Sim",
+            "Gazebo Ros2 Control"
+          ]
+        },
+        {
+          "query_id": 13,
+          "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+          "context": {
+            "hardware": [
+              "FLIR thermal camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 28.44,
+          "top_5_results": [
+            "Flir Camera Msgs",
+            "Camera Calibration Parsers",
+            "Camera Info Manager",
+            "Camera Aravis2",
+            "Realsense2 Camera"
+          ]
+        },
+        {
+          "query_id": 14,
+          "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+          "context": {
+            "existing_packages": [
+              "behaviortree_cpp"
+            ],
+            "use_case": "autonomous navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0909,
+          "success@10": false,
+          "latency_ms": 29.33,
+          "top_5_results": [
+            "Behaviortree Cpp",
+            "Ros2 Control",
+            "Gazebo Ros2 Control",
+            "Robot State Publisher",
+            "Turtlebot4 Navigation"
+          ]
+        },
+        {
+          "query_id": 15,
+          "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+          "context": {
+            "robot_type": "bicycle steering",
+            "need": "steering controller",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.9197,
+          "map@10": 0.8333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 28.72,
+          "top_5_results": [
+            "Bicycle Steering Controller",
+            "Robot State Publisher",
+            "Ackermann Steering Controller",
+            "Gazebo Ros2 Control",
+            "Control Toolbox"
+          ]
+        },
+        {
+          "query_id": 16,
+          "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+          "context": {
+            "existing_packages": [
+              "effort_controllers",
+              "ros2_control"
+            ],
+            "need": "force feedback",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 30.27,
+          "top_5_results": [
+            "Robot State Publisher",
+            "Ros2 Control",
+            "Joint State Publisher",
+            "Joint Trajectory Controller",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 17,
+          "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+          "context": {
+            "existing_packages": [
+              "andino_navigation",
+              "andino_control"
+            ],
+            "robot_type": "Andino robot",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.6934,
+          "map@10": 0.5833,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 28.35,
+          "top_5_results": [
+            "Robot State Publisher",
+            "Andino Slam",
+            "Slam Toolbox",
+            "Diff Drive Controller",
+            "Gazebo Ros2 Control"
+          ]
+        },
+        {
+          "query_id": 18,
+          "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+          "context": {
+            "hardware": [
+              "Axis network camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.8066,
+          "map@10": 0.625,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 29.03,
+          "top_5_results": [
+            "Axis Camera",
+            "Image Transport",
+            "Ros Control",
+            "Camera Calibration Parsers",
+            "Camera Info Manager"
+          ]
+        },
+        {
+          "query_id": 19,
+          "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+          "context": {
+            "existing_packages": [
+              "nav2_costmap_2d",
+              "navigation2"
+            ],
+            "need": "improved obstacle detection",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 22,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 21.61,
+          "top_5_results": [
+            "Spatio Temporal Voxel Layer",
+            "Apriltag Ros",
+            "Base Local Planner",
+            "Aruco Ros",
+            "Beluga Amcl"
+          ]
+        },
+        {
+          "query_id": 20,
+          "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_planner"
+            ],
+            "need": "path smoothing",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 17,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0833,
+          "success@10": false,
+          "latency_ms": 16.3,
+          "top_5_results": [
+            "Global Planner",
+            "Turtlebot4 Navigation",
+            "Navigation2",
+            "Automotive Navigation Msgs",
+            "Event Camera Renderer"
+          ]
+        },
+        {
+          "query_id": 21,
+          "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+          "context": {
+            "existing_packages": [
+              "admittance_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 28.47,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Robot Localization",
+            "Control Toolbox",
+            "Event Camera Msgs",
+            "Beluga Amcl"
+          ]
+        },
+        {
+          "query_id": 22,
+          "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "problem": "high computational cost",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 11,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.2641,
+          "map@10": 0.125,
+          "mrr": 0.25,
+          "success@10": true,
+          "latency_ms": 11.78,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Slam Toolbox",
+            "Ackermann Steering Controller"
+          ]
+        },
+        {
+          "query_id": 23,
+          "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+          "context": {
+            "existing_packages": [
+              "aruco_ros"
+            ],
+            "use_case": "marker-based localization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 27.94,
+          "top_5_results": [
+            "Aruco Ros",
+            "Hardware Interface",
+            "Ros2 Control",
+            "Ros Control",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 24,
+          "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+          "context": {
+            "existing_packages": [
+              "position_controllers",
+              "ros2_control"
+            ],
+            "need": "trajectory planning",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.6049,
+          "map@10": 0.4,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 31.69,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Position Controllers",
+            "Robot State Publisher",
+            "Teb Local Planner",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 25,
+          "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+          "context": {
+            "existing_packages": [
+              "autoware"
+            ],
+            "need": "message definitions",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.4,
+          "recall@10": 1.0,
+          "f1@10": 0.5714,
+          "ndcg@10": 1.0,
+          "map@10": 1.0,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 30.04,
+          "top_5_results": [
+            "Autoware Perception Msgs",
+            "Autoware Control Msgs",
+            "Autoware Auto Perception Msgs",
+            "Autoware Auto Control Msgs",
+            "Nav2 Msgs"
+          ]
+        },
+        {
+          "query_id": 26,
+          "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+          "context": {
+            "hardware": [
+              "event camera"
+            ],
+            "use_case": "high-speed vision",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 29.45,
+          "top_5_results": [
+            "Event Camera Msgs",
+            "Event Camera Renderer",
+            "Camera Calibration Parsers",
+            "Camera Info Manager",
+            "Camera Aravis2"
+          ]
+        },
+        {
+          "query_id": 27,
+          "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "need": "visualization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 20,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 19.28,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 28,
+          "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+          "context": {
+            "existing_packages": [
+              "velocity_controllers"
+            ],
+            "problem": "jerky motion",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0385,
+          "success@10": false,
+          "latency_ms": 28.37,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Control Toolbox",
+            "Gz Ros2 Control",
+            "Gazebo Ros2 Control",
+            "Ackermann Steering Controller"
+          ]
+        },
+        {
+          "query_id": 29,
+          "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+          "context": {
+            "use_case": "automotive robotics",
+            "need": "industry-standard messages",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 27.66,
+          "top_5_results": [
+            "Automotive Navigation Msgs",
+            "Turtlebot4 Navigation",
+            "Nav2 Msgs",
+            "Image Transport",
+            "Rplidar Ros"
+          ]
+        },
+        {
+          "query_id": 30,
+          "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+          "context": {
+            "need": "lifecycle management",
+            "use_case": "reliable robot operation",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 28.03,
+          "top_5_results": [
+            "Controller Manager",
+            "Robot State Publisher",
+            "Ros Control",
+            "Moveit",
+            "Ros2 Control"
+          ]
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@10": {
+          "mean": 0.11,
+          "std": 0.0978
+        },
+        "recall@10": {
+          "mean": 0.4083,
+          "std": 0.3465
+        },
+        "f1@10": {
+          "mean": 0.1711,
+          "std": 0.1483
+        },
+        "ndcg@10": {
+          "mean": 0.3451,
+          "std": 0.3139
+        },
+        "map@10": {
+          "mean": 0.2554,
+          "std": 0.2783
+        },
+        "mrr": {
+          "mean": 0.453,
+          "std": 0.4146
+        },
+        "success@10": {
+          "rate": 70.0,
+          "count": "21/30"
+        },
+        "latency_ms": {
+          "mean": 27.51,
+          "std": 4.51,
+          "min": 11.78,
+          "max": 33.28
+        }
+      }
+    },
+    {
+      "method": "vector",
+      "alpha": null,
+      "per_query_metrics": [
+        {
+          "query_id": 1,
+          "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_bringup"
+            ],
+            "use_case": "mobile robot navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.2769,
+          "map@10": 0.1037,
+          "mrr": 0.1111,
+          "success@10": true,
+          "latency_ms": 23.45,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Cartographer Rviz"
+          ]
+        },
+        {
+          "query_id": 2,
+          "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+          "context": {
+            "existing_packages": [
+              "ros2_control",
+              "diff_drive_controller"
+            ],
+            "hardware": [
+              "differential drive robot"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.4693,
+          "map@10": 0.3333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 22.21,
+          "top_5_results": [
+            "Robot Localization",
+            "Sensor Msgs",
+            "Gpsd Client",
+            "Gps Tools",
+            "Cartographer Ros"
+          ]
+        },
+        {
+          "query_id": 3,
+          "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+          "context": {
+            "existing_packages": [
+              "gazebo_ros2_control",
+              "gazebo_ros_pkgs"
+            ],
+            "environment": "gazebo simulation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 0.75,
+          "f1@10": 0.4286,
+          "ndcg@10": 0.3917,
+          "map@10": 0.1958,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 18.92,
+          "top_5_results": [
+            "Gazebo Ros2 Control",
+            "Gz Ros2 Control",
+            "Ros Gz Sim",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 4,
+          "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+          "context": {
+            "hardware": [
+              "RPLIDAR A1",
+              "2D LIDAR"
+            ],
+            "use_case": "indoor SLAM",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 1.0,
+          "f1@10": 0.4615,
+          "ndcg@10": 0.9218,
+          "map@10": 0.8095,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 24.25,
+          "top_5_results": [
+            "Andino Slam",
+            "Slam Toolbox",
+            "Cartographer",
+            "Velodyne Pointcloud",
+            "Laser Geometry"
+          ]
+        },
+        {
+          "query_id": 5,
+          "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+          "context": {
+            "existing_packages": [
+              "ackermann_steering_controller"
+            ],
+            "robot_type": "ackermann steering vehicle",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 23.9,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Global Planner",
+            "Joint Trajectory Controller"
+          ]
+        },
+        {
+          "query_id": 6,
+          "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+          "context": {
+            "hardware": [
+              "RealSense D435",
+              "depth camera"
+            ],
+            "use_case": "object detection",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 24.42,
+          "top_5_results": [
+            "Realsense2 Camera",
+            "Aruco Ros",
+            "Camera Info Manager",
+            "Vision Opencv",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 7,
+          "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+          "context": {
+            "existing_packages": [
+              "robot_localization"
+            ],
+            "need": "IMU data",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.151,
+          "map@10": 0.05,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 24.57,
+          "top_5_results": [
+            "Imu Filter Madgwick",
+            "Imu Complementary Filter",
+            "Robot Localization",
+            "Robot State Publisher",
+            "Ess Imu Ros2 Uart Driver"
+          ]
+        },
+        {
+          "query_id": 8,
+          "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+          "context": {
+            "existing_packages": [
+              "geometry2",
+              "tf2"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0526,
+          "success@10": false,
+          "latency_ms": 22.19,
+          "top_5_results": [
+            "Tf2",
+            "Robot State Publisher",
+            "Nav2 Constrained Smoother",
+            "Navigation2",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 9,
+          "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+          "context": {
+            "existing_packages": [
+              "apriltag_ros"
+            ],
+            "use_case": "fiducial marker detection",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1128,
+          "map@10": 0.025,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 21.83,
+          "top_5_results": [
+            "Apriltag Ros",
+            "Kobuki Ros",
+            "Camera Calibration Parsers",
+            "Event Camera Renderer",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 10,
+          "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+          "context": {
+            "existing_packages": [
+              "joint_trajectory_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 23.97,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 11,
+          "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+          "context": {
+            "hardware": [
+              "2D LIDAR",
+              "depth camera"
+            ],
+            "need": "sensor fusion",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.7654,
+          "map@10": 0.6667,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.22,
+          "top_5_results": [
+            "Ira Laser Tools",
+            "Depthimage To Laserscan",
+            "Laser Geometry",
+            "Urg Node",
+            "Cartographer Ros"
+          ]
+        },
+        {
+          "query_id": 12,
+          "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+          "context": {
+            "existing_packages": [
+              "clearpath_control"
+            ],
+            "robot_type": "Clearpath Jackal",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.3296,
+          "map@10": 0.15,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 23.27,
+          "top_5_results": [
+            "Clearpath Control",
+            "Control Msgs",
+            "Base Local Planner",
+            "Gz Ros2 Control",
+            "Clearpath Simulator"
+          ]
+        },
+        {
+          "query_id": 13,
+          "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+          "context": {
+            "hardware": [
+              "FLIR thermal camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.15,
+          "top_5_results": [
+            "Flir Camera Msgs",
+            "Event Camera Renderer",
+            "Image Pipeline",
+            "Avt Vimba Camera",
+            "Usb Cam"
+          ]
+        },
+        {
+          "query_id": 14,
+          "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+          "context": {
+            "existing_packages": [
+              "behaviortree_cpp"
+            ],
+            "use_case": "autonomous navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0909,
+          "success@10": false,
+          "latency_ms": 22.41,
+          "top_5_results": [
+            "Behaviortree Cpp",
+            "Global Planner",
+            "Control Msgs",
+            "Base Local Planner",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 15,
+          "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+          "context": {
+            "robot_type": "bicycle steering",
+            "need": "steering controller",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 1.0,
+          "map@10": 1.0,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.01,
+          "top_5_results": [
+            "Bicycle Steering Controller",
+            "Ackermann Steering Controller",
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 16,
+          "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+          "context": {
+            "existing_packages": [
+              "effort_controllers",
+              "ros2_control"
+            ],
+            "need": "force feedback",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 23.32,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Robot Localization",
+            "Gz Ros2 Control",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 17,
+          "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+          "context": {
+            "existing_packages": [
+              "andino_navigation",
+              "andino_control"
+            ],
+            "robot_type": "Andino robot",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.9197,
+          "map@10": 0.8333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 22.37,
+          "top_5_results": [
+            "Andino Slam",
+            "Andino Navigation",
+            "Slam Toolbox",
+            "Cartographer Ros",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 18,
+          "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+          "context": {
+            "hardware": [
+              "Axis network camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.7904,
+          "map@10": 0.6,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 22.72,
+          "top_5_results": [
+            "Axis Camera",
+            "Avt Vimba Camera",
+            "Vision Opencv",
+            "Usb Cam",
+            "Event Camera Renderer"
+          ]
+        },
+        {
+          "query_id": 19,
+          "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+          "context": {
+            "existing_packages": [
+              "nav2_costmap_2d",
+              "navigation2"
+            ],
+            "need": "improved obstacle detection",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.23,
+          "top_5_results": [
+            "Spatio Temporal Voxel Layer",
+            "Nav2 Constrained Smoother",
+            "Cartographer",
+            "Nav2 Core",
+            "Vision Opencv"
+          ]
+        },
+        {
+          "query_id": 20,
+          "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_planner"
+            ],
+            "need": "path smoothing",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.95,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Global Planner"
+          ]
+        },
+        {
+          "query_id": 21,
+          "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+          "context": {
+            "existing_packages": [
+              "admittance_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 22.53,
+          "top_5_results": [
+            "Admittance Controller",
+            "Admittance Controller",
+            "Joint Trajectory Controller",
+            "Robot Localization",
+            "Imu Filter Madgwick"
+          ]
+        },
+        {
+          "query_id": 22,
+          "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "problem": "high computational cost",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.2641,
+          "map@10": 0.125,
+          "mrr": 0.25,
+          "success@10": true,
+          "latency_ms": 23.21,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 23,
+          "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+          "context": {
+            "existing_packages": [
+              "aruco_ros"
+            ],
+            "use_case": "marker-based localization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.1815,
+          "map@10": 0.0667,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 23.71,
+          "top_5_results": [
+            "Aruco Ros",
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Robot Localization"
+          ]
+        },
+        {
+          "query_id": 24,
+          "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+          "context": {
+            "existing_packages": [
+              "position_controllers",
+              "ros2_control"
+            ],
+            "need": "trajectory planning",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 21.9,
+          "top_5_results": [
+            "Teb Local Planner",
+            "Joint Trajectory Controller",
+            "Base Local Planner",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 25,
+          "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+          "context": {
+            "existing_packages": [
+              "autoware"
+            ],
+            "need": "message definitions",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.4,
+          "recall@10": 1.0,
+          "f1@10": 0.5714,
+          "ndcg@10": 0.9829,
+          "map@10": 0.95,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.17,
+          "top_5_results": [
+            "Autoware Auto Perception Msgs",
+            "Autoware Perception Msgs",
+            "Autoware Auto Control Msgs",
+            "Sensor Msgs",
+            "Autoware Control Msgs"
+          ]
+        },
+        {
+          "query_id": 26,
+          "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+          "context": {
+            "hardware": [
+              "event camera"
+            ],
+            "use_case": "high-speed vision",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 22.69,
+          "top_5_results": [
+            "Event Camera Renderer",
+            "Event Camera Msgs",
+            "Axis Camera",
+            "Vision Opencv",
+            "Avt Vimba Camera"
+          ]
+        },
+        {
+          "query_id": 27,
+          "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "need": "visualization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 22.29,
+          "top_5_results": [
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Cartographer",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 28,
+          "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+          "context": {
+            "existing_packages": [
+              "velocity_controllers"
+            ],
+            "problem": "jerky motion",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 20.88,
+          "top_5_results": [
+            "Velocity Controllers",
+            "Joint Trajectory Controller",
+            "Position Controllers",
+            "Control Msgs",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 29,
+          "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+          "context": {
+            "use_case": "automotive robotics",
+            "need": "industry-standard messages",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 23.77,
+          "top_5_results": [
+            "Automotive Navigation Msgs",
+            "Gpsd Client",
+            "Nav2 Msgs",
+            "Nav2 Constrained Smoother",
+            "Andino Navigation"
+          ]
+        },
+        {
+          "query_id": 30,
+          "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+          "context": {
+            "need": "lifecycle management",
+            "use_case": "reliable robot operation",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 23.4,
+          "top_5_results": [
+            "Base Local Planner",
+            "Kobuki Ros",
+            "Gz Ros2 Control",
+            "Robot Localization",
+            "Ros2 Control"
+          ]
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@10": {
+          "mean": 0.12,
+          "std": 0.098
+        },
+        "recall@10": {
+          "mean": 0.4528,
+          "std": 0.3324
+        },
+        "f1@10": {
+          "mean": 0.1873,
+          "std": 0.1467
+        },
+        "ndcg@10": {
+          "mean": 0.4072,
+          "std": 0.3254
+        },
+        "map@10": {
+          "mean": 0.3164,
+          "std": 0.3097
+        },
+        "mrr": {
+          "mean": 0.5302,
+          "std": 0.431
+        },
+        "success@10": {
+          "rate": 76.67,
+          "count": "23/30"
+        },
+        "latency_ms": {
+          "mean": 22.93,
+          "std": 1.11,
+          "min": 18.92,
+          "max": 24.57
+        }
+      }
+    },
+    {
+      "method": "hybrid",
+      "alpha": 0.5,
+      "per_query_metrics": [
+        {
+          "query_id": 1,
+          "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_bringup"
+            ],
+            "use_case": "mobile robot navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.2769,
+          "map@10": 0.1037,
+          "mrr": 0.1111,
+          "success@10": true,
+          "latency_ms": 69.81,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Cartographer Rviz"
+          ]
+        },
+        {
+          "query_id": 2,
+          "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+          "context": {
+            "existing_packages": [
+              "ros2_control",
+              "diff_drive_controller"
+            ],
+            "hardware": [
+              "differential drive robot"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.4693,
+          "map@10": 0.3333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 68.04,
+          "top_5_results": [
+            "Robot Localization",
+            "Sensor Msgs",
+            "Cartographer Ros",
+            "Gz Ros2 Control",
+            "Diff Drive Controller"
+          ]
+        },
+        {
+          "query_id": 3,
+          "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+          "context": {
+            "existing_packages": [
+              "gazebo_ros2_control",
+              "gazebo_ros_pkgs"
+            ],
+            "environment": "gazebo simulation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 0.75,
+          "f1@10": 0.4286,
+          "ndcg@10": 0.3917,
+          "map@10": 0.1958,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 56.34,
+          "top_5_results": [
+            "Gazebo Ros2 Control",
+            "Gz Ros2 Control",
+            "Ros Gz Sim",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 4,
+          "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+          "context": {
+            "hardware": [
+              "RPLIDAR A1",
+              "2D LIDAR"
+            ],
+            "use_case": "indoor SLAM",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 1.0,
+          "f1@10": 0.4615,
+          "ndcg@10": 0.9218,
+          "map@10": 0.8095,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 58.5,
+          "top_5_results": [
+            "Andino Slam",
+            "Slam Toolbox",
+            "Cartographer",
+            "Velodyne Pointcloud",
+            "Laser Geometry"
+          ]
+        },
+        {
+          "query_id": 5,
+          "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+          "context": {
+            "existing_packages": [
+              "ackermann_steering_controller"
+            ],
+            "robot_type": "ackermann steering vehicle",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 52.0,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Global Planner",
+            "Joint Trajectory Controller"
+          ]
+        },
+        {
+          "query_id": 6,
+          "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+          "context": {
+            "hardware": [
+              "RealSense D435",
+              "depth camera"
+            ],
+            "use_case": "object detection",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 90.1,
+          "top_5_results": [
+            "Realsense2 Camera",
+            "Aruco Ros",
+            "Camera Info Manager",
+            "Vision Opencv",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 7,
+          "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+          "context": {
+            "existing_packages": [
+              "robot_localization"
+            ],
+            "need": "IMU data",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.151,
+          "map@10": 0.05,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 66.73,
+          "top_5_results": [
+            "Imu Filter Madgwick",
+            "Imu Complementary Filter",
+            "Robot Localization",
+            "Robot State Publisher",
+            "Ess Imu Ros2 Uart Driver"
+          ]
+        },
+        {
+          "query_id": 8,
+          "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+          "context": {
+            "existing_packages": [
+              "geometry2",
+              "tf2"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.05,
+          "success@10": false,
+          "latency_ms": 53.15,
+          "top_5_results": [
+            "Tf2",
+            "Robot State Publisher",
+            "Nav2 Constrained Smoother",
+            "Navigation2",
+            "Gpsd Client"
+          ]
+        },
+        {
+          "query_id": 9,
+          "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+          "context": {
+            "existing_packages": [
+              "apriltag_ros"
+            ],
+            "use_case": "fiducial marker detection",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1128,
+          "map@10": 0.025,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 57.0,
+          "top_5_results": [
+            "Apriltag Ros",
+            "Kobuki Ros",
+            "Camera Calibration Parsers",
+            "Event Camera Renderer",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 10,
+          "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+          "context": {
+            "existing_packages": [
+              "joint_trajectory_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 57.11,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 11,
+          "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+          "context": {
+            "hardware": [
+              "2D LIDAR",
+              "depth camera"
+            ],
+            "need": "sensor fusion",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.7654,
+          "map@10": 0.6667,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 89.95,
+          "top_5_results": [
+            "Ira Laser Tools",
+            "Depthimage To Laserscan",
+            "Laser Geometry",
+            "Urg Node",
+            "Cartographer Ros"
+          ]
+        },
+        {
+          "query_id": 12,
+          "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+          "context": {
+            "existing_packages": [
+              "clearpath_control"
+            ],
+            "robot_type": "Clearpath Jackal",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.3296,
+          "map@10": 0.15,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 55.57,
+          "top_5_results": [
+            "Clearpath Control",
+            "Control Msgs",
+            "Base Local Planner",
+            "Gz Ros2 Control",
+            "Clearpath Simulator"
+          ]
+        },
+        {
+          "query_id": 13,
+          "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+          "context": {
+            "hardware": [
+              "FLIR thermal camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 73.31,
+          "top_5_results": [
+            "Flir Camera Msgs",
+            "Event Camera Renderer",
+            "Image Pipeline",
+            "Avt Vimba Camera",
+            "Usb Cam"
+          ]
+        },
+        {
+          "query_id": 14,
+          "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+          "context": {
+            "existing_packages": [
+              "behaviortree_cpp"
+            ],
+            "use_case": "autonomous navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0909,
+          "success@10": false,
+          "latency_ms": 79.31,
+          "top_5_results": [
+            "Behaviortree Cpp",
+            "Global Planner",
+            "Control Msgs",
+            "Base Local Planner",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 15,
+          "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+          "context": {
+            "robot_type": "bicycle steering",
+            "need": "steering controller",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 1.0,
+          "map@10": 1.0,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 68.19,
+          "top_5_results": [
+            "Bicycle Steering Controller",
+            "Ackermann Steering Controller",
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 16,
+          "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+          "context": {
+            "existing_packages": [
+              "effort_controllers",
+              "ros2_control"
+            ],
+            "need": "force feedback",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 71.98,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Robot Localization",
+            "Gz Ros2 Control",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 17,
+          "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+          "context": {
+            "existing_packages": [
+              "andino_navigation",
+              "andino_control"
+            ],
+            "robot_type": "Andino robot",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.9197,
+          "map@10": 0.8333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 67.41,
+          "top_5_results": [
+            "Andino Slam",
+            "Andino Navigation",
+            "Slam Toolbox",
+            "Cartographer Ros",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 18,
+          "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+          "context": {
+            "hardware": [
+              "Axis network camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.7977,
+          "map@10": 0.6111,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 80.86,
+          "top_5_results": [
+            "Axis Camera",
+            "Avt Vimba Camera",
+            "Vision Opencv",
+            "Usb Cam",
+            "Event Camera Renderer"
+          ]
+        },
+        {
+          "query_id": 19,
+          "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+          "context": {
+            "existing_packages": [
+              "nav2_costmap_2d",
+              "navigation2"
+            ],
+            "need": "improved obstacle detection",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 46.03,
+          "top_5_results": [
+            "Spatio Temporal Voxel Layer",
+            "Nav2 Constrained Smoother",
+            "Slam Toolbox",
+            "Gpsd Client",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 20,
+          "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_planner"
+            ],
+            "need": "path smoothing",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 48.65,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Global Planner"
+          ]
+        },
+        {
+          "query_id": 21,
+          "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+          "context": {
+            "existing_packages": [
+              "admittance_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 55.66,
+          "top_5_results": [
+            "Admittance Controller",
+            "Joint Trajectory Controller",
+            "Robot Localization",
+            "Admittance Controller",
+            "Imu Filter Madgwick"
+          ]
+        },
+        {
+          "query_id": 22,
+          "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "problem": "high computational cost",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.2641,
+          "map@10": 0.125,
+          "mrr": 0.25,
+          "success@10": true,
+          "latency_ms": 39.6,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 23,
+          "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+          "context": {
+            "existing_packages": [
+              "aruco_ros"
+            ],
+            "use_case": "marker-based localization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0667,
+          "success@10": false,
+          "latency_ms": 86.37,
+          "top_5_results": [
+            "Aruco Ros",
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Camera Calibration Parsers"
+          ]
+        },
+        {
+          "query_id": 24,
+          "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+          "context": {
+            "existing_packages": [
+              "position_controllers",
+              "ros2_control"
+            ],
+            "need": "trajectory planning",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 59.13,
+          "top_5_results": [
+            "Teb Local Planner",
+            "Joint Trajectory Controller",
+            "Base Local Planner",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 25,
+          "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+          "context": {
+            "existing_packages": [
+              "autoware"
+            ],
+            "need": "message definitions",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.4,
+          "recall@10": 1.0,
+          "f1@10": 0.5714,
+          "ndcg@10": 0.9829,
+          "map@10": 0.95,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 70.84,
+          "top_5_results": [
+            "Autoware Auto Perception Msgs",
+            "Autoware Perception Msgs",
+            "Autoware Auto Control Msgs",
+            "Sensor Msgs",
+            "Autoware Control Msgs"
+          ]
+        },
+        {
+          "query_id": 26,
+          "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+          "context": {
+            "hardware": [
+              "event camera"
+            ],
+            "use_case": "high-speed vision",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 73.62,
+          "top_5_results": [
+            "Event Camera Renderer",
+            "Event Camera Msgs",
+            "Axis Camera",
+            "Vision Opencv",
+            "Avt Vimba Camera"
+          ]
+        },
+        {
+          "query_id": 27,
+          "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "need": "visualization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 42.62,
+          "top_5_results": [
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Cartographer",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 28,
+          "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+          "context": {
+            "existing_packages": [
+              "velocity_controllers"
+            ],
+            "problem": "jerky motion",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 71.54,
+          "top_5_results": [
+            "Velocity Controllers",
+            "Joint Trajectory Controller",
+            "Position Controllers",
+            "Control Msgs",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 29,
+          "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+          "context": {
+            "use_case": "automotive robotics",
+            "need": "industry-standard messages",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 53.9,
+          "top_5_results": [
+            "Automotive Navigation Msgs",
+            "Gpsd Client",
+            "Nav2 Msgs",
+            "Nav2 Constrained Smoother",
+            "Andino Navigation"
+          ]
+        },
+        {
+          "query_id": 30,
+          "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+          "context": {
+            "need": "lifecycle management",
+            "use_case": "reliable robot operation",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 66.37,
+          "top_5_results": [
+            "Base Local Planner",
+            "Kobuki Ros",
+            "Robot Localization",
+            "Ros2 Control",
+            "Ros Gz"
+          ]
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@10": {
+          "mean": 0.1167,
+          "std": 0.1003
+        },
+        "recall@10": {
+          "mean": 0.4417,
+          "std": 0.3417
+        },
+        "f1@10": {
+          "mean": 0.1822,
+          "std": 0.1504
+        },
+        "ndcg@10": {
+          "mean": 0.4014,
+          "std": 0.3315
+        },
+        "map@10": {
+          "mean": 0.3146,
+          "std": 0.312
+        },
+        "mrr": {
+          "mean": 0.5256,
+          "std": 0.4352
+        },
+        "success@10": {
+          "rate": 73.33,
+          "count": "22/30"
+        },
+        "latency_ms": {
+          "mean": 64.32,
+          "std": 13.08,
+          "min": 39.6,
+          "max": 90.1
+        }
+      }
+    },
+    {
+      "method": "hybrid",
+      "alpha": 0.7,
+      "per_query_metrics": [
+        {
+          "query_id": 1,
+          "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_bringup"
+            ],
+            "use_case": "mobile robot navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.2769,
+          "map@10": 0.1037,
+          "mrr": 0.1111,
+          "success@10": true,
+          "latency_ms": 62.77,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Cartographer Rviz"
+          ]
+        },
+        {
+          "query_id": 2,
+          "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+          "context": {
+            "existing_packages": [
+              "ros2_control",
+              "diff_drive_controller"
+            ],
+            "hardware": [
+              "differential drive robot"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.4693,
+          "map@10": 0.3333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 54.29,
+          "top_5_results": [
+            "Robot Localization",
+            "Sensor Msgs",
+            "Cartographer Ros",
+            "Gz Ros2 Control",
+            "Diff Drive Controller"
+          ]
+        },
+        {
+          "query_id": 3,
+          "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+          "context": {
+            "existing_packages": [
+              "gazebo_ros2_control",
+              "gazebo_ros_pkgs"
+            ],
+            "environment": "gazebo simulation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 0.75,
+          "f1@10": 0.4286,
+          "ndcg@10": 0.3917,
+          "map@10": 0.1958,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 57.19,
+          "top_5_results": [
+            "Gazebo Ros2 Control",
+            "Gz Ros2 Control",
+            "Ros Gz Sim",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 4,
+          "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+          "context": {
+            "hardware": [
+              "RPLIDAR A1",
+              "2D LIDAR"
+            ],
+            "use_case": "indoor SLAM",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 1.0,
+          "f1@10": 0.4615,
+          "ndcg@10": 0.9218,
+          "map@10": 0.8095,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 60.62,
+          "top_5_results": [
+            "Andino Slam",
+            "Slam Toolbox",
+            "Cartographer",
+            "Velodyne Pointcloud",
+            "Laser Geometry"
+          ]
+        },
+        {
+          "query_id": 5,
+          "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+          "context": {
+            "existing_packages": [
+              "ackermann_steering_controller"
+            ],
+            "robot_type": "ackermann steering vehicle",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 47.68,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Global Planner",
+            "Joint Trajectory Controller"
+          ]
+        },
+        {
+          "query_id": 6,
+          "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+          "context": {
+            "hardware": [
+              "RealSense D435",
+              "depth camera"
+            ],
+            "use_case": "object detection",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 79.09,
+          "top_5_results": [
+            "Realsense2 Camera",
+            "Aruco Ros",
+            "Camera Info Manager",
+            "Vision Opencv",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 7,
+          "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+          "context": {
+            "existing_packages": [
+              "robot_localization"
+            ],
+            "need": "IMU data",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.151,
+          "map@10": 0.05,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 61.0,
+          "top_5_results": [
+            "Imu Filter Madgwick",
+            "Imu Complementary Filter",
+            "Robot Localization",
+            "Robot State Publisher",
+            "Ess Imu Ros2 Uart Driver"
+          ]
+        },
+        {
+          "query_id": 8,
+          "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+          "context": {
+            "existing_packages": [
+              "geometry2",
+              "tf2"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0455,
+          "success@10": false,
+          "latency_ms": 50.89,
+          "top_5_results": [
+            "Tf2",
+            "Robot State Publisher",
+            "Nav2 Constrained Smoother",
+            "Navigation2",
+            "Gpsd Client"
+          ]
+        },
+        {
+          "query_id": 9,
+          "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+          "context": {
+            "existing_packages": [
+              "apriltag_ros"
+            ],
+            "use_case": "fiducial marker detection",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1128,
+          "map@10": 0.025,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 50.67,
+          "top_5_results": [
+            "Apriltag Ros",
+            "Kobuki Ros",
+            "Camera Calibration Parsers",
+            "Event Camera Renderer",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 10,
+          "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+          "context": {
+            "existing_packages": [
+              "joint_trajectory_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 50.36,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 11,
+          "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+          "context": {
+            "hardware": [
+              "2D LIDAR",
+              "depth camera"
+            ],
+            "need": "sensor fusion",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.7654,
+          "map@10": 0.6667,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 82.42,
+          "top_5_results": [
+            "Ira Laser Tools",
+            "Depthimage To Laserscan",
+            "Laser Geometry",
+            "Urg Node",
+            "Cartographer Ros"
+          ]
+        },
+        {
+          "query_id": 12,
+          "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+          "context": {
+            "existing_packages": [
+              "clearpath_control"
+            ],
+            "robot_type": "Clearpath Jackal",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.3296,
+          "map@10": 0.15,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 49.57,
+          "top_5_results": [
+            "Clearpath Control",
+            "Control Msgs",
+            "Base Local Planner",
+            "Gz Ros2 Control",
+            "Clearpath Simulator"
+          ]
+        },
+        {
+          "query_id": 13,
+          "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+          "context": {
+            "hardware": [
+              "FLIR thermal camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 64.32,
+          "top_5_results": [
+            "Flir Camera Msgs",
+            "Event Camera Renderer",
+            "Image Pipeline",
+            "Avt Vimba Camera",
+            "Usb Cam"
+          ]
+        },
+        {
+          "query_id": 14,
+          "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+          "context": {
+            "existing_packages": [
+              "behaviortree_cpp"
+            ],
+            "use_case": "autonomous navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0909,
+          "success@10": false,
+          "latency_ms": 77.31,
+          "top_5_results": [
+            "Behaviortree Cpp",
+            "Global Planner",
+            "Control Msgs",
+            "Base Local Planner",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 15,
+          "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+          "context": {
+            "robot_type": "bicycle steering",
+            "need": "steering controller",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 1.0,
+          "map@10": 1.0,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 66.71,
+          "top_5_results": [
+            "Bicycle Steering Controller",
+            "Ackermann Steering Controller",
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 16,
+          "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+          "context": {
+            "existing_packages": [
+              "effort_controllers",
+              "ros2_control"
+            ],
+            "need": "force feedback",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 78.12,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Robot Localization",
+            "Gz Ros2 Control",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 17,
+          "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+          "context": {
+            "existing_packages": [
+              "andino_navigation",
+              "andino_control"
+            ],
+            "robot_type": "Andino robot",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.9197,
+          "map@10": 0.8333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 60.17,
+          "top_5_results": [
+            "Andino Slam",
+            "Andino Navigation",
+            "Slam Toolbox",
+            "Cartographer Ros",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 18,
+          "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+          "context": {
+            "hardware": [
+              "Axis network camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.7977,
+          "map@10": 0.6111,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 74.06,
+          "top_5_results": [
+            "Axis Camera",
+            "Avt Vimba Camera",
+            "Vision Opencv",
+            "Usb Cam",
+            "Event Camera Renderer"
+          ]
+        },
+        {
+          "query_id": 19,
+          "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+          "context": {
+            "existing_packages": [
+              "nav2_costmap_2d",
+              "navigation2"
+            ],
+            "need": "improved obstacle detection",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 44.22,
+          "top_5_results": [
+            "Spatio Temporal Voxel Layer",
+            "Nav2 Constrained Smoother",
+            "Slam Toolbox",
+            "Gpsd Client",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 20,
+          "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_planner"
+            ],
+            "need": "path smoothing",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 41.1,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Global Planner"
+          ]
+        },
+        {
+          "query_id": 21,
+          "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+          "context": {
+            "existing_packages": [
+              "admittance_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 50.8,
+          "top_5_results": [
+            "Admittance Controller",
+            "Joint Trajectory Controller",
+            "Robot Localization",
+            "Admittance Controller",
+            "Imu Filter Madgwick"
+          ]
+        },
+        {
+          "query_id": 22,
+          "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "problem": "high computational cost",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.2641,
+          "map@10": 0.125,
+          "mrr": 0.25,
+          "success@10": true,
+          "latency_ms": 31.81,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 23,
+          "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+          "context": {
+            "existing_packages": [
+              "aruco_ros"
+            ],
+            "use_case": "marker-based localization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.1357,
+          "map@10": 0.0333,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 80.35,
+          "top_5_results": [
+            "Aruco Ros",
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Camera Calibration Parsers"
+          ]
+        },
+        {
+          "query_id": 24,
+          "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+          "context": {
+            "existing_packages": [
+              "position_controllers",
+              "ros2_control"
+            ],
+            "need": "trajectory planning",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 52.32,
+          "top_5_results": [
+            "Teb Local Planner",
+            "Joint Trajectory Controller",
+            "Base Local Planner",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 25,
+          "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+          "context": {
+            "existing_packages": [
+              "autoware"
+            ],
+            "need": "message definitions",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.4,
+          "recall@10": 1.0,
+          "f1@10": 0.5714,
+          "ndcg@10": 0.9829,
+          "map@10": 0.95,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 66.47,
+          "top_5_results": [
+            "Autoware Auto Perception Msgs",
+            "Autoware Perception Msgs",
+            "Autoware Auto Control Msgs",
+            "Sensor Msgs",
+            "Autoware Control Msgs"
+          ]
+        },
+        {
+          "query_id": 26,
+          "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+          "context": {
+            "hardware": [
+              "event camera"
+            ],
+            "use_case": "high-speed vision",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 70.2,
+          "top_5_results": [
+            "Event Camera Renderer",
+            "Event Camera Msgs",
+            "Axis Camera",
+            "Vision Opencv",
+            "Avt Vimba Camera"
+          ]
+        },
+        {
+          "query_id": 27,
+          "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "need": "visualization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 44.23,
+          "top_5_results": [
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Cartographer",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 28,
+          "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+          "context": {
+            "existing_packages": [
+              "velocity_controllers"
+            ],
+            "problem": "jerky motion",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 65.79,
+          "top_5_results": [
+            "Velocity Controllers",
+            "Joint Trajectory Controller",
+            "Position Controllers",
+            "Control Msgs",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 29,
+          "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+          "context": {
+            "use_case": "automotive robotics",
+            "need": "industry-standard messages",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 58.15,
+          "top_5_results": [
+            "Automotive Navigation Msgs",
+            "Gpsd Client",
+            "Nav2 Msgs",
+            "Nav2 Constrained Smoother",
+            "Andino Navigation"
+          ]
+        },
+        {
+          "query_id": 30,
+          "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+          "context": {
+            "need": "lifecycle management",
+            "use_case": "reliable robot operation",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 70.29,
+          "top_5_results": [
+            "Base Local Planner",
+            "Kobuki Ros",
+            "Robot Localization",
+            "Ros2 Control",
+            "Ros Gz"
+          ]
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@10": {
+          "mean": 0.12,
+          "std": 0.098
+        },
+        "recall@10": {
+          "mean": 0.4528,
+          "std": 0.3324
+        },
+        "f1@10": {
+          "mean": 0.1873,
+          "std": 0.1467
+        },
+        "ndcg@10": {
+          "mean": 0.4059,
+          "std": 0.3268
+        },
+        "map@10": {
+          "mean": 0.3157,
+          "std": 0.311
+        },
+        "mrr": {
+          "mean": 0.5266,
+          "std": 0.4342
+        },
+        "success@10": {
+          "rate": 76.67,
+          "count": "23/30"
+        },
+        "latency_ms": {
+          "mean": 60.1,
+          "std": 12.68,
+          "min": 31.81,
+          "max": 82.42
+        }
+      }
+    },
+    {
+      "method": "hybrid",
+      "alpha": 1.0,
+      "per_query_metrics": [
+        {
+          "query_id": 1,
+          "query": "I'm using nav2 for autonomous navigation. What localization packages are compatible with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_bringup"
+            ],
+            "use_case": "mobile robot navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.2769,
+          "map@10": 0.1037,
+          "mrr": 0.1111,
+          "success@10": true,
+          "latency_ms": 54.52,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Cartographer Rviz"
+          ]
+        },
+        {
+          "query_id": 2,
+          "query": "I have ros2_control running with diff_drive_controller. What sensor packages can provide odometry input?",
+          "context": {
+            "existing_packages": [
+              "ros2_control",
+              "diff_drive_controller"
+            ],
+            "hardware": [
+              "differential drive robot"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.4693,
+          "map@10": 0.3333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 63.67,
+          "top_5_results": [
+            "Robot Localization",
+            "Sensor Msgs",
+            "Cartographer Ros",
+            "Gz Ros2 Control",
+            "Diff Drive Controller"
+          ]
+        },
+        {
+          "query_id": 3,
+          "query": "My robot uses gazebo_ros2_control for simulation. What controller plugins are compatible?",
+          "context": {
+            "existing_packages": [
+              "gazebo_ros2_control",
+              "gazebo_ros_pkgs"
+            ],
+            "environment": "gazebo simulation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 0.75,
+          "f1@10": 0.4286,
+          "ndcg@10": 0.3917,
+          "map@10": 0.1958,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 57.14,
+          "top_5_results": [
+            "Gazebo Ros2 Control",
+            "Gz Ros2 Control",
+            "Ros Gz Sim",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 4,
+          "query": "I'm building a mobile robot with RPLIDAR A1. What SLAM packages support this 2D LIDAR?",
+          "context": {
+            "hardware": [
+              "RPLIDAR A1",
+              "2D LIDAR"
+            ],
+            "use_case": "indoor SLAM",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.3,
+          "recall@10": 1.0,
+          "f1@10": 0.4615,
+          "ndcg@10": 0.9218,
+          "map@10": 0.8095,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 62.77,
+          "top_5_results": [
+            "Andino Slam",
+            "Slam Toolbox",
+            "Cartographer",
+            "Velodyne Pointcloud",
+            "Laser Geometry"
+          ]
+        },
+        {
+          "query_id": 5,
+          "query": "I use ackermann_steering_controller for my car-like robot. What path planning algorithms work with Ackermann steering?",
+          "context": {
+            "existing_packages": [
+              "ackermann_steering_controller"
+            ],
+            "robot_type": "ackermann steering vehicle",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 54.2,
+          "top_5_results": [
+            "Ackermann Steering Controller",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Global Planner",
+            "Joint Trajectory Controller"
+          ]
+        },
+        {
+          "query_id": 6,
+          "query": "I have a RealSense D435 depth camera. What packages can I use for object detection and tracking?",
+          "context": {
+            "hardware": [
+              "RealSense D435",
+              "depth camera"
+            ],
+            "use_case": "object detection",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 86.39,
+          "top_5_results": [
+            "Realsense2 Camera",
+            "Aruco Ros",
+            "Camera Info Manager",
+            "Vision Opencv",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 7,
+          "query": "I'm using robot_localization for sensor fusion. What IMU drivers can provide input to it?",
+          "context": {
+            "existing_packages": [
+              "robot_localization"
+            ],
+            "need": "IMU data",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.151,
+          "map@10": 0.05,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 63.97,
+          "top_5_results": [
+            "Imu Filter Madgwick",
+            "Imu Complementary Filter",
+            "Robot Localization",
+            "Robot State Publisher",
+            "Ess Imu Ros2 Uart Driver"
+          ]
+        },
+        {
+          "query_id": 8,
+          "query": "My navigation stack uses geometry2 for coordinate transforms. What packages depend on tf2?",
+          "context": {
+            "existing_packages": [
+              "geometry2",
+              "tf2"
+            ],
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0455,
+          "success@10": false,
+          "latency_ms": 50.69,
+          "top_5_results": [
+            "Tf2",
+            "Robot State Publisher",
+            "Nav2 Constrained Smoother",
+            "Navigation2",
+            "Gpsd Client"
+          ]
+        },
+        {
+          "query_id": 9,
+          "query": "I want to add AprilTag detection to my mobile robot. What camera packages work with apriltag_ros?",
+          "context": {
+            "existing_packages": [
+              "apriltag_ros"
+            ],
+            "use_case": "fiducial marker detection",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.25,
+          "f1@10": 0.1429,
+          "ndcg@10": 0.1128,
+          "map@10": 0.025,
+          "mrr": 0.1,
+          "success@10": true,
+          "latency_ms": 51.11,
+          "top_5_results": [
+            "Apriltag Ros",
+            "Kobuki Ros",
+            "Camera Calibration Parsers",
+            "Event Camera Renderer",
+            "Axis Camera"
+          ]
+        },
+        {
+          "query_id": 10,
+          "query": "I'm using joint_trajectory_controller for my robot arm. What motion planning frameworks integrate with it?",
+          "context": {
+            "existing_packages": [
+              "joint_trajectory_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 54.0,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Teb Local Planner",
+            "Base Local Planner",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 11,
+          "query": "My robot has both a 2D LIDAR and a depth camera. How can I merge these laser scans?",
+          "context": {
+            "hardware": [
+              "2D LIDAR",
+              "depth camera"
+            ],
+            "need": "sensor fusion",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.7654,
+          "map@10": 0.6667,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 78.7,
+          "top_5_results": [
+            "Ira Laser Tools",
+            "Depthimage To Laserscan",
+            "Laser Geometry",
+            "Urg Node",
+            "Cartographer Ros"
+          ]
+        },
+        {
+          "query_id": 12,
+          "query": "I'm using clearpath_control for a Jackal robot. What simulation packages work with Clearpath robots?",
+          "context": {
+            "existing_packages": [
+              "clearpath_control"
+            ],
+            "robot_type": "Clearpath Jackal",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 0.6667,
+          "f1@10": 0.3077,
+          "ndcg@10": 0.3296,
+          "map@10": 0.15,
+          "mrr": 0.2,
+          "success@10": true,
+          "latency_ms": 53.18,
+          "top_5_results": [
+            "Clearpath Control",
+            "Control Msgs",
+            "Base Local Planner",
+            "Gz Ros2 Control",
+            "Clearpath Simulator"
+          ]
+        },
+        {
+          "query_id": 13,
+          "query": "I have a FLIR thermal camera. What ROS packages support FLIR camera integration?",
+          "context": {
+            "hardware": [
+              "FLIR thermal camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 69.08,
+          "top_5_results": [
+            "Flir Camera Msgs",
+            "Event Camera Renderer",
+            "Image Pipeline",
+            "Avt Vimba Camera",
+            "Usb Cam"
+          ]
+        },
+        {
+          "query_id": 14,
+          "query": "I'm using behaviortree_cpp for robot behavior control. What navigation packages integrate with behavior trees?",
+          "context": {
+            "existing_packages": [
+              "behaviortree_cpp"
+            ],
+            "use_case": "autonomous navigation",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0909,
+          "success@10": false,
+          "latency_ms": 66.98,
+          "top_5_results": [
+            "Behaviortree Cpp",
+            "Global Planner",
+            "Control Msgs",
+            "Base Local Planner",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 15,
+          "query": "I need to control a bicycle-model robot. What steering controllers support bicycle kinematics?",
+          "context": {
+            "robot_type": "bicycle steering",
+            "need": "steering controller",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 1.0,
+          "map@10": 1.0,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 57.08,
+          "top_5_results": [
+            "Bicycle Steering Controller",
+            "Ackermann Steering Controller",
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Base Local Planner"
+          ]
+        },
+        {
+          "query_id": 16,
+          "query": "My robot uses effort_controllers for joint control. What force/torque sensor packages can provide feedback?",
+          "context": {
+            "existing_packages": [
+              "effort_controllers",
+              "ros2_control"
+            ],
+            "need": "force feedback",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 69.95,
+          "top_5_results": [
+            "Joint Trajectory Controller",
+            "Robot State Publisher",
+            "Robot Localization",
+            "Gz Ros2 Control",
+            "Control Msgs"
+          ]
+        },
+        {
+          "query_id": 17,
+          "query": "I'm using andino_navigation for a small mobile robot. What SLAM package is compatible with Andino?",
+          "context": {
+            "existing_packages": [
+              "andino_navigation",
+              "andino_control"
+            ],
+            "robot_type": "Andino robot",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.9197,
+          "map@10": 0.8333,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 60.7,
+          "top_5_results": [
+            "Andino Slam",
+            "Andino Navigation",
+            "Slam Toolbox",
+            "Cartographer Ros",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 18,
+          "query": "I have an Axis network camera. What ROS packages can stream video from network cameras?",
+          "context": {
+            "hardware": [
+              "Axis network camera"
+            ],
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.2,
+          "recall@10": 1.0,
+          "f1@10": 0.3333,
+          "ndcg@10": 0.7977,
+          "map@10": 0.6111,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 77.14,
+          "top_5_results": [
+            "Axis Camera",
+            "Avt Vimba Camera",
+            "Vision Opencv",
+            "Usb Cam",
+            "Event Camera Renderer"
+          ]
+        },
+        {
+          "query_id": 19,
+          "query": "I'm using nav2_costmap for obstacle detection. What costmap layers can I add for better performance?",
+          "context": {
+            "existing_packages": [
+              "nav2_costmap_2d",
+              "navigation2"
+            ],
+            "need": "improved obstacle detection",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 46.73,
+          "top_5_results": [
+            "Spatio Temporal Voxel Layer",
+            "Nav2 Constrained Smoother",
+            "Slam Toolbox",
+            "Gpsd Client",
+            "Cartographer"
+          ]
+        },
+        {
+          "query_id": 20,
+          "query": "I need to smooth my navigation paths. What path smoothing algorithms work with nav2?",
+          "context": {
+            "existing_packages": [
+              "navigation2",
+              "nav2_planner"
+            ],
+            "need": "path smoothing",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 38.48,
+          "top_5_results": [
+            "Nav2 Constrained Smoother",
+            "Andino Navigation",
+            "Nav2 Core",
+            "Nav2 Msgs",
+            "Global Planner"
+          ]
+        },
+        {
+          "query_id": 21,
+          "query": "I'm using admittance_controller for compliant manipulation. What force sensors are compatible?",
+          "context": {
+            "existing_packages": [
+              "admittance_controller",
+              "ros2_control"
+            ],
+            "robot_type": "manipulator",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 53.26,
+          "top_5_results": [
+            "Admittance Controller",
+            "Admittance Controller",
+            "Joint Trajectory Controller",
+            "Robot Localization",
+            "Imu Filter Madgwick"
+          ]
+        },
+        {
+          "query_id": 22,
+          "query": "I want to replace cartographer with a faster SLAM solution. What are lighter alternatives?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "problem": "high computational cost",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.2641,
+          "map@10": 0.125,
+          "mrr": 0.25,
+          "success@10": true,
+          "latency_ms": 35.45,
+          "top_5_results": [
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 23,
+          "query": "I have ArUco markers in my environment. What packages can detect and use them for localization?",
+          "context": {
+            "existing_packages": [
+              "aruco_ros"
+            ],
+            "use_case": "marker-based localization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.148,
+          "map@10": 0.0417,
+          "mrr": 0.125,
+          "success@10": true,
+          "latency_ms": 90.31,
+          "top_5_results": [
+            "Aruco Ros",
+            "Cartographer",
+            "Cartographer Ros",
+            "Cartographer Rviz",
+            "Camera Calibration Parsers"
+          ]
+        },
+        {
+          "query_id": 24,
+          "query": "I'm using position_controllers for my robot joints. What trajectory planners generate position commands?",
+          "context": {
+            "existing_packages": [
+              "position_controllers",
+              "ros2_control"
+            ],
+            "need": "trajectory planning",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 3,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.3333,
+          "f1@10": 0.1538,
+          "ndcg@10": 0.2961,
+          "map@10": 0.1667,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 51.92,
+          "top_5_results": [
+            "Teb Local Planner",
+            "Joint Trajectory Controller",
+            "Base Local Planner",
+            "Control Msgs",
+            "Position Controllers"
+          ]
+        },
+        {
+          "query_id": 25,
+          "query": "My Autoware stack needs perception messages. What packages define Autoware-compatible message types?",
+          "context": {
+            "existing_packages": [
+              "autoware"
+            ],
+            "need": "message definitions",
+            "query_type": "dependency_based"
+          },
+          "relevant_count": 4,
+          "retrieved_count": 30,
+          "precision@10": 0.4,
+          "recall@10": 1.0,
+          "f1@10": 0.5714,
+          "ndcg@10": 0.9829,
+          "map@10": 0.95,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 69.56,
+          "top_5_results": [
+            "Autoware Auto Perception Msgs",
+            "Autoware Perception Msgs",
+            "Autoware Auto Control Msgs",
+            "Sensor Msgs",
+            "Autoware Control Msgs"
+          ]
+        },
+        {
+          "query_id": 26,
+          "query": "I need an event camera for high-speed motion. What ROS packages support event camera processing?",
+          "context": {
+            "hardware": [
+              "event camera"
+            ],
+            "use_case": "high-speed vision",
+            "query_type": "hardware_constrained"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 69.63,
+          "top_5_results": [
+            "Event Camera Renderer",
+            "Event Camera Msgs",
+            "Axis Camera",
+            "Vision Opencv",
+            "Avt Vimba Camera"
+          ]
+        },
+        {
+          "query_id": 27,
+          "query": "I want to visualize my Cartographer SLAM results. What visualization packages work with Cartographer?",
+          "context": {
+            "existing_packages": [
+              "cartographer_ros"
+            ],
+            "need": "visualization",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 45.5,
+          "top_5_results": [
+            "Cartographer Rviz",
+            "Cartographer Ros",
+            "Cartographer",
+            "Slam Toolbox",
+            "Andino Slam"
+          ]
+        },
+        {
+          "query_id": 28,
+          "query": "I'm using velocity_controllers but need smoother motion. What are better control alternatives?",
+          "context": {
+            "existing_packages": [
+              "velocity_controllers"
+            ],
+            "problem": "jerky motion",
+            "query_type": "replacement_alternative"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.3869,
+          "map@10": 0.25,
+          "mrr": 0.5,
+          "success@10": true,
+          "latency_ms": 66.48,
+          "top_5_results": [
+            "Velocity Controllers",
+            "Joint Trajectory Controller",
+            "Position Controllers",
+            "Control Msgs",
+            "Teb Local Planner"
+          ]
+        },
+        {
+          "query_id": 29,
+          "query": "I need to integrate automotive-grade navigation messages. What message packages support automotive standards?",
+          "context": {
+            "use_case": "automotive robotics",
+            "need": "industry-standard messages",
+            "query_type": "integration_compatibility"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.1,
+          "recall@10": 0.5,
+          "f1@10": 0.1667,
+          "ndcg@10": 0.6131,
+          "map@10": 0.5,
+          "mrr": 1.0,
+          "success@10": true,
+          "latency_ms": 62.15,
+          "top_5_results": [
+            "Automotive Navigation Msgs",
+            "Gpsd Client",
+            "Nav2 Msgs",
+            "Nav2 Constrained Smoother",
+            "Andino Navigation"
+          ]
+        },
+        {
+          "query_id": 30,
+          "query": "My robot needs lifecycle management for reliability. What packages implement ROS 2 lifecycle nodes?",
+          "context": {
+            "need": "lifecycle management",
+            "use_case": "reliable robot operation",
+            "query_type": "feature_addition"
+          },
+          "relevant_count": 2,
+          "retrieved_count": 30,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "ndcg@10": 0.0,
+          "map@10": 0.0,
+          "mrr": 0.0,
+          "success@10": false,
+          "latency_ms": 71.44,
+          "top_5_results": [
+            "Base Local Planner",
+            "Kobuki Ros",
+            "Robot Localization",
+            "Ros2 Control",
+            "Ros Gz"
+          ]
+        }
+      ],
+      "aggregate_metrics": {
+        "precision@10": {
+          "mean": 0.12,
+          "std": 0.098
+        },
+        "recall@10": {
+          "mean": 0.4528,
+          "std": 0.3324
+        },
+        "f1@10": {
+          "mean": 0.1873,
+          "std": 0.1467
+        },
+        "ndcg@10": {
+          "mean": 0.4063,
+          "std": 0.3265
+        },
+        "map@10": {
+          "mean": 0.316,
+          "std": 0.3107
+        },
+        "mrr": {
+          "mean": 0.5274,
+          "std": 0.4334
+        },
+        "success@10": {
+          "rate": 76.67,
+          "count": "23/30"
+        },
+        "latency_ms": {
+          "mean": 61.07,
+          "std": 12.58,
+          "min": 35.45,
+          "max": 90.31
+        }
+      }
+    }
+  ]
+}

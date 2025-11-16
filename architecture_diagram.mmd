@@ -1,0 +1,89 @@
+%% ROS Component Explorer - System Architecture Diagram
+%% This file can be rendered using Mermaid.js or VS Code extensions
+
+graph TB
+    subgraph UI["🖥️ USER INTERFACE LAYER"]
+        WebUI["NiceGUI Web Application<br/>(frontend/modern_ui.py)"]
+        SearchTab["Search Tab"]
+        AgentTab["AI Agent Tab"]
+        LaunchTab["Launch File Generator"]
+        
+        WebUI --> SearchTab
+        WebUI --> AgentTab
+        WebUI --> LaunchTab
+    end
+
+    subgraph Orchestration["🎯 SEARCH ORCHESTRATION LAYER"]
+        FilterPackages["_filter_packages()<br/>Query Analysis & Routing"]
+        QueryAnalysis["Query Analysis:<br/>• Has search term?<br/>• Has tags?<br/>• Empty?"]
+        MethodSelection["Method Selection:<br/>• Vector Semantic<br/>• Text/BM25<br/>• Tag Filter"]
+        
+        FilterPackages --> QueryAnalysis
+        QueryAnalysis --> MethodSelection
+    end
+
+    subgraph SearchExecution["⚡ SEARCH EXECUTION LAYER"]
+        VectorSearch["Vector Semantic Search<br/>semantic_search()"]
+        TextSearch["Text/BM25 Search<br/>search_components()"]
+        SolrManager["SolrManager<br/>(backend/solr_manager.py)<br/>• Result normalization<br/>• Score calculation<br/>• Metadata enrichment"]
+        
+        VectorSearch --> SolrManager
+        TextSearch --> SolrManager
+    end
+
+    subgraph Embedding["🧠 EMBEDDING GENERATION LAYER"]
+        VectorGen["VectorGenerator<br/>(backend/vector_generator.py)"]
+        BERT["Sentence-BERT Model<br/>all-MiniLM-L6-v2<br/>384-dimensional vectors<br/>GPU accelerated (CUDA)"]
+        
+        VectorGen --> BERT
+    end
+
+    subgraph Storage["💾 SEARCH ENGINE / STORAGE"]
+        Solr["Apache Solr<br/>(localhost:8984/solr/ros_explorer)"]
+        TextIndex["Text Indexing<br/>• BM25 scoring<br/>• content field<br/>• name, description"]
+        VectorIndex["Vector Indexing<br/>• content_vector field<br/>• knn_vector_384 type<br/>• Cosine similarity KNN"]
+        ComponentData["90 ROS Components<br/>• Metadata fields<br/>• Topics<br/>• Dependencies<br/>• Hardware specs"]
+        
+        Solr --> TextIndex
+        Solr --> VectorIndex
+        Solr --> ComponentData
+    end
+
+    subgraph KnowledgeBase["📚 KNOWLEDGE BASE / DATA SOURCE"]
+        TTL["RDF/TTL Files<br/>(data/*.ttl)"]
+        Ontology["ROS Ontology<br/>http://www.ros.org/ontology#<br/>• Component Types<br/>• Properties<br/>• Relationships"]
+        Files["Files:<br/>• components_clean.ttl<br/>• components.ttl<br/>• mobile_robot_packages_hierarchical.ttl"]
+        
+        TTL --> Ontology
+        TTL --> Files
+    end
+
+    %% Main flow connections
+    SearchTab -->|"User Query:<br/>'SLAM packages for RPLiDAR A1'"| FilterPackages
+    MethodSelection -->|"Vector Search Path"| VectorSearch
+    MethodSelection -->|"Text Search Path"| TextSearch
+    
+    VectorSearch -->|"1. Encode query"| VectorGen
+    VectorGen -->|"384-dim vector"| VectorSearch
+    
+    VectorSearch -->|"2. KNN query"| VectorIndex
+    TextSearch -->|"BM25 query"| TextIndex
+    
+    SolrManager -->|"Ranked results"| WebUI
+    
+    %% Data flow
+    TTL -->|"Parse & Load"| Solr
+    VectorGen -->|"Generate embeddings"| VectorIndex
+    
+    %% Styling
+    classDef uiStyle fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef searchStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef embeddingStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef storageStyle fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef dataStyle fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    
+    class UI,WebUI,SearchTab,AgentTab,LaunchTab uiStyle
+    class Orchestration,FilterPackages,QueryAnalysis,MethodSelection,SearchExecution,VectorSearch,TextSearch,SolrManager searchStyle
+    class Embedding,VectorGen,BERT embeddingStyle
+    class Storage,Solr,TextIndex,VectorIndex,ComponentData storageStyle
+    class KnowledgeBase,TTL,Ontology,Files dataStyle

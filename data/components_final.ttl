@@ -1,0 +1,171 @@
+@prefix ros: <http://www.ros.org/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+  # -- 1. Define all unique ROS Topic types found in the components --
+  ros:topic_LaserScan             a ros:ROS_Topic ; rdfs:label "LaserScan Topic" ; ros:hasMessageType "sensor_msgs/LaserScan" .
+  ros:topic_Odometry              a ros:ROS_Topic ; rdfs:label "Odometry Topic" ; ros:hasMessageType "geometry_msgs/Odometry" .
+  ros:topic_PointCloud2           a ros:ROS_Topic ; rdfs:label "PointCloud2 Topic" ; ros:hasMessageType "sensor_msgs/PointCloud2" .
+  ros:topic_PoseWithCovariance    a ros:ROS_Topic ; rdfs:label "PoseWithCovarianceStamped Topic" ; ros:hasMessageType "geometry_msgs/PoseWithCovarianceStamped" .
+  ros:topic_OccupancyGrid         a ros:ROS_Topic ; rdfs:label "OccupancyGrid Topic" ; ros:hasMessageType "nav_msgs/OccupancyGrid" .
+  ros:topic_Imu                   a ros:ROS_Topic ; rdfs:label "Imu Topic" ; ros:hasMessageType "sensor_msgs/Imu" .
+  ros:topic_PoseStamped           a ros:ROS_Topic ; rdfs:label "PoseStamped Topic" ; ros:hasMessageType "geometry_msgs/PoseStamped" .
+  ros:topic_Twist                 a ros:ROS_Topic ; rdfs:label "Twist Topic" ; ros:hasMessageType "geometry_msgs/Twist" .
+  ros:topic_Path                  a ros:ROS_Topic ; rdfs:label "Path Topic" ; ros:hasMessageType "nav_msgs/Path" .
+  ros:topic_JointState            a ros:ROS_Topic ; rdfs:label "JointState Topic" ; ros:hasMessageType "sensor_msgs/JointState" .
+  ros:topic_Float64               a ros:ROS_Topic ; rdfs:label "Float64 Topic" ; ros:hasMessageType "std_msgs/Float64" .
+  ros:topic_Image                 a ros:ROS_Topic ; rdfs:label "Image Topic" ; ros:hasMessageType "sensor_msgs/Image" .
+  ros:topic_CameraInfo            a ros:ROS_Topic ; rdfs:label "CameraInfo Topic" ; ros:hasMessageType "sensor_msgs/CameraInfo" .
+  ros:topic_Detection3DArray      a ros:ROS_Topic ; rdfs:label "Detection3DArray Topic" ; ros:hasMessageType "vision_msgs/Detection3DArray" .
+
+  # -- 2. Define Localization Components --
+  ros:amcl a ros:LocalizationComponent ;
+    rdfs:label "AMCL" ;
+    dcterms:description "Adaptive Monte Carlo Localization for a mobile robot. Uses particle filter to estimate robot pose." ;
+    ros:isInPackage "amcl" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry, ros:topic_PointCloud2 ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_OccupancyGrid .
+
+  ros:gmapping a ros:LocalizationComponent ;
+    rdfs:label "GMapping" ;
+    dcterms:description "Gmapping is a ROS wrapper for OpenSlam's GMapping. Creates 2D occupancy grid maps from laser data." ;
+    ros:isInPackage "gmapping" ;
+    ros:hasUpdateRate "5.0"^^xsd:float ;
+    ros:implementsAlgorithm "slam" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_LaserScan, ros:topic_Odometry ;
+    ros:publishesTopic ros:topic_OccupancyGrid, ros:topic_PoseWithCovariance .
+
+  # -- 3. Define Sensor Driver Components --
+  ros:sick_scan_driver a ros:SensorDriverComponent ;
+    rdfs:label "SICK Scan Driver" ;
+    dcterms:description "Driver for SICK TIM series laser scanners. Provides laser scan data for navigation and mapping." ;
+    ros:isInPackage "sick_scan" ;
+    ros:hasUpdateRate "25.0"^^xsd:float ;
+    ros:hasSensorType "laser_scanner" ;
+    ros:rosVersion "ROS 2" ;
+    ros:publishesTopic ros:topic_LaserScan .
+
+  ros:velodyne_driver a ros:SensorDriverComponent ;
+    rdfs:label "Velodyne Driver" ;
+    dcterms:description "Driver for Velodyne 3D LiDAR scanners. Provides point cloud data for 3D perception." ;
+    ros:isInPackage "velodyne_driver" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:hasSensorType "lidar_3d" ;
+    ros:rosVersion "ROS 1" ;
+    ros:publishesTopic ros:topic_PointCloud2 .
+
+  ros:realsense_driver a ros:SensorDriverComponent ;
+    rdfs:label "RealSense Driver" ;
+    dcterms:description "Driver for Intel RealSense depth cameras. Provides RGB-D data for computer vision applications." ;
+    ros:isInPackage "realsense2_camera" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:hasSensorType "rgb_d_camera" ;
+    ros:rosVersion "ROS 2" ;
+    ros:publishesTopic ros:topic_Image, ros:topic_PointCloud2, ros:topic_CameraInfo .
+
+  # -- 4. Define Navigation Components --
+  ros:move_base a ros:NavigationComponent ;
+    rdfs:label "Move Base" ;
+    dcterms:description "Move base provides an implementation of an action that, given a goal in the world, will attempt to reach it with a mobile base." ;
+    ros:isInPackage "move_base" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:implementsAlgorithm "navigation" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_OccupancyGrid, ros:topic_PoseWithCovariance, ros:topic_LaserScan ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  ros:navigation2 a ros:NavigationComponent ;
+    rdfs:label "Navigation 2" ;
+    dcterms:description "Navigation 2 (Nav2) is a complete navigation system for ROS 2. Supports costmaps, planners, controllers, and behaviors." ;
+    ros:isInPackage "nav2_bringup" ;
+    ros:hasUpdateRate "20.0"^^xsd:float ;
+    ros:implementsAlgorithm "navigation" ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_OccupancyGrid, ros:topic_PoseWithCovariance, ros:topic_LaserScan ;
+    ros:publishesTopic ros:topic_Twist, ros:topic_Path .
+
+  # -- 5. Define Path Planner Components --
+  ros:global_planner a ros:PathPlannerComponent ;
+    rdfs:label "Global Planner" ;
+    dcterms:description "Implementation of a fast, interpolated navigation function that can be used to create a smooth path." ;
+    ros:isInPackage "global_planner" ;
+    ros:hasUpdateRate "1.0"^^xsd:float ;
+    ros:implementsAlgorithm "path_planning" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_OccupancyGrid, ros:topic_PoseStamped ;
+    ros:publishesTopic ros:topic_Path .
+
+  ros:teb_planner a ros:PathPlannerComponent ;
+    rdfs:label "TEB Local Planner" ;
+    dcterms:description "Timed Elastic Band local planner that generates and optimizes local trajectory with respect to execution time, separation from obstacles and compliance with kinodynamic constraints." ;
+    ros:isInPackage "teb_local_planner" ;
+    ros:hasUpdateRate "10.0"^^xsd:float ;
+    ros:implementsAlgorithm "local_planning" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_OccupancyGrid, ros:topic_PoseStamped, ros:topic_Odometry ;
+    ros:publishesTopic ros:topic_Twist .
+
+  # -- 6. Define Control Components --
+  ros:diff_drive_controller a ros:ControllerComponent ;
+    rdfs:label "Differential Drive Controller" ;
+    dcterms:description "Controller for differential drive mobile robots. Converts velocity commands to wheel velocities." ;
+    ros:isInPackage "diff_drive_controller" ;
+    ros:hasUpdateRate "50.0"^^xsd:float ;
+    ros:implementsAlgorithm "differential_drive" ;
+    ros:rosVersion "ROS 2" ;
+    ros:subscribesToTopic ros:topic_Twist ;
+    ros:publishesTopic ros:topic_JointState, ros:topic_Odometry .
+
+  ros:joint_state_controller a ros:ControllerComponent ;
+    rdfs:label "Joint State Controller" ;
+    dcterms:description "Controller that publishes the state of a robot's joints to a topic. Does not modify joint positions." ;
+    ros:isInPackage "joint_state_controller" ;
+    ros:hasUpdateRate "100.0"^^xsd:float ;
+    ros:implementsAlgorithm "joint_control" ;
+    ros:rosVersion "ROS 2" ;
+    ros:publishesTopic ros:topic_JointState .
+
+  # -- 7. Define Perception Components --
+  ros:darknet_ros a ros:PerceptionComponent ;
+    rdfs:label "DARKNET ROS" ;
+    dcterms:description "Real-Time Object Detection In ROS using YOLO. Performs object detection on images using deep learning." ;
+    ros:isInPackage "darknet_ros" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:implementsAlgorithm "object_detection" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Image ;
+    ros:publishesTopic ros:topic_Detection3DArray .
+
+  ros:apriltag_ros a ros:PerceptionComponent ;
+    rdfs:label "AprilTag ROS" ;
+    dcterms:description "AprilTag detection node for ROS. Detects and estimates poses of AprilTag fiducial markers." ;
+    ros:isInPackage "apriltag_ros" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:implementsAlgorithm "fiducial_detection" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Image, ros:topic_CameraInfo ;
+    ros:publishesTopic ros:topic_PoseStamped .
+
+  # -- 8. Define Integration Components --
+  ros:robot_localization a ros:IntegrationComponent ;
+    rdfs:label "Robot Localization" ;
+    dcterms:description "Collection of state estimation nodes for mobile robots. Fuses data from IMU, odometry, and GPS." ;
+    ros:isInPackage "robot_localization" ;
+    ros:hasUpdateRate "30.0"^^xsd:float ;
+    ros:implementsAlgorithm "sensor_fusion" ;
+    ros:rosVersion "ROS 1" ;
+    ros:subscribesToTopic ros:topic_Imu, ros:topic_Odometry ;
+    ros:publishesTopic ros:topic_PoseWithCovariance, ros:topic_Odometry .
+
+  ros:tf2 a ros:IntegrationComponent ;
+    rdfs:label "TF2" ;
+    dcterms:description "Transform library that maintains the relationship between coordinate frames in a tree structure buffered in time." ;
+    ros:isInPackage "tf2_ros" ;
+    ros:hasUpdateRate "100.0"^^xsd:float ;
+    ros:implementsAlgorithm "coordinate_transforms" ;
+    ros:rosVersion "ROS 2" ;
+    ros:publishesTopic ros:topic_PoseStamped .

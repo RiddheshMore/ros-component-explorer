@@ -1,0 +1,565 @@
+{
+  "metadata": {
+    "description": "Real developer queries from Robotics Stack Exchange for ROS package search evaluation",
+    "total_queries": 30,
+    "creation_date": "2025-11-14",
+    "source": "Robotics Stack Exchange (robotics.stackexchange.com)",
+    "query_types": {
+      "integration_compatibility": 10,
+      "dependency_based": 5,
+      "hardware_constrained": 4,
+      "replacement_alternative": 4,
+      "feature_addition": 7
+    },
+    "note": "All queries are real developer questions mapped to packages from the knowledge graph (101 ROS 2 packages)"
+  },
+  "queries": [
+    {
+      "id": 1,
+      "query": "Nav2 + Robot Localization: odometry_filtered not publishing, TF odom offset increases with each goal",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "navigation2",
+          "robot_localization",
+          "nav2_amcl"
+        ],
+        "use_case": "autonomous navigation with sensor fusion"
+      },
+      "relevant_packages": [
+        "robot_localization",
+        "nav2_amcl",
+        "slam_toolbox"
+      ],
+      "rationale": "Developer integrating robot_localization with Nav2 for better odometry"
+    },
+    {
+      "id": 2,
+      "query": "Sensor fusion with ros2_control",
+      "context": {
+        "query_type": "dependency_based",
+        "existing_packages": [
+          "ros2_control",
+          "diff_drive_controller"
+        ],
+        "hardware": [
+          "differential drive robot",
+          "wheel encoders",
+          "IMU"
+        ]
+      },
+      "relevant_packages": [
+        "robot_localization",
+        "imu_filter_madgwick"
+      ],
+      "rationale": "Developer needs sensor packages to provide odometry input to ros2_control"
+    },
+    {
+      "id": 3,
+      "query": "SLAM Mapping using RPLiDAR A1 on Raspberry pi 4 with ROS2 Humble",
+      "context": {
+        "query_type": "hardware_constrained",
+        "hardware": [
+          "RPLIDAR A1",
+          "2D LIDAR",
+          "Raspberry Pi"
+        ],
+        "use_case": "indoor SLAM"
+      },
+      "relevant_packages": [
+        "slam_toolbox",
+        "cartographer_ros",
+        "gmapping"
+      ],
+      "rationale": "Developer building mobile robot with RPLIDAR needs compatible SLAM packages"
+    },
+    {
+      "id": 4,
+      "query": "How to Use and Calibrate an IMU in ROS 2",
+      "context": {
+        "query_type": "dependency_based",
+        "existing_packages": [
+          "robot_localization"
+        ],
+        "hardware": [
+          "IMU",
+          "wheel encoders"
+        ]
+      },
+      "relevant_packages": [
+        "imu_filter_madgwick",
+        "phidgets_spatial",
+        "microstrain_inertial"
+      ],
+      "rationale": "Developer using robot_localization needs IMU drivers for sensor fusion"
+    },
+    {
+      "id": 5,
+      "query": "GazeboSIMROS2Controllplugin not loading in the gazebo launch logs",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "gazebo_ros2_control",
+          "gazebo_ros_pkgs"
+        ],
+        "environment": "gazebo simulation"
+      },
+      "relevant_packages": [
+        "diff_drive_controller",
+        "joint_trajectory_controller",
+        "ros2_controllers"
+      ],
+      "rationale": "Developer needs controller plugins compatible with gazebo_ros2_control"
+    },
+    {
+      "id": 6,
+      "query": "Control UR10 from python using ros and moveit",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "moveit"
+        ],
+        "robot_type": "UR10 manipulator"
+      },
+      "relevant_packages": [
+        "moveit_commander",
+        "moveit_visual_tools",
+        "pilz_industrial_motion"
+      ],
+      "rationale": "Developer needs Python interface and tools for MoveIt manipulation"
+    },
+    {
+      "id": 7,
+      "query": "Setting Up RealSense Camera for 3D Mapping with RTAB-Map in ROS2 Humble",
+      "context": {
+        "query_type": "hardware_constrained",
+        "hardware": [
+          "RealSense D435",
+          "depth camera"
+        ],
+        "use_case": "3D mapping"
+      },
+      "relevant_packages": [
+        "rtabmap_ros",
+        "perception_pcl",
+        "depthimage_to_laserscan"
+      ],
+      "rationale": "Developer needs packages for 3D mapping with RealSense camera"
+    },
+    {
+      "id": 8,
+      "query": "Odom tf going perpendicular",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "diff_drive_controller",
+          "ros2_control"
+        ],
+        "problem": "incorrect TF transforms"
+      },
+      "relevant_packages": [
+        "geometry2",
+        "tf2",
+        "robot_state_publisher"
+      ],
+      "rationale": "Developer needs TF packages for coordinate transformation debugging"
+    },
+    {
+      "id": 9,
+      "query": "Move base and planner recommendations",
+      "context": {
+        "query_type": "replacement_alternative",
+        "existing_packages": [
+          "move_base"
+        ],
+        "need": "better path planning"
+      },
+      "relevant_packages": [
+        "teb_local_planner",
+        "dwa_local_planner",
+        "nav2_mppi_controller"
+      ],
+      "rationale": "Developer seeking alternative planner packages for move_base"
+    },
+    {
+      "id": 10,
+      "query": "Nav2 robot does not move (Path Planning, Ackermann Steering)",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "navigation2"
+        ],
+        "robot_type": "Ackermann steering vehicle"
+      },
+      "relevant_packages": [
+        "ackermann_steering_controller",
+        "nav2_mppi_controller"
+      ],
+      "rationale": "Developer needs controllers and planners for Ackermann kinematics"
+    },
+    {
+      "id": 11,
+      "query": "Localization on big environments, slam toolbox vs amcl",
+      "context": {
+        "query_type": "replacement_alternative",
+        "existing_packages": [
+          "slam_toolbox"
+        ],
+        "use_case": "large warehouse localization"
+      },
+      "relevant_packages": [
+        "nav2_amcl",
+        "beluga_amcl",
+        "cartographer_ros"
+      ],
+      "rationale": "Developer evaluating SLAM vs localization packages for large spaces"
+    },
+    {
+      "id": 12,
+      "query": "Merged LaserScan from two lidars drifts during rotation in ROS 2 humble SLAM",
+      "context": {
+        "query_type": "feature_addition",
+        "hardware": [
+          "2D LIDAR",
+          "multiple LIDARs"
+        ],
+        "need": "sensor fusion"
+      },
+      "relevant_packages": [
+        "ira_laser_tools",
+        "slam_toolbox",
+        "robot_localization"
+      ],
+      "rationale": "Developer needs packages to merge multiple LIDAR scans"
+    },
+    {
+      "id": 13,
+      "query": "Differential Drive Controller enable_odom_tf: false doesnt work",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "diff_drive_controller",
+          "ros2_control"
+        ],
+        "problem": "odometry configuration"
+      },
+      "relevant_packages": [
+        "robot_localization",
+        "robot_state_publisher"
+      ],
+      "rationale": "Developer managing odometry sources needs proper TF configuration"
+    },
+    {
+      "id": 14,
+      "query": "Calibrating RealSense Camera and RPLiDAR for Sensor Fusion in ROS 2 Jazzy",
+      "context": {
+        "query_type": "dependency_based",
+        "hardware": [
+          "RealSense camera",
+          "RPLIDAR"
+        ],
+        "need": "sensor fusion"
+      },
+      "relevant_packages": [
+        "depthimage_to_laserscan",
+        "ira_laser_tools",
+        "perception_pcl"
+      ],
+      "rationale": "Developer needs packages to fuse camera and LIDAR data"
+    },
+    {
+      "id": 15,
+      "query": "Customize SLERP used in MoveIt motion planning",
+      "context": {
+        "query_type": "feature_addition",
+        "existing_packages": [
+          "moveit",
+          "moveit_ros_planning"
+        ],
+        "robot_type": "robotic arm"
+      },
+      "relevant_packages": [
+        "pilz_industrial_motion",
+        "moveit_visual_tools"
+      ],
+      "rationale": "Developer needs advanced motion planning features for MoveIt"
+    },
+    {
+      "id": 16,
+      "query": "Changing Controller for Panda MoveIt Config in Gazebo",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "moveit",
+          "gazebo_ros2_control"
+        ],
+        "robot_type": "Panda manipulator"
+      },
+      "relevant_packages": [
+        "joint_trajectory_controller",
+        "position_controllers",
+        "effort_controllers"
+      ],
+      "rationale": "Developer needs controllers compatible with MoveIt and Gazebo"
+    },
+    {
+      "id": 17,
+      "query": "Running SLAM without encoders",
+      "context": {
+        "query_type": "hardware_constrained",
+        "hardware": [
+          "2D LIDAR",
+          "depth camera"
+        ],
+        "problem": "no wheel odometry"
+      },
+      "relevant_packages": [
+        "slam_toolbox",
+        "cartographer_ros",
+        "rtabmap_ros"
+      ],
+      "rationale": "Developer needs SLAM packages that work without wheel encoders"
+    },
+    {
+      "id": 18,
+      "query": "Robot oscillates back and forth when approaching the goal point while using teb_local_planner",
+      "context": {
+        "query_type": "feature_addition",
+        "existing_packages": [
+          "teb_local_planner",
+          "move_base"
+        ],
+        "robot_type": "differential drive robot"
+      },
+      "relevant_packages": [
+        "dwa_local_planner",
+        "nav2_mppi_controller",
+        "nav2_constrained_smoother"
+      ],
+      "rationale": "Developer needs smoother path planning alternatives to TEB"
+    },
+    {
+      "id": 19,
+      "query": "Eliminating Costmap Calculation in Navigation2",
+      "context": {
+        "query_type": "feature_addition",
+        "existing_packages": [
+          "navigation2",
+          "nav2_costmap_2d"
+        ],
+        "need": "custom costmap configuration"
+      },
+      "relevant_packages": [
+        "nav2_planner",
+        "nav2_controller"
+      ],
+      "rationale": "Developer optimizing costmap for custom navigation requirements"
+    },
+    {
+      "id": 20,
+      "query": "robot_localization GPS causing large drift/covariance spike",
+      "context": {
+        "query_type": "dependency_based",
+        "existing_packages": [
+          "robot_localization"
+        ],
+        "hardware": [
+          "GPS",
+          "IMU",
+          "wheel encoders"
+        ]
+      },
+      "relevant_packages": [
+        "microstrain_inertial",
+        "phidgets_spatial"
+      ],
+      "rationale": "Developer debugging sensor fusion needs better sensor drivers"
+    },
+    {
+      "id": 21,
+      "query": "pointcloud fusion of 4 intelrealsense depth camera",
+      "context": {
+        "query_type": "feature_addition",
+        "hardware": [
+          "RealSense D435",
+          "depth camera",
+          "multiple cameras"
+        ],
+        "need": "360 degree perception"
+      },
+      "relevant_packages": [
+        "perception_pcl",
+        "pointcloud_to_laserscan",
+        "image_pipeline"
+      ],
+      "rationale": "Developer needs packages to fuse multiple camera pointclouds"
+    },
+    {
+      "id": 22,
+      "query": "Implementing ArUco Marker-Based Global Frame for Precise Docking with Nav2 Controller Server",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "aruco_ros",
+          "navigation2"
+        ],
+        "use_case": "marker-based precise docking"
+      },
+      "relevant_packages": [
+        "robot_localization",
+        "geometry2",
+        "vision_msgs"
+      ],
+      "rationale": "Developer integrating ArUco detection with Nav2 for precise localization"
+    },
+    {
+      "id": 23,
+      "query": "3D mapping of tight spaces with LiDAR, IMU and wheel odometry",
+      "context": {
+        "query_type": "hardware_constrained",
+        "hardware": [
+          "LIDAR",
+          "IMU",
+          "wheel encoders"
+        ],
+        "use_case": "tight space mapping"
+      },
+      "relevant_packages": [
+        "rtabmap_ros",
+        "slam_toolbox",
+        "robot_localization"
+      ],
+      "rationale": "Developer needs SLAM packages optimized for confined spaces"
+    },
+    {
+      "id": 24,
+      "query": "Integration of custom path planner with move_base for large agriculture robot",
+      "context": {
+        "query_type": "feature_addition",
+        "existing_packages": [
+          "move_base"
+        ],
+        "robot_type": "large agricultural robot (2.1x1.8m)"
+      },
+      "relevant_packages": [
+        "nav2_planner",
+        "nav2_mppi_controller",
+        "nav2_costmap_2d"
+      ],
+      "rationale": "Developer needs custom planners for large robot in narrow spaces"
+    },
+    {
+      "id": 25,
+      "query": "SLAM on ROS1 and CONFUSED about DWA, My ROBOT just dont GO",
+      "context": {
+        "query_type": "replacement_alternative",
+        "existing_packages": [
+          "move_base",
+          "dwa_local_planner"
+        ],
+        "problem": "robot not moving with DWA"
+      },
+      "relevant_packages": [
+        "teb_local_planner",
+        "global_planner",
+        "local_planner"
+      ],
+      "rationale": "Developer having issues with DWA needs alternative local planners"
+    },
+    {
+      "id": 26,
+      "query": "hexapod control in gazebo",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "gazebo_ros_pkgs",
+          "gazebo_ros2_control"
+        ],
+        "robot_type": "6-legged hexapod"
+      },
+      "relevant_packages": [
+        "joint_trajectory_controller",
+        "position_controllers",
+        "ros2_controllers"
+      ],
+      "rationale": "Developer needs multi-joint controllers for hexapod simulation"
+    },
+    {
+      "id": 27,
+      "query": "ROS2 SLAM Toolbox mapping map corrupted debug help requested",
+      "context": {
+        "query_type": "replacement_alternative",
+        "existing_packages": [
+          "slam_toolbox"
+        ],
+        "hardware": [
+          "RPLIDAR A1",
+          "IMU",
+          "Raspberry Pi"
+        ]
+      },
+      "relevant_packages": [
+        "cartographer_ros",
+        "gmapping",
+        "robot_localization"
+      ],
+      "rationale": "Developer with SLAM issues may need alternative SLAM packages or better sensor fusion"
+    },
+    {
+      "id": 28,
+      "query": "Frequency Limitation in robot_localizations EKF Node",
+      "context": {
+        "query_type": "dependency_based",
+        "existing_packages": [
+          "robot_localization"
+        ],
+        "hardware": [
+          "IMU",
+          "wheel encoders"
+        ]
+      },
+      "relevant_packages": [
+        "imu_filter_madgwick",
+        "phidgets_spatial",
+        "microstrain_inertial"
+      ],
+      "rationale": "Developer optimizing sensor fusion needs higher-rate IMU drivers"
+    },
+    {
+      "id": 29,
+      "query": "Does using two depth cameras in a ROS2 navigation system increase accuracy?",
+      "context": {
+        "query_type": "feature_addition",
+        "hardware": [
+          "depth camera",
+          "multiple cameras"
+        ],
+        "use_case": "improved obstacle detection"
+      },
+      "relevant_packages": [
+        "perception_pcl",
+        "depthimage_to_laserscan",
+        "nav2_costmap_2d"
+      ],
+      "rationale": "Developer considering multi-camera setup for better navigation accuracy"
+    },
+    {
+      "id": 30,
+      "query": "Robot doesn't move in map frame with SLAM toolbox localization",
+      "context": {
+        "query_type": "integration_compatibility",
+        "existing_packages": [
+          "slam_toolbox",
+          "navigation2"
+        ],
+        "problem": "TF transform issues"
+      },
+      "relevant_packages": [
+        "geometry2",
+        "tf2",
+        "robot_state_publisher"
+      ],
+      "rationale": "Developer needs proper TF configuration for SLAM toolbox with Nav2"
+    }
+  ]
+}

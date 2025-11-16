@@ -1,11 +1,13 @@
 """
-Enhanced Vector-Based Search Manager for ROS Component Explorer.
+Vector-Based Search Utilities for ROS Component Explorer.
 
-This module implements proper vector-based k-NN search for ROS components:
-1. Loads all packages as dense vector embeddings into Solr
-2. Converts user queries into vectors using the same embedding model
-3. Uses k-NN similarity search to find the most relevant packages
-4. Combines semantic search with traditional text search for hybrid results
+This module provides specialized vector search utilities:
+1. Sets up vector embeddings in Solr (Sentence-BERT all-MiniLM-L6-v2)
+2. Find similar components using vector similarity
+3. K-means clustering of components based on embeddings
+
+Note: For primary search operations (text, semantic, hybrid), use SolrManager directly.
+This class provides auxiliary vector-based analysis tools.
 """
 
 import logging
@@ -23,13 +25,17 @@ logger = logging.getLogger(__name__)
 
 class VectorSearchManager:
     """
-    Manages vector-based semantic search for ROS components.
+    Manages vector-based utilities for ROS component analysis.
     
-    Provides enhanced search capabilities by:
-    - Loading components as dense vector embeddings
-    - Converting user queries to vectors
-    - Performing k-NN similarity search
-    - Combining semantic and text-based results
+    Provides specialized vector search capabilities:
+    - Setting up vector embeddings in Solr
+    - Finding similar components (component-to-component similarity)
+    - Clustering components using k-means
+    
+    For primary search operations, use SolrManager directly:
+    - SolrManager.search_components() - BM25 text search
+    - SolrManager.semantic_search() - Vector k-NN search
+    - SolrManager.hybrid_search() - Combined text + semantic search
     """
     
     def __init__(self, ttl_file: str, model_name: str = "all-MiniLM-L6-v2"):
@@ -119,38 +125,6 @@ class VectorSearchManager:
             logger.warning(f"Could not check if components have vectors: {e}")
             return False
             
-    def vector_search(self, query: str, k: int = 10, filters: Optional[Dict] = None) -> List[Dict]:
-        """
-        Perform vector-based semantic search for a user query.
-        
-        Args:
-            query: User's natural language query
-            k: Number of top results to return
-            filters: Optional filters for component metadata
-            
-        Returns:
-            List of most relevant components based on semantic similarity
-        """
-        try:
-            logger.info(f"Performing vector search for query: '{query}'")
-            
-            # Convert query to vector
-            query_vector = self._query_to_vector(query)
-            
-            if query_vector is None:
-                logger.error("Failed to convert query to vector")
-                return []
-                
-            # Perform k-NN semantic search
-            results = self.solr_manager.semantic_search(query_vector, k, filters)
-            
-            logger.info(f"Vector search returned {len(results)} results")
-            return results
-            
-        except Exception as e:
-            logger.error(f"Error in vector search: {e}")
-            return []
-            
     def _query_to_vector(self, query: str) -> Optional[List[float]]:
         """
         Convert a user query string to a vector embedding.
@@ -169,47 +143,6 @@ class VectorSearchManager:
         except Exception as e:
             logger.error(f"Error converting query to vector: {e}")
             return None
-            
-    def hybrid_search(self, query: str, k: int = 10, filters: Optional[Dict] = None, 
-                     semantic_weight: float = 0.7) -> List[Dict]:
-        """
-        Perform hybrid search combining vector similarity and text search.
-        
-        Args:
-            query: User's natural language query
-            k: Number of top results to return
-            filters: Optional filters for component metadata
-            semantic_weight: Weight for semantic similarity (0.0 to 1.0)
-            
-        Returns:
-            List of components ranked by hybrid relevance score
-        """
-        try:
-            logger.info(f"Performing hybrid search for query: '{query}'")
-            
-            # Get vector representation
-            query_vector = self._query_to_vector(query)
-            
-            if query_vector is None:
-                # Fallback to text search only
-                logger.warning("Vector conversion failed, using text search only")
-                return self.solr_manager.search_components(query)
-                
-            # Perform hybrid search
-            results = self.solr_manager.hybrid_search(
-                text_query=query,
-                query_vector=query_vector,
-                k=k,
-                filters=filters,
-                semantic_weight=semantic_weight
-            )
-            
-            logger.info(f"Hybrid search returned {len(results)} results")
-            return results
-            
-        except Exception as e:
-            logger.error(f"Error in hybrid search: {e}")
-            return []
             
     def find_similar_components(self, component_id: str, k: int = 5) -> List[Dict]:
         """

@@ -25,29 +25,39 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 from backend.solr_manager import SolrManager
-from frontend.ui import build_ui
+from frontend.modern_ui import ModernROSExplorerUI
 import nicegui.ui as ui
 
 
 def main():
     """Initialize and run the ROS Component Explorer application."""
     
-    # Initialize the Solr manager with mobile robot components
-    # Use the new mobile robot components as primary data
-    mobile_robot_file = project_root / "data" / "mobile_robot_components.ttl"
-    legacy_data_file = project_root / "data" / "components_converted.ttl"
+    # Initialize the Solr manager with available component data
+    components_clean_file = project_root / "data" / "components_clean.ttl"
+    components_file = project_root / "data" / "components.ttl"
+    hierarchical_file = project_root / "data" / "mobile_robot_packages_hierarchical.ttl"
     expanded_file = project_root / "data" / "expanded_components_ros.ttl"
+    components_final_file = project_root / "data" / "components_final.ttl"
     
-    # Prioritize mobile robot components
-    if mobile_robot_file.exists():
-        data_file = mobile_robot_file
-        print(f"Using mobile robot components from {mobile_robot_file}")
-    elif legacy_data_file.exists():
-        data_file = legacy_data_file
-        print(f"Using legacy components from {legacy_data_file}")
+    # Prioritize components_clean.ttl as it has the correct Component types and proper Turtle format
+    if components_clean_file.exists() and components_clean_file.stat().st_size > 0:
+        data_file = components_clean_file
+        print(f"Using clean components file: {components_clean_file}")
+    elif components_file.exists() and components_file.stat().st_size > 0:
+        data_file = components_file
+        print(f"Using main components file: {components_file}")
+    elif hierarchical_file.exists() and hierarchical_file.stat().st_size > 0:
+        data_file = hierarchical_file
+        print(f"Using hierarchical components file: {hierarchical_file}")
+    elif expanded_file.exists() and expanded_file.stat().st_size > 0:
+        data_file = expanded_file
+        print(f"Using expanded components file: {expanded_file}")
+    elif components_final_file.exists() and components_final_file.stat().st_size > 0:
+        data_file = components_final_file
+        print(f"Using cleaned components file: {components_final_file}")
     else:
-        print(f"Error: No data files found!")
-        print("Please ensure mobile_robot_components.ttl or components_converted.ttl exists.")
+        print(f"Error: No valid data files found!")
+        print("All TTL files appear to be empty or missing.")
         return
         
     if not expanded_file.exists():
@@ -55,22 +65,32 @@ def main():
         print("Only base components will be loaded.")
     
     try:
-        # Initialize Solr with mobile robot components
-        db_manager = SolrManager(str(data_file))
-        base_count = len(db_manager.get_all_components())
+        # Try to initialize Solr, but fall back to old db_manager if it fails
+        db_manager = None
+        try:
+            print("Attempting to initialize Solr backend...")
+            db_manager = SolrManager(str(data_file))
+            total_count = len(db_manager.get_all_components())
+            print(f"Solr initialized successfully with {total_count} components")
+            print("Note: Using Solr backend for hybrid semantic search")
+        except Exception as solr_error:
+            print(f"Solr not available: {solr_error}")
+            print("Falling back to in-memory RDF backend...")
+            from backend.db_manager import DatabaseManager
+            db_manager = DatabaseManager(str(data_file))
+            total_count = len(db_manager.get_all_components())
+            print(f"RDF backend initialized with {total_count} components")
+            print("Note: Using in-memory RDF backend (text search only)")
         
-        # Only use mobile robot components to maintain GitHub URLs
-        total_count = len(db_manager.get_all_components())
-        print(f"Total components loaded: {total_count}")
-        print("Note: Using only mobile robot components to preserve GitHub repository URLs")
+        # Build and run the modern user interface with Figma-based design
+        modern_ui = ModernROSExplorerUI(db_manager, str(data_file))
+        modern_ui.build_ui()
         
-        # Build and run the user interface with rule-based natural language processing
-        build_ui(db_manager, str(data_file))
-        
-        # Start the NiceGUI application
+        # Start the NiceGUI application  
         ui.run(
-            title="ROS Component Explorer - Natural Language Search",
-            port=8080,
+            host="0.0.0.0",
+            port=8083,
+            title="ROS Component Explorer",
             show=True,
             reload=False
         )
