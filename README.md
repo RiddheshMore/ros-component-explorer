@@ -1,4 +1,4 @@
-# 🤖 ROS Component Explorer
+# ROS Component Explorer
 
 A hybrid semantic search system for discovering and exploring ROS 2 packages using knowledge graphs and vector embeddings. Combines traditional BM25 text search with BERT-based semantic understanding for intelligent package discovery.
 
@@ -6,7 +6,7 @@ A hybrid semantic search system for discovering and exploring ROS 2 packages usi
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://python.org)
 [![ROS 2](https://img.shields.io/badge/ROS-2-brightgreen.svg)](https://ros.org)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.12+
@@ -40,8 +40,8 @@ A hybrid semantic search system for discovering and exploring ROS 2 packages usi
    cd solr-9.0.0
    bin/solr start -p 8984
    
-   # Create the 'ros_packages' collection
-   bin/solr create -c ros_packages -p 8984
+   # Create the 'ros_explorer' core
+   bin/solr create_core -c ros_explorer -p 8984
    ```
 
    **To manage Solr:**
@@ -61,17 +61,42 @@ A hybrid semantic search system for discovering and exploring ROS 2 packages usi
    pip install -r requirements.txt
    ```
 
-4. **Start the application**
+4. **Index ROS Components into Solr**
+   
+   The application automatically indexes components from TTL files on first startup. For manual indexing, use the provided script:
+   
+   ```bash
+   # Index all default TTL files
+   python index_components.py
+   
+   # Clear existing index and re-index everything
+   python index_components.py --clear
+   
+   # Index a specific TTL file
+   python index_components.py --file data/custom_components.ttl
+   
+   # List all indexed components
+   python index_components.py --list
+   ```
+   
+   **Available TTL data files:**
+   - `data/components_clean.ttl` - Primary component dataset (recommended)
+   - `data/components.ttl` - Original component data
+   - `data/mobile_robot_packages_hierarchical.ttl` - Mobile robot packages
+   - `data/expanded_components_ros.ttl` - Extended component data
+   - `data/ros_knowledge_graph.ttl` - Full knowledge graph
+
+5. **Start the application**
    ```bash
    python main.py
    ```
    
    **Note**: The application expects Solr to be running on `http://localhost:8984`. Make sure Solr is started before running the application.
 
-5. **Access the web interface**
+6. **Access the web interface**
    Open your browser to `http://localhost:8083`
 
-## 📖 Usage Examples
+## Usage Examples
 
 ### Web Interface Search Queries
 Navigate to `http://localhost:8083` and try these context-aware queries:
@@ -92,13 +117,37 @@ Navigate to `http://localhost:8083` and try these context-aware queries:
 - "I'm using nav2_costmap for obstacles. What costmap layers improve detection?"
 - "I need to smooth my navigation paths. What smoothing algorithms work with nav2?"
 
+## Project Structure
 
-### Areas for Enhancement
-- 📦 **Knowledge Base Expansion**: Add more ROS 2 packages to the dataset
-- 🎯 **Query Dataset**: Contribute more context-aware test queries
-- 🔧 **Feature Development**: New search algorithms or UI improvements
-- 📊 **Evaluation Metrics**: Additional performance measures
-- 🌐 **Integration**: APIs for ROS 2 development tools
+```
+ros-component-explorer/
+├── backend/
+│   ├── solr_manager.py        # Solr indexing and search
+│   ├── vector_generator.py    # BERT vector embeddings
+│   └── ros_agent.py           # Query processing
+├── frontend/
+│   └── modern_ui.py           # NiceGUI web interface
+├── data/
+│   ├── components_clean.ttl   # Primary TTL dataset
+│   └── ros_knowledge_graph.ttl # Full knowledge graph
+├── evaluation/                # Benchmarking and evaluation tools
+├── main.py                    # Application entry point
+├── index_components.py        # Manual Solr indexing script
+├── setup.sh                   # Automated setup script
+└── requirements.txt           # Python dependencies
+```
 
+## Areas for Enhancement
+- **Knowledge Base Expansion**: Add more ROS 2 packages to the dataset
+- **Query Dataset**: Contribute more context-aware test queries
+- **Feature Development**: New search algorithms or UI improvements
+- **Evaluation Metrics**: Additional performance measures
+- **Integration**: APIs for ROS 2 development tools
 
-**🚀 Get Started**: `python main.py` → Open `http://localhost:8083`
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+**Get Started**: `python main.py` → Open `http://localhost:8083`
